@@ -36,3 +36,14 @@ Construído com as tecnologias mais populares do mundo Javascript, este reposit�
 
 A aplicação em Node.js (backend) é uma API REST escrita em Node.JS que serve dados ao frontend e ao mobile.<br/>
 A aplicação em ReactJS (web) e em React Native (mobile) é onde o usuário pode se conectar a um professor ou aluno.<br/>
+
+Feito com ❤️ por Gabriel Pereira 👋🏽 [Entre em contato!](https://www.linkedin.com/in/gabriel-pereira-oliveira-78b1801ab/)
+
+[postgres]: https://www.postgresql.org/
+[nodejs]: https://nodejs.org/en/
+[typescript]: https://www.typescriptlang.org/
+[reactjs]: https://reactjs.org
+[reactNative]: https://reactnative.dev/
+[rs]: https://rocketseat.com.br
+[Rocketseat]:https://github.com/Rocketseat
+[styled-components]:https://styled-components.com/
