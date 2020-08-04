@@ -7,19 +7,20 @@ import landingImg from '../../assets/images/landing.svg';
 import studyIcon from '../../assets/images/icons/study.svg';
 import giveClassIcon from '../../assets/images/icons/give-classes.svg';
 import purpleHeartIcon from '../../assets/images/icons/purple-heart.svg';
-import './styles.css';
+
+import { Container, LogoContainer, ButtonContainer } from './styles'
 
 const Landing: React.FC = () => {
-  return <div id="page-landing">
+  return <Container id="page-landing">
     <div id="page-landing-content" className="container">
-      <div className="logo-container">
+      <LogoContainer className="logo-container">
         <img src={logoImg} alt="Proffy"/>
         <h2>Sua plataforma de estudos online</h2>
-      </div>
+      </LogoContainer>
 
       <img src={landingImg} alt="Plataforma de estudos" className="hero-image"/>
 
-      <div className="buttons-container">
+      <ButtonContainer className="buttons-container">
         <Link to="study" className="study">
           <img src={studyIcon} alt="estudar"/>
           Estudar
@@ -28,7 +29,7 @@ const Landing: React.FC = () => {
           <img src={giveClassIcon} alt="estudar"/>
           Dar Aulas
         </Link>
-      </div>
+      </ButtonContainer>
 
       <span className="total-connection">
         Total de 200 conexões já realizadas 
@@ -36,7 +37,7 @@ const Landing: React.FC = () => {
       </span>
 
     </div>
-  </div>;
+  </Container>;
 }
 
 export default Landing;

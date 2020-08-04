@@ -3,13 +3,13 @@ import React from 'react';
 import PageHeader from '../../components/PageHeader';
 import TeacherItem from '../../components/TeacherItem';
 
-import './styles.css';
+import { Container, SearchForm } from './styles';
 
 const TeacherList: React.FC = () => {
   return (
-  <div id="page-teacher-list" className="container">
+  <Container>
     <PageHeader title='Esse são os proffys disponíveis.'>
-      <form id="search-teachers">
+      <SearchForm>
         <div className="input-block">
           <label htmlFor="subject">Matéria</label>
           <input type="text" id='subject'/>
@@ -24,7 +24,7 @@ const TeacherList: React.FC = () => {
           <label htmlFor="time">Hora</label>
           <input type="text" id='time'/>
         </div>
-      </form>
+      </SearchForm>
     </PageHeader>
 
     <main>
@@ -33,7 +33,7 @@ const TeacherList: React.FC = () => {
       <TeacherItem/>
       <TeacherItem/>
     </main>
-  </div>
+  </Container>
   );
 }
 
