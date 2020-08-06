@@ -24,7 +24,7 @@
 </p>
 
 <h2 align="center">
-    <img alt="Proffy" title="#GoBarber" src=".github/capa.png" width="350px" />
+    <img alt="Proffy" title="#GoBarber" src=".github/Proffy-responsivo.png" width="350px" />
 </h2>
 
 
