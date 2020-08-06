@@ -7,17 +7,21 @@ export const Container = styled.div`
   main {
     margin: 3.2rem auto;
     width: 90%;
+
+    > p {
+      margin-top: 10rem;
+      text-align: center;
+    }
   }
 
-
-  @media (min-width: 700px){
+  @media (min-width: 700px) {
     max-width: 100vw;
 
     form {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       column-gap: 16px;
-      position:absolute;
+      position: absolute;
       bottom: -28px;
 
       div.input-block + div.input-block {
@@ -28,7 +32,7 @@ export const Container = styled.div`
     main {
       padding: 3.2rem 0;
       max-width: 740px;
-      margin:0 auto;
+      margin: 0 auto;
     }
   }
 `;
@@ -36,42 +40,29 @@ export const Container = styled.div`
 export const SearchForm = styled.form`
   margin-top: 3.2rem;
 
+  button {
+    width: 100%;
+    height: 5.6rem;
+    background: var(--color-secundary);
+    color: var(--color-button-text);
+    border: 0;
+    border-radius: 0.8rem;
+
+    font: 700 1.6rem Archivo;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: background 0.2s;
+    margin-top: 5.4rem;
+    color: var(--color-line-in-white);
+
+    &:hover {
+      background: var(--color-secundary-dark);
+    }
+  }
+
   label {
     color: var(--color-text-in-primary);
-  }
-
-  div.input-block {
-    position: relative;
-
-    label {
-      font-size: 1.4rem;
-    }
-
-    input {
-      width: 100%;
-      height: 5.6rem;
-      margin-top: 0.8rem;
-      border-radius: 0.8rem;
-      background: var(--color-input-background);
-      border: 1px solid var(--color-line-white);
-      outline: 0;
-      padding: 0 1.6rem;
-      font: 1.6rem Archivo;
-    }
-  }
-
-  div.input-block:focus-within::after {
-    width: calc(100% - 3.2rem);
-    height: 2px;
-    content: '';
-    background:  var(--color-primary-light);
-    position: absolute;
-    left: 1.6rem;
-    right: 1.6rem;
-    bottom:0;
-  }
-
-  div.input-block + div.input-block {
-    margin-top: 1.4rem;
   }
 `;

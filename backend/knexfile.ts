@@ -1,12 +1,14 @@
 import path from 'path';
 
 module.exports = {
-  client: 'sqlite3',
+  client: 'pg',
   connection: {
-   filename: path.resolve(__dirname,'src', 'database', 'database.sqlite')
+    host: '192.168.99.100',
+    user: 'postgres',
+    password: 'docker',
+    database: 'Proffy',
   },
   migrations: {
     directory: path.resolve(__dirname, 'src', 'database', 'migrations'),
   },
-  useNullAsDefault: true,
 };

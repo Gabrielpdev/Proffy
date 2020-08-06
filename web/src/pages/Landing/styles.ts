@@ -26,7 +26,6 @@ export const Container = styled.div`
       margin-left: 0.8rem;
     }
   }
-  
 
   @media (min-width: 1100px) {
     #page-landing-content {
@@ -35,16 +34,15 @@ export const Container = styled.div`
       display: grid;
       grid-template-rows: 350px 1fr;
       grid-template-columns: 2fr 1fr 1fr;
-      grid-template-areas: 
-        "logo heroImg heroImg"
-        "buttons buttons total"
-      ;
+      grid-template-areas:
+        'logo heroImg heroImg'
+        'buttons buttons total';
     }
-    .logo-container{
+    .logo-container {
       grid-area: logo;
       align-self: center;
       text-align: left;
-      margin:0;
+      margin: 0;
     }
 
     .logo-container h2 {
@@ -57,7 +55,7 @@ export const Container = styled.div`
     }
 
     .hero-image {
-      grid-area:  heroImg;
+      grid-area: heroImg;
       justify-self: end;
     }
 
@@ -74,7 +72,7 @@ export const Container = styled.div`
       grid-area: total;
       justify-self: end;
     }
-  } 
+  }
 `;
 
 export const LogoContainer = styled.div`
@@ -91,8 +89,6 @@ export const LogoContainer = styled.div`
     line-height: 4.6rem;
     margin-top: 0.8rem;
   }
-
- 
 `;
 
 export const ButtonContainer = styled.div`
@@ -104,7 +100,7 @@ export const ButtonContainer = styled.div`
     width: 30rem;
     height: 10.4rem;
     border-radius: 0.8rem;
-    font: 700 2.0rem Archivo;
+    font: 700 2rem Archivo;
 
     display: flex;
     align-items: center;
@@ -114,21 +110,21 @@ export const ButtonContainer = styled.div`
     color: var(--color-button-text);
 
     transition: background-color 0.2s;
-    
-    img{
+
+    img {
       width: 4rem;
       margin-right: 2.4rem;
     }
   }
 
-  a:first-child{
+  a:first-child {
     margin-right: 1.6rem;
   }
 
-  a.study{
+  a.study {
     background: var(--color-primary-lighter);
 
-    &:hover{
+    &:hover {
       background: var(--color-primary-light);
     }
   }
@@ -141,4 +137,3 @@ export const ButtonContainer = styled.div`
     }
   }
 `;
-

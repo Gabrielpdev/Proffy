@@ -1,11 +1,15 @@
 import React from 'react';
 import './assets/styles/global.css';
-import {Routes} from './routes';
+import { BrowserRouter as Router } from 'react-router-dom';
+import Routes from './routes/index';
+import AppProvider from './hooks/index';
 
-function App() {
-  return (
-   <Routes/>
-  );
-}
+const src: React.FC = () => (
+  <Router>
+    <AppProvider>
+      <Routes />
+    </AppProvider>
+  </Router>
+);
 
-export default App;
+export default src;

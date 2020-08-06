@@ -7,6 +7,8 @@
   --color-primary: #8257E5;
   --color-primary-dark: #774DD6;
   --color-primary-darker: #6842C2;
+  --color-primary-darken: #5838aa;
+  --color-secundary-light: #04e063;
   --color-secundary: #04D361;
   --color-secundary-dark: #04BF58;
   --color-title-in-primary: #FFFFFF;
@@ -44,6 +46,11 @@ body {
 body, input, button, textarea {
   font: 500 1.6rem Poppins;
   color: var(--color-text-base);
+}
+
+button {
+  outline: none;
+  cursor: pointer;
 }
 
 .container {
