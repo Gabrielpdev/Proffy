@@ -76,6 +76,7 @@ export const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   margin: 3.2rem 0;
+  padding: 0 2rem;
 `;
 
 export const SelectButton = styled.button<SelectButtonProps>`
