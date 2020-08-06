@@ -71,7 +71,7 @@ $ yarn start
 # server inicializado
 
 # 💻 Iniciando com o Front-end
-$ cd frontend
+$ cd web
 $ yarn
 $ yarn start
 
