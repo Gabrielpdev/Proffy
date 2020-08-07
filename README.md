@@ -45,10 +45,9 @@ A aplicação visa estabelecer um contato entre alunos e professores. O professo
 Após isso os alunos podem encontrar esse professor buscando a matéria, dia e hora que batem com a do professor cadastrado.<br/> 
 
 
-<p align="center">
-  <a href="" rel="noopener">
- <img width=350px src=".github\demo.gif" alt="Preview logo"></a>
-</p>
+<h2 align="center">
+    <img alt="Proffy" title="#GoBarber" src=".github/web.gif" width="100%" />
+</h2>
 
 ## 🏁 Iniciando <a name = "getting_started"></a>
 
@@ -77,14 +76,19 @@ $ yarn start
 
 # 📱 Iniciando com o Mobile 🚧 Em Construção...🚧
 
+$ cd mobile
+$ yarn
+$ yarn start
 ```
 
 ## ⛏️ Tecnologias Utilizadas <a name = "built_using"></a>
 
 - 🔵 [TypeScript][typescript]
 - 🟢 [Node Js][nodejs]
+- ❄️ [Knex][knex]
 - 🐘 [Postgres][postgres]
 - ⚛️ [React][reactjs]
+- 🔼 [Expo][expo]
 - ⚛️ [React Native][reactNative]
 - 💅 [Styled-components]
 
@@ -105,6 +109,8 @@ $ yarn start
 
 Feito com ❤️ por Gabriel Pereira 👋🏽 [Entre em contato!](https://www.linkedin.com/in/gabriel-pereira-oliveira-78b1801ab/)
 
+[expo]: https://expo.io/
+[knex]:http://knexjs.org/
 [postgres]: https://www.postgresql.org/
 [nodejs]: https://nodejs.org/en/
 [typescript]: https://www.typescriptlang.org/
