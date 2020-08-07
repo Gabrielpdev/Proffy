@@ -27,4 +27,6 @@ routes.get('/classes', ensureAuthenticated, classesController.index);
 
 routes.post('/connections', ensureAuthenticated, connectionsController.create);
 
+routes.put('/users', ensureAuthenticated, userController.update);
+
 export default routes;

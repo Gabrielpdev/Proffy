@@ -10,8 +10,11 @@ import rocketIcon from '../../assets/images/icons/rocket.svg';
 import { api } from '../../services/api';
 
 import { Container, SearchForm } from './styles';
+import { useToast } from '../../hooks/toast';
 
 const TeacherList: React.FC = () => {
+  const { addToast } = useToast();
+
   const [subject, setSubject] = useState('');
   const [week_day, setWeekDay] = useState('');
   const [time, setTime] = useState('');
@@ -25,22 +28,44 @@ const TeacherList: React.FC = () => {
     });
   }, []);
 
+  useEffect(() => {
+    api
+      .get('/classes', {
+        params: {
+          week_day,
+          subject,
+          time,
+        },
+      })
+      .then((response) => {
+        setTeachers(response.data);
+      });
+  }, []);
+
   const searchTeachers = useCallback(
     (e: FormEvent) => {
       e.preventDefault();
 
-      api
-        .get('/classes', {
-          params: {
-            week_day,
-            subject,
-            time,
-          },
-        })
-        .then((response) => {
-          console.log(teachers[0]);
-          setTeachers(response.data);
+      if (week_day !== '' && subject !== '' && time !== '') {
+        api
+          .get('/classes', {
+            params: {
+              week_day,
+              subject,
+              time,
+            },
+          })
+          .then((response) => {
+            setTeachers(response.data);
+          });
+      } else {
+        addToast({
+          type: 'error',
+          title: 'Erro na busca',
+          description:
+            'Ocorreu um erro na busca, preencha todos do dados para buscar.',
         });
+      }
     },
     [week_day, subject, time, teachers],
   );

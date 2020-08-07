@@ -1,5 +1,4 @@
-import React, { useState, useCallback, FormEvent, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useState, useCallback, FormEvent } from 'react';
 import PageHeader from '../../components/PageHeader';
 import Input from '../../components/Input';
 import { useToast } from '../../hooks/toast';
@@ -10,70 +9,76 @@ import { api } from '../../services/api';
 
 import studyIcon from '../../assets/images/icons/study.svg';
 import giveClassIcon from '../../assets/images/icons/give-classes.svg';
-import smileIcon from '../../assets/images/icons/smile.svg';
 
 import {
   Container,
+  HeaderProfile,
   Content,
   DataContent,
   ButtonContainer,
   SelectButton,
   WarningContent,
 } from './styles';
+import { useAuth } from '../../hooks/auth';
 
-const SignUp: React.FC = () => {
-  const { push } = useHistory();
+const Profile: React.FC = () => {
   const { addToast } = useToast();
+  const { user, updateUser } = useAuth();
 
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [name, setName] = useState(user.name);
+  const [email, setEmail] = useState(user.email);
   const [password, setPassword] = useState('');
   const [password_confirmation, setPasswordConfirmation] = useState('');
-  const [avatar, setAvatar] = useState('');
-  const [whatsapp, setWhatsapp] = useState('');
-  const [bio, setBio] = useState('');
-  const [isTeacher, setIsTeacher] = useState(false);
-
-  const [total, setTotal] = useState(0);
-
-  useEffect(() => {
-    api.get('users').then((response) => {
-      setTotal(response.data.total);
-    });
-  }, []);
+  const [avatar, setAvatar] = useState(user.avatar);
+  const [whatsapp, setWhatsapp] = useState(user.whatsapp);
+  const [bio, setBio] = useState(user.bio);
+  const [isTeacher, setIsTeacher] = useState(user.is_teacher);
 
   const addNewUser = useCallback(
     (e: FormEvent) => {
       e.preventDefault();
-      api
-        .post('/users', {
+      let data = {};
+      if (password === '') {
+        data = {
           name,
           avatar,
           whatsapp,
           bio,
           email,
+          is_teacher: isTeacher,
+        };
+      } else {
+        data = {
+          name,
+          avatar,
+          whatsapp,
+          bio,
+          email,
+          is_teacher: isTeacher,
           password,
           password_confirmation,
-          is_teacher: isTeacher,
-        })
-        .then(() => {
+        };
+      }
+
+      api
+        .put('/users', data)
+        .then((response) => {
+          updateUser(response.data);
+
           addToast({
             type: 'success',
-            title: 'Cadastro realizado.',
-            description: 'Você já pode fazer o logon no Proffy!',
+            title: 'Perfil atualizado!.',
           });
-
-          push('/');
+          window.scrollTo(0, 0);
         })
         .catch(() => {
           addToast({
             type: 'error',
-            title: 'Erro no cadastro',
-            description: 'Ocorreu um erro ao fazer cadastro, tente novamente.',
+            title: 'Erro ao atualizar perfil',
+            description: 'Ocorreu um erro ao atualizar, tente novamente.',
           });
         });
     },
-
     [
       name,
       avatar,
@@ -82,8 +87,8 @@ const SignUp: React.FC = () => {
       email,
       password,
       password_confirmation,
-      push,
       isTeacher,
+      updateUser,
       addToast,
     ],
   );
@@ -94,12 +99,13 @@ const SignUp: React.FC = () => {
 
   return (
     <Container>
-      <PageHeader
-        singUp
-        title="Que incrível ter você em nossa plataforma."
-        titleDescriptionIcon={smileIcon}
-        titleDescription={`${total} usuários cadastrados !`}
-      />
+      <PageHeader title="">
+        <HeaderProfile>
+          <img src={user.avatar} alt={user.name} />
+
+          <strong>{user.name}</strong>
+        </HeaderProfile>
+      </PageHeader>
 
       <Content onSubmit={addNewUser}>
         <DataContent>
@@ -134,15 +140,17 @@ const SignUp: React.FC = () => {
           />
           <TextArea
             name="bio"
-            title="Biografia"
+            title="Biografia "
             description="(Máx: 250 caractéres)"
             value={bio}
             onChange={(e) => setBio(e.target.value)}
           />
 
+          <hr />
+
           <Input
             name="password"
-            title="Senha"
+            title="Nova Senha"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -185,11 +193,11 @@ const SignUp: React.FC = () => {
             Preencha todos os dados
           </p>
 
-          <button type="submit">Salvar Cadastro</button>
+          <button type="submit">Atualizar Perfil</button>
         </WarningContent>
       </Content>
     </Container>
   );
 };
 
-export default SignUp;
+export default Profile;

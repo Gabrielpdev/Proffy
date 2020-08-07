@@ -97,7 +97,7 @@ export const WarningContent = styled.footer`
     text-decoration: none;
     transition: background 0.2s;
     margin-top: 3.2rem;
-    color: var(--color-line-in-white);
+    color: var(--color-button-text);
 
     &:hover {
       background: var(--color-secundary-dark);

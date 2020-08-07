@@ -49,13 +49,8 @@ export const SearchForm = styled.form`
     border-radius: 0.8rem;
 
     font: 700 1.6rem Archivo;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
     transition: background 0.2s;
     margin-top: 5.4rem;
-    color: var(--color-line-in-white);
 
     &:hover {
       background: var(--color-secundary-dark);

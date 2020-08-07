@@ -27,7 +27,7 @@ const PageHeader: React.FC<IProps> = ({
   titleDescriptionIcon,
   singUp = false,
 }) => {
-  const { signOut } = useAuth();
+  const { signOut, user } = useAuth();
 
   return (
     <Container>
@@ -40,7 +40,9 @@ const PageHeader: React.FC<IProps> = ({
         ) : (
           <>
             <NavLink to="/dashboard">Dashboard</NavLink>
-            <NavLink to="/give-classes">Dar aula</NavLink>{' '}
+            {user.is_teacher ? (
+              <NavLink to="/give-classes">Dar aula</NavLink>
+            ) : null}
             <NavLink to="/profile">Perfil</NavLink>{' '}
           </>
         )}

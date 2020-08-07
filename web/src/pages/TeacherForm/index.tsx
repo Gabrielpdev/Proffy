@@ -53,7 +53,7 @@ const TeacherForm: React.FC = () => {
           addToast({
             type: 'success',
             title: 'Cadastro realizado.',
-            description: 'Você já pode fazer o logon no GoBarber!',
+            description: 'Agora é só esperar seu alunos te chamarem',
           });
 
           push('/dashboard');
@@ -62,7 +62,7 @@ const TeacherForm: React.FC = () => {
           addToast({
             type: 'error',
             title: 'Erro no cadastro',
-            description: 'Ocorreu um erro ao fazer cadastro, tente novamente.',
+            description: 'Ocorreu um erro ao cadastrar, tente novamente.',
           });
         });
     },

@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import Background from '../../assets/images/background.svg';
+
 interface SelectButtonProps {
   isSelected: boolean;
 }
@@ -9,6 +11,16 @@ export const Container = styled.div`
   height: 100vh;
 
   header {
+    background: url(${Background}) center;
+    background-size: 100% 100%;
+    background-color: var(--color-primary);
+    height: 40rem;
+
+    @media (min-width: 700px) {
+      max-width: 100vw;
+      height: 45rem;
+    }
+
     div {
       strong {
         max-width: 64rem;
@@ -17,7 +29,34 @@ export const Container = styled.div`
   }
 
   @media (min-width: 700px) {
-    max-width: 100%;
+    max-width: 100vw;
+  }
+`;
+
+export const HeaderProfile = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  img {
+    margin-top: 2rem;
+    height: 20rem;
+    width: 20rem;
+    border: 0.1rem solid var(--color-primary-darken);
+    border-radius: 50%;
+    box-shadow: 0.1rem 0.1rem 5rem rgba(0, 0, 0, 0.5);
+  }
+
+  strong {
+    margin-top: 2rem;
+    font: 700 3rem Archivo;
+  }
+
+  @media (min-width: 700px) {
+    align-self: center;
+
+    img {
+      margin-top: 0;
+    }
   }
 `;
 
@@ -65,6 +104,14 @@ export const DataContent = styled.fieldset`
         color: var(--color-primary-dark);
       }
     }
+  }
+
+  hr {
+    width: 100%;
+    border: 0;
+    height: 1px;
+    background: rgba(0, 0, 0, 0.1);
+    margin: 30px 0;
   }
 
   @media (min-width: 700px) {
@@ -156,7 +203,6 @@ export const WarningContent = styled.footer`
     width: 100%;
     height: 5.6rem;
     background: var(--color-secundary);
-    color: var(--color-button-text);
     border: 0;
     border-radius: 0.8rem;
     font: 700 1.6rem Archivo;
@@ -166,6 +212,7 @@ export const WarningContent = styled.footer`
     text-decoration: none;
     transition: background 0.2s;
     margin-top: 3.2rem;
+    color: var(--color-button-text);
 
     &:hover {
       background: var(--color-secundary-dark);

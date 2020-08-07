@@ -5,12 +5,21 @@ import { Container } from './styles';
 interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   title: string;
   name: string;
+  description?: string;
 }
 
-const TextArea: React.FC<TextAreaProps> = ({ title, name, ...rest }) => {
+const TextArea: React.FC<TextAreaProps> = ({
+  title,
+  name,
+  description,
+  ...rest
+}) => {
   return (
     <Container>
-      <label htmlFor={name}>{title}</label>
+      <div>
+        <label htmlFor={name}>{title}</label>
+        <label htmlFor={name}>{description}</label>
+      </div>
       <textarea {...rest} id={name} />
     </Container>
   );

@@ -3,8 +3,22 @@ import styled from 'styled-components';
 export const Container = styled.div`
   position: relative;
   margin-top: 2.4rem;
-  label {
-    font-size: 1.4rem;
+  display: flex;
+  flex-direction: column;
+
+  div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    label {
+      font-size: 1.4rem;
+
+      & + label {
+        margin-top: auto;
+        font-size: 1rem;
+      }
+    }
   }
 
   textarea {
