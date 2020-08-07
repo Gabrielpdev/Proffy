@@ -35,7 +35,7 @@
     "import/no-unresolved": "off",
     "import/no-duplicates": "off",
     "import/prefer-default-export": "off",
-    "@typescript-eslint/camelcase": "off",
+    "camelcase": "off",
     "@typescript-eslint/explicit-function-return-type": [
       "error",
       {

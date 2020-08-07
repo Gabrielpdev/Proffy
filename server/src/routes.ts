@@ -20,12 +20,12 @@ routes.get('/teachers', teacherController.index);
 
 routes.post('/sessions', sessionsController.create);
 
-routes.get('/connections', ensureAuthenticated, connectionsController.index);
+routes.get('/connections', connectionsController.index);
 
 routes.post('/classes', ensureAuthenticated, classesController.create);
-routes.get('/classes', ensureAuthenticated, classesController.index);
+routes.get('/classes', classesController.index);
 
-routes.post('/connections', ensureAuthenticated, connectionsController.create);
+routes.post('/connections', connectionsController.create);
 
 routes.put('/users', ensureAuthenticated, userController.update);
 
