@@ -47,7 +47,7 @@ Após isso os alunos podem encontrar esse professor buscando a matéria, dia e h
 
 <p align="center">
   <a href="" rel="noopener">
- <img width=350px src=".github\demo.gif" alt="Preview logo"></a>
+ <img width=350px src=".github\web.gif" alt="Preview logo"></a>
 </p>
 
 ## 🏁 Iniciando <a name = "getting_started"></a>
@@ -77,12 +77,16 @@ $ yarn start
 
 # 📱 Iniciando com o Mobile 🚧 Em Construção...🚧
 
+$ cd mobile
+$ yarn
+$ yarn start
 ```
 
 ## ⛏️ Tecnologias Utilizadas <a name = "built_using"></a>
 
 - 🔵 [TypeScript][typescript]
 - 🟢 [Node Js][nodejs]
+- ❄️ [Knex][knex]
 - 🐘 [Postgres][postgres]
 - ⚛️ [React][reactjs]
 - ⚛️ [React Native][reactNative]
@@ -105,6 +109,7 @@ $ yarn start
 
 Feito com ❤️ por Gabriel Pereira 👋🏽 [Entre em contato!](https://www.linkedin.com/in/gabriel-pereira-oliveira-78b1801ab/)
 
+[knex]:http://knexjs.org/
 [postgres]: https://www.postgresql.org/
 [nodejs]: https://nodejs.org/en/
 [typescript]: https://www.typescriptlang.org/
