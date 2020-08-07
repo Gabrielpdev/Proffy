@@ -45,10 +45,9 @@ A aplicação visa estabelecer um contato entre alunos e professores. O professo
 Após isso os alunos podem encontrar esse professor buscando a matéria, dia e hora que batem com a do professor cadastrado.<br/> 
 
 
-<p align="center">
-  <a href="" rel="noopener">
- <img width=350px src=".github\web.gif" alt="Preview logo"></a>
-</p>
+<h2 align="center">
+    <img alt="Proffy" title="#GoBarber" src=".github/web.gif" width="100%" />
+</h2>
 
 ## 🏁 Iniciando <a name = "getting_started"></a>
 
