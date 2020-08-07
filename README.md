@@ -88,6 +88,7 @@ $ yarn start
 - ❄️ [Knex][knex]
 - 🐘 [Postgres][postgres]
 - ⚛️ [React][reactjs]
+- 🔼 [Expo][expo]
 - ⚛️ [React Native][reactNative]
 - 💅 [Styled-components]
 
@@ -108,6 +109,7 @@ $ yarn start
 
 Feito com ❤️ por Gabriel Pereira 👋🏽 [Entre em contato!](https://www.linkedin.com/in/gabriel-pereira-oliveira-78b1801ab/)
 
+[expo]: https://expo.io/
 [knex]:http://knexjs.org/
 [postgres]: https://www.postgresql.org/
 [nodejs]: https://nodejs.org/en/
