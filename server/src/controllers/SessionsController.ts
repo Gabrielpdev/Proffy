@@ -23,8 +23,7 @@ export default class SessionsController {
 
       delete user.password;
 
-      const token = sign({}, authConfig.secret, {
-        subject: user.id,
+      const token = sign({ userId: user.id }, authConfig.secret, {
         expiresIn: authConfig.expiresIn,
       });
 

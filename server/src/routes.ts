@@ -25,7 +25,7 @@ routes.get('/connections', connectionsController.index);
 routes.post('/classes', ensureAuthenticated, classesController.create);
 routes.get('/classes', classesController.index);
 
-routes.post('/connections', connectionsController.create);
+routes.post('/connections', ensureAuthenticated, connectionsController.create);
 
 routes.put('/users', ensureAuthenticated, userController.update);
 

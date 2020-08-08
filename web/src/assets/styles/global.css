@@ -50,7 +50,6 @@ body, input, button, textarea {
 }
 
 button {
-  outline: none;
   cursor: pointer;
 }
 

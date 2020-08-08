@@ -5,7 +5,7 @@ import authConfig from '../config/auth';
 interface ITokenPayload {
   iat: number;
   exp: number;
-  sub: string;
+  userId: string;
 }
 
 export default function ensureAuthentication(
@@ -24,10 +24,10 @@ export default function ensureAuthentication(
   try {
     const decoded = verify(token, authConfig.secret);
 
-    const { sub } = decoded as ITokenPayload;
+    const { userId } = decoded as ITokenPayload;
 
     req.user = {
-      id: sub,
+      id: userId,
     };
 
     return next();
