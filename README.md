@@ -1,5 +1,5 @@
 <h2 align="center">
-    <img alt="Proffy" title="#GoBarber" src=".github/logo.png" width="350px" />
+    <img alt="Proffy" title="#Proffy" src=".github/logo.png" width="350px" />
 </h2>
   
 <p align="center">
@@ -24,7 +24,7 @@
 </p>
 
 <h2 align="center">
-    <img alt="Proffy" title="#GoBarber" src=".github/Proffy-responsivo.png" width="350px" />
+    <img alt="Proffy" title="#Proffy" src=".github/Proffy-responsivo.png" width="350px" />
 </h2>
 
 
