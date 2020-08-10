@@ -3,12 +3,12 @@ import { Feather } from '@expo/vector-icons';
 
 interface ContentProps {
   isFocused: boolean;
+  textArena: boolean;
 }
 
 export const Container = styled.View``;
 
 export const Title = styled.Text`
-  margin-top: 10px;
   color: #8257e5;
   font-family: 'Poppins_400Regular';
   font-size: 14px;
@@ -18,7 +18,8 @@ export const Title = styled.Text`
 
 export const Content = styled.View<ContentProps>`
   width: 100%;
-  height: 60px;
+  height: ${props => (props.textArena ? '120px' : '60px')};
+
   padding: 0 16px;
   background: #fafafc;
   border-radius: 10px;

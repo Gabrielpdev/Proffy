@@ -11,8 +11,9 @@ import { Container, Title, Content, TextInput, Icon } from './styles';
 
 interface InputProps extends TextInputProps {
   title: string;
-  icon: string;
+  icon?: string;
   value: string;
+  textArena?: boolean;
 }
 
 interface InputRef {
@@ -20,7 +21,7 @@ interface InputRef {
 }
 
 const Input: React.RefForwardingComponent<InputRef, InputProps> = (
-  { title, value, icon, ...rest },
+  { title, value, icon, textArena = false, ...rest },
   ref,
 ) => {
   const inputElementRef = useRef<any>(null);
@@ -47,7 +48,7 @@ const Input: React.RefForwardingComponent<InputRef, InputProps> = (
   return (
     <Container>
       <Title>{title}</Title>
-      <Content isFocused={isFocused}>
+      <Content isFocused={isFocused} textArena={textArena}>
         <Icon
           name={icon}
           size={20}

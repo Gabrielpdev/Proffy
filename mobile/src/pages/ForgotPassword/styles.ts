@@ -13,21 +13,26 @@ interface InputProps {
 
 export const Container = styled.View`
   flex: 1;
-  justify-content: space-between;
   flex-direction: column;
-  padding: 0 0 ${Platform.OS === 'android' ? 120 : 40}px;
+  padding: 0 0 ${Platform.OS === 'android' ? 310 : 40}px;
+`;
+
+export const Background = styled.ImageBackground`
+  height: 70%;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  background: #8257e5;
 `;
 
 export const LogoContainer = styled.View`
   align-items: center;
   justify-content: center;
-  padding: 40px 40px 20px 40px;
-  background: #8257e5;
 `;
 
 export const Logo = styled.Image`
-  width: 80%;
-  height: 20%;
+  height: 70px;
+  width: 200px;
 `;
 
 export const LogoDescription = styled.Text`
@@ -38,80 +43,41 @@ export const LogoDescription = styled.Text`
   margin-top: 15px;
 `;
 
-export const Banner = styled.Image``;
-
 export const Form = styled.View`
   background: #f0f0f7;
   align-items: center;
   justify-content: center;
   padding: 40px;
-  margin-bottom: auto;
+`;
+
+export const Icon = styled.TouchableOpacity`
+  align-self: flex-start;
 `;
 
 export const TitleBlock = styled.View`
-  justify-content: space-between;
   align-items: center;
-  flex-direction: row;
+  flex-direction: column;
   width: 100%;
   margin-bottom: 10px;
 `;
 
 export const Title = styled.Text`
+  margin-top: 31px;
+  align-self: flex-start;
   font-family: 'Poppins_600SemiBold';
   font-size: 24px;
   line-height: 34px;
+  color: #32264d;
 `;
 
-export const Create = styled.TouchableOpacity``;
-
-export const CreateCount = styled.Text`
-  color: #8257e5;
+export const Description = styled.Text`
+  margin-top: 16px;
+  margin-bottom: 40px;
   font-family: 'Poppins_400Regular';
-  font-size: 12px;
+  font-size: 14px;
   line-height: 24px;
-`;
-
-export const Footer = styled.View`
-  margin-top: 20px;
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: row;
-  width: 100%;
-`;
-
-export const Remember = styled.View`
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: row;
-`;
-
-export const RememberButton = styled.TouchableOpacity`
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: row;
-`;
-
-export const Icon = styled(Feather)<IconProps>`
-  background: ${props => (props.remember ? '#04d361' : '#fff')};
-  padding: 5px;
-  border-radius: 8px;
-  margin-right: 5px;
-  color: #ffffff;
-`;
-
-export const RememberButtonText = styled.Text`
-  margin-top: auto;
-  font-family: 'Poppins_400Regular';
-  font-size: 12px;
-  color: #9c98a6;
-`;
-
-export const Forgot = styled.TouchableOpacity``;
-
-export const ForgotText = styled.Text`
-  font-family: 'Poppins_400Regular';
-  font-size: 12px;
-  color: #9c98a6;
+  color: #6a6180;
+  align-self: flex-start;
 `;
 
 export const Button = styled(RectButton)`

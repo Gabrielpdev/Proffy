@@ -2,6 +2,7 @@ import React, { useState, useCallback, useRef } from 'react';
 
 import { TextInput, KeyboardAvoidingView, Platform } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 import landingImg from '../../assets/images/landing.png';
 import logoImg from '../../assets/images/logo.png';
 
@@ -30,7 +31,7 @@ import {
 } from './styles';
 
 const SignIn: React.FC = () => {
-  const formRef = useRef(null);
+  const navigation = useNavigation();
 
   const passwordInputRef = useRef<TextInput>(null);
 
@@ -43,6 +44,14 @@ const SignIn: React.FC = () => {
     console.log(email);
     console.log(password);
   }, [email, password]);
+
+  const handleNavigateToCreate = useCallback(() => {
+    navigation.navigate('Step1');
+  }, [navigation]);
+
+  const handleNavigateToForgotPassword = useCallback(() => {
+    navigation.navigate('ForgotPassword');
+  }, [navigation]);
 
   const toggleRemember = useCallback(() => {
     setRemember(state => !state);
@@ -67,7 +76,7 @@ const SignIn: React.FC = () => {
             <Form>
               <TitleBlock>
                 <Title>Fazer login</Title>
-                <Create>
+                <Create onPress={handleNavigateToCreate}>
                   <CreateCount>Criar uma conta</CreateCount>
                 </Create>
               </TitleBlock>
@@ -78,6 +87,7 @@ const SignIn: React.FC = () => {
                 autoCapitalize="none"
                 autoCorrect={false}
                 keyboardType="email-address"
+                placeholder="Digite seu email"
                 value={email}
                 onChangeText={text => setEmail(text)}
                 returnKeyType="next"
@@ -91,6 +101,7 @@ const SignIn: React.FC = () => {
                 secureTextEntry
                 title="Senha"
                 icon="lock"
+                placeholder="Digite sua senha"
                 value={password}
                 onChangeText={text => setPassword(text)}
                 returnKeyType="next"
@@ -104,7 +115,7 @@ const SignIn: React.FC = () => {
                   </RememberButton>
                 </Remember>
 
-                <Forgot onPress={() => {}}>
+                <Forgot onPress={handleNavigateToForgotPassword}>
                   <ForgotText>Esqueci minha senha</ForgotText>
                 </Forgot>
               </Footer>
