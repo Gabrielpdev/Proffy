@@ -25,12 +25,21 @@ export default class ClassesController {
         const classes = await db('users')
           .where('is_teacher', '=', true)
           .join('classes', 'users.id', '=', 'classes.user_id')
+          .join('classes_schedule', function () {
+            this.on('classes_schedule.class_id', '=', 'classes.id');
+          })
+          .groupBy('users.id', 'classes.id', 'classes_schedule.id')
           .select([
-            'classes.*',
+            'users.id',
             'users.name',
             'users.avatar',
             'users.bio',
             'users.whatsapp',
+            'classes.subject',
+            'classes.cost',
+            'classes_schedule.week_day',
+            'classes_schedule.from',
+            'classes_schedule.to',
           ]);
 
         return response.json(classes);
@@ -38,7 +47,7 @@ export default class ClassesController {
 
       const timeInMinutes = convertHourToMinute(time);
 
-      const classes = await db('classes')
+      const classSchedule = await db('classes')
         .whereExists(function () {
           this.select('classes_schedule.*')
             .from('classes_schedule')
@@ -49,9 +58,25 @@ export default class ClassesController {
         })
         .where('classes.subject', '=', subject)
         .join('users', 'classes.user_id', '=', 'users.id')
-        .select(['classes.*', 'users.*']);
+        .where('users.is_teacher', '=', true)
+        .join('classes_schedule', function () {
+          this.on('classes_schedule.class_id', '=', 'classes.id');
+        })
+        .groupBy('users.id', 'classes.id', 'classes_schedule.id')
+        .select([
+          'users.id',
+          'users.name',
+          'users.avatar',
+          'users.bio',
+          'users.whatsapp',
+          'classes.subject',
+          'classes.cost',
+          'classes_schedule.week_day',
+          'classes_schedule.from',
+          'classes_schedule.to',
+        ]);
 
-      return response.json(classes);
+      return response.json(classSchedule);
     } catch (err) {
       console.log(err);
     }
