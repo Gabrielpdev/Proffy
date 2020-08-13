@@ -11,7 +11,6 @@ import Finished from '../pages/SignUp/Finished';
 import ForgotPassword from '../pages/ForgotPassword';
 import SendEmail from '../pages/ForgotPassword/SendEmail';
 
-import GiveClasses from '../pages/GiveClasses';
 import StudyTabs from './StudyTabs';
 
 const { Navigator, Screen } = createStackNavigator();
@@ -28,8 +27,7 @@ const AppStack: React.FC = () => {
         <Screen name="ForgotPassword" component={ForgotPassword} />
         <Screen name="ForgotSend" component={SendEmail} />
 
-        <Screen name="GiveClasses" component={GiveClasses} />
-        <Screen name="Study" component={StudyTabs} />
+        <Screen name="Dashboard" component={StudyTabs} />
       </Navigator>
     </NavigationContainer>
   );

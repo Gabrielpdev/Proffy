@@ -8,7 +8,6 @@ interface TitleProps {
 
 interface ContentProps {
   isFocused: boolean;
-  textArena: boolean;
 }
 
 export const Container = styled.View``;
@@ -28,7 +27,7 @@ export const Title = styled.Text<TitleProps>`
 
 export const Content = styled.View<ContentProps>`
   width: 100%;
-  height: ${props => (props.textArena ? '120px' : '60px')};
+  height: 60px;
 
   padding: 0 16px;
   background: #fafafc;
@@ -50,7 +49,7 @@ export const Content = styled.View<ContentProps>`
         `}
 `;
 
-export const TextInput = styled.TextInput`
+export const Input = styled(TextInputMask)`
   flex: 1;
   color: #6a6180;
   font-size: 16px;

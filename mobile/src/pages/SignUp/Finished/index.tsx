@@ -37,7 +37,7 @@ const Finished: React.FC = () => {
           plataforma da Proffy
         </Description>
         <Button onPress={handleFinish}>
-          <ButtonText>Próximo</ButtonText>
+          <ButtonText>Fazer login</ButtonText>
         </Button>
       </Banner>
     </Container>

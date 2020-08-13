@@ -1,6 +1,7 @@
 import styled from 'styled-components/native';
 import { ScrollView } from 'react-native';
 import { BorderlessButton, RectButton } from 'react-native-gesture-handler';
+import { TextInputMask } from 'react-native-masked-text';
 
 export const Container = styled.View`
   flex: 1;
@@ -27,14 +28,24 @@ export const Label = styled.Text`
   font-family: 'Poppins_400Regular';
 `;
 
-export const Input = styled.TextInput`
+export const Input = styled(TextInputMask)`
   height: 54px;
   background: #fff;
-  border-radius: 8px;
   justify-content: center;
   padding: 0 16px;
   margin-top: 4px;
   margin-bottom: 16px;
+  border-radius: 8px;
+`;
+
+export const PickerView = styled.View`
+  height: 54px;
+  background: #fff;
+  justify-content: center;
+  padding: 0 16px;
+  margin-top: 4px;
+  margin-bottom: 16px;
+  border-radius: 8px;
 `;
 
 export const InputGroup = styled.View`

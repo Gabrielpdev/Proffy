@@ -3,6 +3,10 @@ import { RectButton } from 'react-native-gesture-handler';
 import { Platform } from 'react-native';
 import Input from '../../../components/Input';
 
+interface ButtonsProps {
+  isSelected: boolean;
+}
+
 export const Container = styled.View`
   flex: 1;
   flex-direction: column;
@@ -59,7 +63,7 @@ export const Form = styled.View`
   margin-top: 27%;
 `;
 
-export const FormTitle = styled.Text`
+export const FormQuestion1 = styled.Text`
   font-family: 'Poppins_600SemiBold';
   font-size: 24px;
   line-height: 26px;
@@ -68,6 +72,53 @@ export const FormTitle = styled.Text`
 `;
 
 export const TextArena = styled(Input)``;
+
+export const FormQuestion2 = styled.Text`
+  font-family: 'Poppins_600SemiBold';
+  font-size: 23px;
+  line-height: 26px;
+  margin: 10px 0;
+  color: #32264d;
+`;
+
+export const FormFooter = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+export const StudyButton = styled(RectButton)<ButtonsProps>`
+  height: 40px;
+  width: 48%;
+  border-radius: 8px;
+  padding: 24px 32px;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  background: ${props => (props.isSelected ? '#9871f5' : '#CDBCF5')};
+`;
+
+export const TeacherButton = styled(RectButton)<ButtonsProps>`
+  height: 40px;
+  width: 48%;
+  border-radius: 8px;
+  padding: 24px 32px;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  background: ${props => (props.isSelected ? '#04d361' : '#B1E6C8')};
+`;
+
+export const ImageIcon = styled.Image`
+  width: 24px;
+  height: 24px;
+`;
+
+export const TextButton = styled.Text`
+  font-family: 'Archivo_700Bold';
+  color: #fff;
+  font-size: 14px;
+`;
 
 export const FormButton = styled(RectButton)`
   align-items: center;

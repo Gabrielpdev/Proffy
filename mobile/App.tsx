@@ -1,4 +1,5 @@
 import React from 'react';
+import { SafeAreaView } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { AppLoading } from 'expo';
 import {
@@ -26,10 +27,10 @@ const App: React.FC = () => {
   }
 
   return (
-    <>
+    <SafeAreaView style={{ flex: 1 }}>
       <AppStack />
       <StatusBar style="light" />
-    </>
+    </SafeAreaView>
   );
 };
 

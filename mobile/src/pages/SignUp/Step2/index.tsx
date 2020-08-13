@@ -28,7 +28,7 @@ import {
 } from './styles';
 
 const Step2: React.FC = () => {
-  const { goBack, navigate } = useNavigation();
+  const { goBack, reset } = useNavigation();
 
   const passwordInputRef = useRef<TextInput>(null);
 
@@ -40,8 +40,11 @@ const Step2: React.FC = () => {
   }, [goBack]);
 
   const handleContinue = useCallback(() => {
-    navigate('Finished');
-  }, [navigate]);
+    reset({
+      index: 1,
+      routes: [{ name: 'SignIn' }, { name: 'Finished' }],
+    });
+  }, [reset]);
 
   return (
     <KeyboardAvoidingView
@@ -68,12 +71,11 @@ const Step2: React.FC = () => {
           </Title>
           <Description>
             Basta preencher esses dados
-            {'\n'}
-e você estará conosco.
-</Description>
+            {'\n'}e você estará conosco.
+          </Description>
 
           <Form>
-            <FormTitle>02. Email e Senha</FormTitle>
+            <FormTitle>03. Email e Senha</FormTitle>
 
             <Input
               title="Email"
@@ -102,7 +104,7 @@ e você estará conosco.
             />
 
             <FormButton onPress={handleContinue}>
-              <FormButtonText>Próximo</FormButtonText>
+              <FormButtonText>Concluir cadastro</FormButtonText>
             </FormButton>
           </Form>
         </Container>

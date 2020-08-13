@@ -41,9 +41,8 @@ const SignIn: React.FC = () => {
   const [password, setPassword] = useState('');
 
   const handleSubmit = useCallback(() => {
-    console.log(email);
-    console.log(password);
-  }, [email, password]);
+    navigation.navigate('Dashboard');
+  }, [navigation]);
 
   const handleNavigateToCreate = useCallback(() => {
     navigation.navigate('Step1');
@@ -104,7 +103,6 @@ const SignIn: React.FC = () => {
                 placeholder="Digite sua senha"
                 value={password}
                 onChangeText={text => setPassword(text)}
-                returnKeyType="next"
               />
 
               <Footer>

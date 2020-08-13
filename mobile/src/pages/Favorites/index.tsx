@@ -26,7 +26,10 @@ const Favorites: React.FC = () => {
 
   return (
     <Container>
-      <PageHeader title="Meus Proffys Favoritos" />
+      <PageHeader
+        title={`Meus proffys${'\n'}favoritos.`}
+        titleBar="Favoritos"
+      />
       <Scroll>
         {favorites.map((teacher: Teacher) => (
           <TeacherItem key={teacher.id} teacher={teacher} favorited />

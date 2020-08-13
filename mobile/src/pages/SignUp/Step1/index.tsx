@@ -10,6 +10,9 @@ import {
 
 import Input from '../../../components/Input';
 
+import studyIcon from '../../../assets/images/icons/study.png';
+import giveClassesIcon from '../../../assets/images/icons/give-classes.png';
+
 import {
   Container,
   Header,
@@ -20,8 +23,14 @@ import {
   Title,
   Description,
   Form,
-  FormTitle,
+  FormQuestion1,
   TextArena,
+  FormFooter,
+  ImageIcon,
+  FormQuestion2,
+  StudyButton,
+  TeacherButton,
+  TextButton,
   FormButton,
   FormButtonText,
 } from './styles';
@@ -33,6 +42,7 @@ const Step1: React.FC = () => {
   const bioInputRef = useRef<TextInput>(null);
 
   const [name, setName] = useState('');
+  const [isTeacher, setIsTeacher] = useState(false);
   const [whatsapp, setWhatsapp] = useState('');
   const [bio, setBio] = useState('');
 
@@ -43,6 +53,10 @@ const Step1: React.FC = () => {
   const handleContinue = useCallback(() => {
     navigate('Step2');
   }, [navigate]);
+
+  const toggleIsTeacher = useCallback(() => {
+    setIsTeacher(state => !state);
+  }, []);
 
   return (
     <KeyboardAvoidingView
@@ -69,11 +83,12 @@ const Step1: React.FC = () => {
           </Title>
           <Description>
             Basta preencher esses dados
-            {'\n'}e você estará conosco.
-          </Description>
+            {'\n'}
+e você estará conosco.
+</Description>
 
           <Form>
-            <FormTitle>01. Quem é você ?</FormTitle>
+            <FormQuestion1>01. Quem é você ?</FormQuestion1>
 
             <Input
               title="Nome"
@@ -110,6 +125,19 @@ const Step1: React.FC = () => {
               onChangeText={text => setBio(text)}
               returnKeyType="next"
             />
+
+            <FormQuestion2>02. O que você quer fazer ?</FormQuestion2>
+            <FormFooter>
+              <StudyButton isSelected={!isTeacher} onPress={toggleIsTeacher}>
+                <ImageIcon source={studyIcon} />
+                <TextButton>Estudar</TextButton>
+              </StudyButton>
+
+              <TeacherButton isSelected={isTeacher} onPress={toggleIsTeacher}>
+                <ImageIcon source={giveClassesIcon} />
+                <TextButton>Dar aula</TextButton>
+              </TeacherButton>
+            </FormFooter>
 
             <FormButton onPress={handleContinue}>
               <FormButtonText>Próximo</FormButtonText>

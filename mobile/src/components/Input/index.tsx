@@ -6,14 +6,22 @@ import React, {
   useCallback,
 } from 'react';
 import { TextInputProps } from 'react-native';
-
+import {
+  TextInputMask,
+  TextInputMaskTypeProp,
+  TextInputMaskOptionProp,
+} from 'react-native-masked-text';
 import { Container, Title, Content, TextInput, Icon } from './styles';
 
 interface InputProps extends TextInputProps {
+  containerStyle?: {};
   title: string;
   icon?: string;
   value: string;
   textArena?: boolean;
+  type?: TextInputMaskTypeProp;
+  options?: TextInputMaskOptionProp;
+  onChangeText(text: any): void;
 }
 
 interface InputRef {
@@ -21,7 +29,17 @@ interface InputRef {
 }
 
 const Input: React.RefForwardingComponent<InputRef, InputProps> = (
-  { title, value, icon, textArena = false, ...rest },
+  {
+    containerStyle,
+    title,
+    value,
+    icon,
+    textArena = false,
+    type,
+    options,
+    onChangeText,
+    ...rest
+  },
   ref,
 ) => {
   const inputElementRef = useRef<any>(null);
@@ -46,20 +64,33 @@ const Input: React.RefForwardingComponent<InputRef, InputProps> = (
   }));
 
   return (
-    <Container>
-      <Title>{title}</Title>
+    <Container style={containerStyle}>
+      <Title isFocused={isFocused}>{title}</Title>
       <Content isFocused={isFocused} textArena={textArena}>
         <Icon
           name={icon}
           size={20}
           color={isFocused || isFilled ? '#8257e5' : '#9c98a6'}
         />
-        <TextInput
-          onFocus={handleInputFocus}
-          onBlur={handleInputBlur}
-          ref={inputElementRef}
-          {...rest}
-        />
+        {type ? (
+          <TextInputMask
+            type={type}
+            value={value}
+            onChangeText={onChangeText}
+            options={options}
+            onFocus={handleInputFocus}
+            onBlur={handleInputBlur}
+            ref={inputElementRef}
+            {...rest}
+          />
+        ) : (
+          <TextInput
+            onFocus={handleInputFocus}
+            onBlur={handleInputBlur}
+            ref={inputElementRef}
+            {...rest}
+          />
+        )}
       </Content>
     </Container>
   );
