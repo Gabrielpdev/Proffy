@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { celebrate, Segments, Joi } from 'celebrate';
 
-import ClassesController from '@modules/classes/infra/http/controllers/classesController';
+import ClassesController from '@modules/classes/infra/http/controllers/ClassesController';
 
 const classRouter = Router();
 const classesController = new ClassesController();

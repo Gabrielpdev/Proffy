@@ -20,8 +20,9 @@ export default class CreateClassSchedule1597351814615
             default: 'uuid_generate_v4()',
           },
           {
-            name: 'week_day',
-            type: 'integer',
+            name: 'week_day_id',
+            type: 'uuid',
+            isNullable: true,
           },
           {
             name: 'from',
@@ -61,6 +62,18 @@ export default class CreateClassSchedule1597351814615
         onUpdate: 'CASCADE',
       }),
     );
+
+    await queryRunner.createForeignKey(
+      'classes_schedule',
+      new TableForeignKey({
+        name: 'WeekDay',
+        columnNames: ['week_day_id'],
+        referencedColumnNames: ['id'],
+        referencedTableName: 'week_day',
+        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE',
+      }),
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
@@ -68,6 +81,7 @@ export default class CreateClassSchedule1597351814615
       'classes_schedule',
       'ClassesScheduleClass',
     );
+    await queryRunner.dropForeignKey('classes_schedule', 'WeekDay');
     await queryRunner.dropTable('classes_schedule');
   }
 }
