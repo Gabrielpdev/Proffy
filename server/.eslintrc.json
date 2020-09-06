@@ -29,6 +29,7 @@
     "class-methods-use-this":"off",
     "camelcase":"off",
     "no-useless-constructor": "off",
+    "no-throw-literal": "off",
     "@typescript-eslint/no-unused-vars": ["error", {"argsIgnorePattern": "_"}],
     "import/extensions": [
       "error",

@@ -6,8 +6,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity('week_day')
-class WeekDay {
+@Entity('schedules')
+class Schedule {
   @PrimaryColumn('uuid')
   id: string;
 
@@ -21,4 +21,4 @@ class WeekDay {
   updated_at: Date;
 }
 
-export default WeekDay;
+export default Schedule;

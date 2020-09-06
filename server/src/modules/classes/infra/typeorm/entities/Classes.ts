@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 
 import User from '@modules/users/infra/typeorm/entities/Users';
+import Schedule from '@modules/schedule/infra/typeorm/entities/Schedule';
 
 @Entity('classes')
 class Class {
@@ -16,7 +17,11 @@ class Class {
   id: string;
 
   @Column()
-  subject: string;
+  subject_id: string;
+
+  @ManyToOne(() => Schedule)
+  @JoinColumn({ name: 'subject_id' })
+  subject: Schedule;
 
   @Column()
   cost: number;

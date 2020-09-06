@@ -15,8 +15,9 @@ interface ScheduleItem {
   to: number;
 }
 interface IRequest {
-  subject: string;
+  subject_id: string;
   cost: number;
+  user_id: string;
   schedule: [ScheduleItem];
 }
 
@@ -33,51 +34,60 @@ class CreateClassService {
     private cacheProvider: ICacheProvier,
   ) {}
 
-  public async execute({ subject, cost, schedule }: IRequest): Promise<Class> {
-    const classe = await this.classesRepository.create({
-      subject,
-      cost,
-      schedule,
-    });
+  public async execute({
+    subject_id,
+    cost,
+    schedule,
+    user_id,
+  }: IRequest): Promise<Class> {
+    try {
+      const classe = await this.classesRepository.create({
+        subject_id,
+        cost,
+        user_id,
+      });
 
-    const { id } = classe;
+      const { id } = classe;
 
-    const classSchedule = schedule.map((scheduleItem: ScheduleItem) => {
-      return {
-        class_id: id,
-        week_day_id: scheduleItem.week_day_id,
-        from: convertHourToMinute(String(scheduleItem.from)),
-        to: convertHourToMinute(String(scheduleItem.to)),
-      };
-    });
+      const classSchedule = schedule.map((scheduleItem: ScheduleItem) => {
+        return {
+          class_id: id,
+          week_day_id: scheduleItem.week_day_id,
+          from: convertHourToMinute(String(scheduleItem.from)),
+          to: convertHourToMinute(String(scheduleItem.to)),
+        };
+      });
 
-    classSchedule.forEach((item: ScheduleItem): void => {
-      // Checar se é horario valido
-      if (item.from > 1439 || item.from < 0) {
-        throw new AppError('Hour must be valid');
-      }
+      classSchedule.forEach((scheduleItem: ScheduleItem): void => {
+        // Checar se é horário valido
+        if (scheduleItem.from > 1439 || scheduleItem.from < 0) {
+          throw { message: 'Hour must be valid', statusCode: 400 };
+        }
 
-      // Checar se é horario valido
-      if (
-        convertHourToMinute(String(item.to)) > 1439 ||
-        convertHourToMinute(String(item.to)) < 0
-      ) {
-        throw new AppError('Hour must be valid');
-      }
+        // Checar se é horário valido
+        if (
+          convertHourToMinute(String(scheduleItem.to)) > 1439 ||
+          convertHourToMinute(String(scheduleItem.to)) < 0
+        ) {
+          throw { message: 'Hour must be valid', statusCode: 400 };
+        }
 
-      // Checar se o dia já nao está ocupado
-      const checkDay = this.classesScheduleRepository.findByDay(
-        item.week_day_id,
-      );
+        // Checar se o dia já nao está ocupado
+        const checkDay = classSchedule.filter(
+          item => item.week_day_id === scheduleItem.week_day_id,
+        );
 
-      if (checkDay) {
-        throw new AppError('Day already been selected');
-      }
+        if (checkDay.length > 1) {
+          throw { message: 'Day already been selected', statusCode: 400 };
+        }
 
-      this.classesScheduleRepository.create(item);
-    });
+        this.classesScheduleRepository.create(scheduleItem);
+      });
 
-    return classe;
+      return classe;
+    } catch (err) {
+      throw new AppError(err.message);
+    }
   }
 }
 

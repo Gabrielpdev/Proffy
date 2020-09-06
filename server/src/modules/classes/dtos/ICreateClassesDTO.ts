@@ -1,7 +1,5 @@
-import ICreateScheduleDTO from './ICreateScheduleDTO';
-
 export default interface ICreateClassesDTO {
-  subject: string;
+  subject_id: string;
   cost: number;
-  schedule: [ICreateScheduleDTO];
+  user_id: string;
 }

@@ -19,8 +19,9 @@ export default class CreateClasses1597351559226 implements MigrationInterface {
             default: 'uuid_generate_v4()',
           },
           {
-            name: 'subject',
-            type: 'varchar',
+            name: 'subject_id',
+            type: 'uuid',
+            isNullable: true,
           },
           {
             name: 'cost',
@@ -56,9 +57,22 @@ export default class CreateClasses1597351559226 implements MigrationInterface {
         onUpdate: 'CASCADE',
       }),
     );
+
+    await queryRunner.createForeignKey(
+      'classes',
+      new TableForeignKey({
+        name: 'ClassSchedule',
+        columnNames: ['subject_id'],
+        referencedColumnNames: ['id'],
+        referencedTableName: 'subjects',
+        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE',
+      }),
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.dropForeignKey('classes', 'ClassSchedule');
     await queryRunner.dropForeignKey('classes', 'ClassUser');
     await queryRunner.dropTable('classes');
   }

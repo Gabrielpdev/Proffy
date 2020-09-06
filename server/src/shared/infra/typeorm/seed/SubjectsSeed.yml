@@ -1,0 +1,11 @@
+fixtures:
+    - subjects:
+        name: 'Matemática'
+    - subjects:
+        name: 'Português'
+    - subjects:
+        name: 'Geografia'
+    - subjects:
+        name: 'História'
+    - subjects:
+        name: 'Ciências'

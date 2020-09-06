@@ -5,14 +5,16 @@ import CreateClassService from '@modules/classes/services/CreateClassService';
 
 export default class ClassesController {
   public async create(request: Request, response: Response): Promise<Response> {
-    const { subject, cost, schedule } = request.body;
+    const user_id = request.user.id;
+    const { subject_id, cost, schedule } = request.body;
 
     const createClass = container.resolve(CreateClassService);
 
     const classe = await createClass.execute({
-      subject,
+      subject_id,
       cost,
       schedule,
+      user_id,
     });
 
     return response.json(classe);

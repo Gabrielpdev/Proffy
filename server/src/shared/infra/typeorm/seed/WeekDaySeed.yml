@@ -1,22 +1,15 @@
 fixtures:
     - week_day:
         name: 'Domingo'
-        value: 0
     - week_day:
         name: 'Segunda-feira'
-        value: 1
     - week_day:
         name: 'Terça-feira'
-        value: 2
     - week_day:
         name: 'Quarta-feira'
-        value: 3
     - week_day:
         name: 'Quinta-feira'
-        value: 4
     - week_day:
         name: 'Sexta-feira'
-        value: 5
     - week_day:
         name: 'Sábado'
-        value: 6
