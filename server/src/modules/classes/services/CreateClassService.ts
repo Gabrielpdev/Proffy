@@ -3,7 +3,6 @@ import { inject, injectable } from 'tsyringe';
 import AppError from '@shared/errors/AppError';
 import convertHourToMinute from 'utils/convertHourToMinutes';
 
-import ICacheProvier from '@shared/container/providers/CacheProvider/models/ICacheProvier';
 import IClasseScheduleRepository from '@modules/schedule/repositories/IClasseScheduleRepository';
 import IClassesRepository from '../repositories/IClassesRepository';
 import Class from '../infra/typeorm/entities/Classes';
@@ -29,9 +28,6 @@ class CreateClassService {
 
     @inject('ClassesScheduleRepository')
     private classesScheduleRepository: IClasseScheduleRepository,
-
-    @inject('CacheProvider')
-    private cacheProvider: ICacheProvier,
   ) {}
 
   public async execute({

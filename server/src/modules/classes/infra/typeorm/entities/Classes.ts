@@ -6,10 +6,12 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 
 import User from '@modules/users/infra/typeorm/entities/Users';
-import Schedule from '@modules/schedule/infra/typeorm/entities/Schedule';
+import Subject from '@modules/schedule/infra/typeorm/entities/Subject';
+import ClassesSchedule from '@modules/schedule/infra/typeorm/entities/ClassesSchedule';
 
 @Entity('classes')
 class Class {
@@ -19,9 +21,9 @@ class Class {
   @Column()
   subject_id: string;
 
-  @ManyToOne(() => Schedule)
+  @ManyToOne(() => Subject)
   @JoinColumn({ name: 'subject_id' })
-  subject: Schedule;
+  subject: Subject;
 
   @Column()
   cost: number;
@@ -32,6 +34,9 @@ class Class {
   @ManyToOne(() => User)
   @JoinColumn({ name: 'user_id' })
   user: User;
+
+  @OneToMany(() => ClassesSchedule, classes_schedule => classes_schedule.class)
+  class_schedule: ClassesSchedule[];
 
   @CreateDateColumn()
   created_at: Date;

@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 
 @Entity('schedules')
-class Schedule {
+class Subject {
   @PrimaryColumn('uuid')
   id: string;
 
@@ -21,4 +21,4 @@ class Schedule {
   updated_at: Date;
 }
 
-export default Schedule;
+export default Subject;

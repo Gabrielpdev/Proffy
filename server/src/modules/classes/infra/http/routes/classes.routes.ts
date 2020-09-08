@@ -8,6 +8,7 @@ const classesController = new ClassesController();
 
 classRouter.use(ensureAuthenticated);
 
+classRouter.get('/', classesController.index);
 classRouter.post(
   '/',
   celebrate({

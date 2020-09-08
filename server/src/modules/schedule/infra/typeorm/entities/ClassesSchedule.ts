@@ -32,7 +32,7 @@ class ClassSchedule {
   @Column()
   class_id: string;
 
-  @ManyToOne(() => Class)
+  @ManyToOne(() => Class, classes => classes.id)
   @JoinColumn({ name: 'class_id' })
   class: Class;
 
