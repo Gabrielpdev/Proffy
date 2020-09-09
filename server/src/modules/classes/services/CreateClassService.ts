@@ -4,6 +4,8 @@ import AppError from '@shared/errors/AppError';
 import convertHourToMinute from 'utils/convertHourToMinutes';
 
 import IClasseScheduleRepository from '@modules/schedule/repositories/IClasseScheduleRepository';
+import ICacheProvier from '@shared/container/providers/CacheProvider/models/ICacheProvier';
+import ClassSchedule from '@modules/schedule/infra/typeorm/entities/ClassesSchedule';
 import IClassesRepository from '../repositories/IClassesRepository';
 import Class from '../infra/typeorm/entities/Classes';
 
@@ -28,6 +30,9 @@ class CreateClassService {
 
     @inject('ClassesScheduleRepository')
     private classesScheduleRepository: IClasseScheduleRepository,
+
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvier,
   ) {}
 
   public async execute({
@@ -43,11 +48,9 @@ class CreateClassService {
         user_id,
       });
 
-      const { id } = classe;
-
       const classSchedule = schedule.map((scheduleItem: ScheduleItem) => {
         return {
-          class_id: id,
+          class_id: classe.id,
           week_day_id: scheduleItem.week_day_id,
           from: convertHourToMinute(String(scheduleItem.from)),
           to: convertHourToMinute(String(scheduleItem.to)),
@@ -79,6 +82,8 @@ class CreateClassService {
 
         this.classesScheduleRepository.create(scheduleItem);
       });
+
+      await this.cacheProvider.invalidatePrefix(`classe:`);
 
       return classe;
     } catch (err) {

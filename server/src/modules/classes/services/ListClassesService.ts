@@ -33,82 +33,94 @@ class ListClassesService {
     week_day_id,
     hour,
   }: IRequest): Promise<ClassSchedule[] | undefined> {
-    if (subject_id && !week_day_id && !hour) {
-      const classes = await this.classesScheduleRepository.findAllClassesBySubject(
-        {
-          subject_id,
-        },
-      );
+    const keyCache = `classes:subject${subject_id}-weekDay:${week_day_id}-hours:${hour}`;
 
-      return classes;
+    let classes = await this.cacheProvider.recover<ClassSchedule[]>(keyCache);
+
+    if (subject_id && !week_day_id && !hour) {
+      if (!classes) {
+        classes = await this.classesScheduleRepository.findAllClassesBySubject({
+          subject_id,
+        });
+
+        this.cacheProvider.save(keyCache, classes);
+      }
     }
 
     if (!subject_id && week_day_id && !hour) {
-      const classes = await this.classesScheduleRepository.findAllClassesByWeekDay(
-        {
+      if (!classes) {
+        classes = await this.classesScheduleRepository.findAllClassesByWeekDay({
           week_day_id,
-        },
-      );
-
-      return classes;
+        });
+        this.cacheProvider.save(keyCache, classes);
+      }
     }
 
     if (!subject_id && !week_day_id && hour) {
-      const classes = await this.classesScheduleRepository.findAllClassesByHour(
-        {
+      if (!classes) {
+        classes = await this.classesScheduleRepository.findAllClassesByHour({
           hour,
-        },
-      );
-
-      return classes;
+        });
+        this.cacheProvider.save(keyCache, classes);
+      }
     }
 
     if (subject_id && week_day_id && !hour) {
-      const classes = await this.classesScheduleRepository.findAllClassesByWeekDayAndSubject(
-        {
-          week_day_id,
-          subject_id,
-        },
-      );
-
-      return classes;
+      if (!classes) {
+        classes = await this.classesScheduleRepository.findAllClassesByWeekDayAndSubject(
+          {
+            week_day_id,
+            subject_id,
+          },
+        );
+        this.cacheProvider.save(keyCache, classes);
+      }
     }
 
     if (!subject_id && week_day_id && hour) {
-      const classes = await this.classesScheduleRepository.findAllClassesByWeekDayAndHour(
-        {
-          week_day_id,
-          hour,
-        },
-      );
-
-      return classes;
+      if (!classes) {
+        classes = await this.classesScheduleRepository.findAllClassesByWeekDayAndHour(
+          {
+            week_day_id,
+            hour,
+          },
+        );
+        this.cacheProvider.save(keyCache, classes);
+      }
     }
 
     if (subject_id && !week_day_id && hour) {
-      const classes = await this.classesScheduleRepository.findAllClassesBySubjectAndHour(
-        {
-          subject_id,
-          hour,
-        },
-      );
-
-      return classes;
+      if (!classes) {
+        classes = await this.classesScheduleRepository.findAllClassesBySubjectAndHour(
+          {
+            subject_id,
+            hour,
+          },
+        );
+        this.cacheProvider.save(keyCache, classes);
+      }
     }
 
     if (subject_id && week_day_id && hour) {
-      const classes = await this.classesScheduleRepository.findAllClassesByAllFilters(
-        {
-          subject_id,
-          week_day_id,
-          hour,
-        },
-      );
-
-      return classes;
+      if (!classes) {
+        classes = await this.classesScheduleRepository.findAllClassesByAllFilters(
+          {
+            subject_id,
+            week_day_id,
+            hour,
+          },
+        );
+        this.cacheProvider.save(keyCache, classes);
+      }
     }
 
-    const classes = await this.classesScheduleRepository.findAllClasses();
+    if (!subject_id && !week_day_id && !hour) {
+      if (!classes) {
+        classes = await this.classesScheduleRepository.findAllClasses();
+
+        this.cacheProvider.save(keyCache, classes);
+      }
+    }
 
     return classes;
   }
