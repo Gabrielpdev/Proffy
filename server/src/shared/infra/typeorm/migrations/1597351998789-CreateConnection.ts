@@ -20,12 +20,22 @@ export default class CreateConnection1597351998789
             default: 'uuid_generate_v4()',
           },
           {
-            name: 'user_id',
+            name: 'student_id',
+            type: 'uuid',
+            isNullable: true,
+          },
+          {
+            name: 'teacher_id',
             type: 'uuid',
             isNullable: true,
           },
           {
             name: 'created_at',
+            type: 'timestamp',
+            default: 'now()',
+          },
+          {
+            name: 'updated_at',
             type: 'timestamp',
             default: 'now()',
           },
@@ -36,8 +46,20 @@ export default class CreateConnection1597351998789
     await queryRunner.createForeignKey(
       'connections',
       new TableForeignKey({
-        name: 'ConnectionsUsers',
-        columnNames: ['user_id'],
+        name: 'ConnectionsStudent',
+        columnNames: ['student_id'],
+        referencedColumnNames: ['id'],
+        referencedTableName: 'users',
+        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE',
+      }),
+    );
+
+    await queryRunner.createForeignKey(
+      'connections',
+      new TableForeignKey({
+        name: 'ConnectionsTeacher',
+        columnNames: ['teacher_id'],
         referencedColumnNames: ['id'],
         referencedTableName: 'users',
         onDelete: 'SET NULL',
@@ -48,6 +70,7 @@ export default class CreateConnection1597351998789
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.dropForeignKey('connections', 'ConnectionsUsers');
+    await queryRunner.dropForeignKey('connections', 'ConnectionsTeacher');
     await queryRunner.dropTable('connections');
   }
 }

@@ -5,7 +5,6 @@ import convertHourToMinute from 'utils/convertHourToMinutes';
 
 import IClasseScheduleRepository from '@modules/schedule/repositories/IClasseScheduleRepository';
 import ICacheProvier from '@shared/container/providers/CacheProvider/models/ICacheProvier';
-import ClassSchedule from '@modules/schedule/infra/typeorm/entities/ClassesSchedule';
 import IClassesRepository from '../repositories/IClassesRepository';
 import Class from '../infra/typeorm/entities/Classes';
 

@@ -6,6 +6,9 @@ import './providers';
 import IClassesRepository from '@modules/classes/repositories/IClassesRepository';
 import ClassesRepository from '@modules/classes/infra/typeorm/repositories/ClassesRepository';
 
+import IConnectionRepository from '@modules/users/repositories/IConnectionRepository';
+import ConnectionsRepository from '@modules/users/infra/typeorm/repositories/ConnectionRepository';
+
 import IClasseScheduleRepository from '@modules/schedule/repositories/IClasseScheduleRepository';
 import ClassesScheduleRepository from '@modules/schedule/infra/typeorm/repositories/ClassesScheduleRepository';
 
@@ -14,6 +17,11 @@ import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepo
 
 import IUserTokensRepository from '@modules/users/repositories/IUserTokensRepository';
 import UserTokensRespository from '@modules/users/infra/typeorm/repositories/UserTokensRespository';
+
+container.registerSingleton<IConnectionRepository>(
+  'ConnectionsRepository',
+  ConnectionsRepository,
+);
 
 container.registerSingleton<IClassesRepository>(
   'ClassesRepository',

@@ -1,5 +1,5 @@
 import User from '@modules/users/infra/typeorm/entities/Users';
-import ICreateUserDTO from '@modules/users/dtos/ICreataUserDTO';
+import ICreateUserDTO from '@modules/users/dtos/ICreateUserDTO';
 import IFindAllProffysDTO from '@modules/users/dtos/IFindAllProffysDTO';
 
 export default interface IUserRepository {
