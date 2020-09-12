@@ -14,7 +14,15 @@ class NumberOfConnectionService {
   ) {}
 
   public async execute(): Promise<number> {
-    const connection = await this.connectionRepository.getAllConnection();
+    const keyCache = `connections`;
+
+    let connection = await this.cacheProvider.recover<number>(keyCache);
+
+    if (!connection) {
+      connection = await this.connectionRepository.getAllConnection();
+
+      this.cacheProvider.save(keyCache, connection);
+    }
 
     return connection;
   }

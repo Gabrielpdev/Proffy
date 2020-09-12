@@ -3,7 +3,6 @@ import { getRepository, Repository } from 'typeorm';
 import convertHourToMinute from 'utils/convertHourToMinutes';
 
 import ICreateScheduleDTO from '@modules/schedule/dtos/ICreateScheduleDTO';
-import IFindByDay from '@modules/schedule/dtos/IFindByDay';
 import IClasseScheduleRepository from '@modules/schedule/repositories/IClasseScheduleRepository';
 import IFindAllClassesBySubject from '@modules/schedule/dtos/IFindAllClassesBySubject';
 import IFindAllClassesByWeekDay from '@modules/schedule/dtos/IFindAllClassesByWeekDay';
@@ -26,25 +25,21 @@ class ClassRepository implements IClasseScheduleRepository {
     this.weekDayRepository = getRepository(WeekDay);
   }
 
-  public async findByDay({
-    class_id,
-    week_day_id,
-  }: IFindByDay): Promise<WeekDay | undefined> {
-    const findDay = this.weekDayRepository.findOne({
-      where: { id: week_day_id, class_id },
-    });
-    return findDay;
-  }
-
-  public async findAllClasses(): Promise<ClassSchedule[] | undefined> {
-    const classes = await this.ormRepository.find({
-      relations: ['class'],
-    });
-
+  public async findAllClasses(
+    user_id: string,
+  ): Promise<ClassSchedule[] | undefined> {
+    const classes = await this.ormRepository
+      .createQueryBuilder('classe_schedule')
+      .leftJoinAndSelect('classe_schedule.class', 'classes')
+      .where('classes.user_id != :user_id', {
+        user_id,
+      })
+      .getMany();
     return classes;
   }
 
   public async findAllClassesByAllFilters({
+    user_id,
     hour,
     week_day_id,
     subject_id,
@@ -66,6 +61,9 @@ class ClassRepository implements IClasseScheduleRepository {
       .andWhere('classes.subject_id = :subject_id', {
         subject_id,
       })
+      .andWhere('classes.user_id != :user_id', {
+        user_id,
+      })
       .getMany();
 
     return schedule;
@@ -73,12 +71,16 @@ class ClassRepository implements IClasseScheduleRepository {
 
   public async findAllClassesBySubject({
     subject_id,
+    user_id,
   }: IFindAllClassesBySubject): Promise<ClassSchedule[] | undefined> {
     const schedule = await this.ormRepository
       .createQueryBuilder('classe_schedule')
       .leftJoinAndSelect('classe_schedule.class', 'classes')
       .where('classes.subject_id = :subject_id', {
         subject_id,
+      })
+      .andWhere('classes.user_id != :user_id', {
+        user_id,
       })
       .getMany();
 
@@ -87,27 +89,39 @@ class ClassRepository implements IClasseScheduleRepository {
 
   public async findAllClassesByWeekDay({
     week_day_id,
+    user_id,
   }: IFindAllClassesByWeekDay): Promise<ClassSchedule[] | undefined> {
-    const classes = await this.ormRepository.find({
-      relations: ['class'],
-      where: { week_day_id },
-    });
+    const classes = await this.ormRepository
+      .createQueryBuilder('classe_schedule')
+      .where('classe_schedule.week_day_id = :week_day_id', {
+        week_day_id,
+      })
+      .leftJoinAndSelect('classe_schedule.class', 'classes')
+      .andWhere('classes.user_id != :user_id', {
+        user_id,
+      })
+      .getMany();
 
     return classes;
   }
 
   public async findAllClassesByHour({
     hour,
+    user_id,
   }: IFindAllClassesByHour): Promise<ClassSchedule[] | undefined> {
     const time = convertHourToMinute(hour);
 
     const classes = await this.ormRepository
       .createQueryBuilder('classe_schedule')
-      .where('classe_schedule.from >= :time', {
+      .andWhere('classe_schedule.from >= :time', {
         time,
       })
       .andWhere('classe_schedule.to < :time', {
         time,
+      })
+      .leftJoinAndSelect('classe_schedule.class', 'classes')
+      .andWhere('classes.user_id != :user_id', {
+        user_id,
       })
       .getMany();
     return classes;
@@ -116,6 +130,7 @@ class ClassRepository implements IClasseScheduleRepository {
   public async findAllClassesBySubjectAndHour({
     subject_id,
     hour,
+    user_id,
   }: IFindAllClassesBySubjectAndHour): Promise<ClassSchedule[] | undefined> {
     const time = convertHourToMinute(hour);
 
@@ -131,6 +146,9 @@ class ClassRepository implements IClasseScheduleRepository {
       .andWhere('classes.subject_id = :subject_id', {
         subject_id,
       })
+      .andWhere('classes.user_id != :user_id', {
+        user_id,
+      })
       .getMany();
 
     return schedule;
@@ -139,6 +157,7 @@ class ClassRepository implements IClasseScheduleRepository {
   public async findAllClassesByWeekDayAndHour({
     week_day_id,
     hour,
+    user_id,
   }: IFindAllClassesByWeekDayAndHour): Promise<ClassSchedule[] | undefined> {
     const time = convertHourToMinute(hour);
 
@@ -153,6 +172,10 @@ class ClassRepository implements IClasseScheduleRepository {
       .andWhere('classes.week_day_id = :week_day_id', {
         week_day_id,
       })
+      .leftJoinAndSelect('classe_schedule.class', 'classes')
+      .andWhere('classes.user_id != :user_id', {
+        user_id,
+      })
       .getMany();
 
     return schedule;
@@ -160,6 +183,7 @@ class ClassRepository implements IClasseScheduleRepository {
 
   public async findAllClassesByWeekDayAndSubject({
     subject_id,
+    user_id,
     week_day_id,
   }: IFindAllClassesByWeekDayAndSubject): Promise<ClassSchedule[] | undefined> {
     const schedule = await this.ormRepository
@@ -170,6 +194,9 @@ class ClassRepository implements IClasseScheduleRepository {
       .leftJoinAndSelect('classe_schedule.class', 'classes')
       .andWhere('classes.subject_id = :subject_id', {
         subject_id,
+      })
+      .andWhere('classes.user_id != :user_id', {
+        user_id,
       })
       .getMany();
 

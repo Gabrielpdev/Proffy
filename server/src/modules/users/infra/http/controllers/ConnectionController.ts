@@ -10,11 +10,12 @@ export default class ConnectionController {
 
     const connections = await numberOfConnection.execute();
 
-    return response.json(connections);
+    return response.json({ connections });
   }
 
   public async create(request: Request, response: Response): Promise<Response> {
-    const { student_id, teacher_id } = request.body;
+    const student_id = request.user.id;
+    const { teacher_id } = request.body;
 
     const createConnection = container.resolve(CreateConnectionService);
 

@@ -7,7 +7,7 @@ import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAut
 const connectionsRouter = Router();
 const connectionController = new ConnectionController();
 
-connectionsRouter.get('/', connectionController.create);
+connectionsRouter.get('/', connectionController.index);
 
 connectionsRouter.use(ensureAuthenticated);
 
@@ -15,7 +15,6 @@ connectionsRouter.post(
   '/',
   celebrate({
     [Segments.BODY]: {
-      student_id: Joi.string().required(),
       teacher_id: Joi.string().required(),
     },
   }),

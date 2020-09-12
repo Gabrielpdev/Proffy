@@ -7,12 +7,14 @@ import IClasseScheduleRepository from '@modules/schedule/repositories/IClasseSch
 import ClassSchedule from '@modules/schedule/infra/typeorm/entities/ClassesSchedule';
 
 interface ScheduleItem {
+  user_id: string;
   class_id: string;
   week_day_id: string;
   from: number;
   to: number;
 }
 interface IRequest {
+  user_id: string;
   subject_id: string | undefined;
   week_day_id: string | undefined;
   hour: string | undefined;
@@ -29,11 +31,12 @@ class ListClassesService {
   ) {}
 
   public async execute({
+    user_id,
     subject_id,
     week_day_id,
     hour,
   }: IRequest): Promise<ClassSchedule[] | undefined> {
-    const keyCache = `classes:subject${subject_id}-weekDay:${week_day_id}-hours:${hour}`;
+    const keyCache = `classes:subject${subject_id}-weekDay:${week_day_id}-hours:${hour}-user:${user_id}`;
 
     let classes = await this.cacheProvider.recover<ClassSchedule[]>(keyCache);
 
@@ -41,6 +44,7 @@ class ListClassesService {
       if (!classes) {
         classes = await this.classesScheduleRepository.findAllClassesBySubject({
           subject_id,
+          user_id,
         });
 
         this.cacheProvider.save(keyCache, classes);
@@ -51,6 +55,7 @@ class ListClassesService {
       if (!classes) {
         classes = await this.classesScheduleRepository.findAllClassesByWeekDay({
           week_day_id,
+          user_id,
         });
         this.cacheProvider.save(keyCache, classes);
       }
@@ -60,6 +65,7 @@ class ListClassesService {
       if (!classes) {
         classes = await this.classesScheduleRepository.findAllClassesByHour({
           hour,
+          user_id,
         });
         this.cacheProvider.save(keyCache, classes);
       }
@@ -70,6 +76,7 @@ class ListClassesService {
         classes = await this.classesScheduleRepository.findAllClassesByWeekDayAndSubject(
           {
             week_day_id,
+            user_id,
             subject_id,
           },
         );
@@ -83,6 +90,7 @@ class ListClassesService {
           {
             week_day_id,
             hour,
+            user_id,
           },
         );
         this.cacheProvider.save(keyCache, classes);
@@ -95,6 +103,7 @@ class ListClassesService {
           {
             subject_id,
             hour,
+            user_id,
           },
         );
         this.cacheProvider.save(keyCache, classes);
@@ -108,6 +117,7 @@ class ListClassesService {
             subject_id,
             week_day_id,
             hour,
+            user_id,
           },
         );
         this.cacheProvider.save(keyCache, classes);
@@ -116,7 +126,7 @@ class ListClassesService {
 
     if (!subject_id && !week_day_id && !hour) {
       if (!classes) {
-        classes = await this.classesScheduleRepository.findAllClasses();
+        classes = await this.classesScheduleRepository.findAllClasses(user_id);
 
         this.cacheProvider.save(keyCache, classes);
       }

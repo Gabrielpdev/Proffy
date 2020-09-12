@@ -82,7 +82,7 @@ class CreateClassService {
         this.classesScheduleRepository.create(scheduleItem);
       });
 
-      await this.cacheProvider.invalidatePrefix(`classe:`);
+      await this.cacheProvider.invalidatePrefix('classes');
 
       return classe;
     } catch (err) {

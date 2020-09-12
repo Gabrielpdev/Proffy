@@ -7,9 +7,9 @@ import ListClassesService from '@modules/classes/services/ListClassesService';
 export default class ClassesController {
   public async index(request: Request, response: Response): Promise<Response> {
     const params = request.query;
+    params.user_id = request.user.id;
 
     const listClasses = await container.resolve(ListClassesService);
-
     const classes = await listClasses.execute(params);
 
     return response.json(classes);
