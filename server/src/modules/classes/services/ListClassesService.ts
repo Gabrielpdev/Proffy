@@ -1,4 +1,5 @@
 import { inject, injectable } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 // import AppError from '@shared/errors/AppError';
 
@@ -47,7 +48,7 @@ class ListClassesService {
           user_id,
         });
 
-        this.cacheProvider.save(keyCache, classes);
+        this.cacheProvider.save(keyCache, classToClass(classes));
       }
     }
 
@@ -57,7 +58,7 @@ class ListClassesService {
           week_day_id,
           user_id,
         });
-        this.cacheProvider.save(keyCache, classes);
+        this.cacheProvider.save(keyCache, classToClass(classes));
       }
     }
 
@@ -67,7 +68,7 @@ class ListClassesService {
           hour,
           user_id,
         });
-        this.cacheProvider.save(keyCache, classes);
+        this.cacheProvider.save(keyCache, classToClass(classes));
       }
     }
 
@@ -80,7 +81,7 @@ class ListClassesService {
             subject_id,
           },
         );
-        this.cacheProvider.save(keyCache, classes);
+        this.cacheProvider.save(keyCache, classToClass(classes));
       }
     }
 
@@ -93,7 +94,7 @@ class ListClassesService {
             user_id,
           },
         );
-        this.cacheProvider.save(keyCache, classes);
+        this.cacheProvider.save(keyCache, classToClass(classes));
       }
     }
 
@@ -106,7 +107,7 @@ class ListClassesService {
             user_id,
           },
         );
-        this.cacheProvider.save(keyCache, classes);
+        this.cacheProvider.save(keyCache, classToClass(classes));
       }
     }
 
@@ -120,7 +121,7 @@ class ListClassesService {
             user_id,
           },
         );
-        this.cacheProvider.save(keyCache, classes);
+        this.cacheProvider.save(keyCache, classToClass(classes));
       }
     }
 
@@ -128,11 +129,11 @@ class ListClassesService {
       if (!classes) {
         classes = await this.classesScheduleRepository.findAllClasses(user_id);
 
-        this.cacheProvider.save(keyCache, classes);
+        this.cacheProvider.save(keyCache, classToClass(classes));
       }
     }
 
-    return classes;
+    return classToClass(classes);
   }
 }
 

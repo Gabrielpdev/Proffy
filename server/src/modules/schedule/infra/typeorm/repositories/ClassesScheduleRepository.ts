@@ -34,6 +34,8 @@ class ClassRepository implements IClasseScheduleRepository {
       .where('classes.user_id != :user_id', {
         user_id,
       })
+      .leftJoinAndSelect('classes.user', 'users')
+      .andWhere('users.is_teacher = true')
       .getMany();
     return classes;
   }
@@ -64,6 +66,8 @@ class ClassRepository implements IClasseScheduleRepository {
       .andWhere('classes.user_id != :user_id', {
         user_id,
       })
+      .leftJoinAndSelect('classes.user', 'users')
+      .andWhere('users.is_teacher = true')
       .getMany();
 
     return schedule;
@@ -82,6 +86,8 @@ class ClassRepository implements IClasseScheduleRepository {
       .andWhere('classes.user_id != :user_id', {
         user_id,
       })
+      .leftJoinAndSelect('classes.user', 'users')
+      .andWhere('users.is_teacher = true')
       .getMany();
 
     return schedule;
@@ -100,6 +106,8 @@ class ClassRepository implements IClasseScheduleRepository {
       .andWhere('classes.user_id != :user_id', {
         user_id,
       })
+      .leftJoinAndSelect('classes.user', 'users')
+      .andWhere('users.is_teacher = true')
       .getMany();
 
     return classes;
@@ -123,6 +131,8 @@ class ClassRepository implements IClasseScheduleRepository {
       .andWhere('classes.user_id != :user_id', {
         user_id,
       })
+      .leftJoinAndSelect('classes.user', 'users')
+      .andWhere('users.is_teacher = true')
       .getMany();
     return classes;
   }
@@ -149,6 +159,8 @@ class ClassRepository implements IClasseScheduleRepository {
       .andWhere('classes.user_id != :user_id', {
         user_id,
       })
+      .leftJoinAndSelect('classes.user', 'users')
+      .andWhere('users.is_teacher = true')
       .getMany();
 
     return schedule;
@@ -176,6 +188,8 @@ class ClassRepository implements IClasseScheduleRepository {
       .andWhere('classes.user_id != :user_id', {
         user_id,
       })
+      .leftJoinAndSelect('classes.user', 'users')
+      .andWhere('users.is_teacher = true')
       .getMany();
 
     return schedule;
@@ -198,6 +212,8 @@ class ClassRepository implements IClasseScheduleRepository {
       .andWhere('classes.user_id != :user_id', {
         user_id,
       })
+      .leftJoinAndSelect('classes.user', 'users')
+      .andWhere('users.is_teacher = true')
       .getMany();
 
     return schedule;

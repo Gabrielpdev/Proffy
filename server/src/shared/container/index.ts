@@ -9,6 +9,9 @@ import ClassesRepository from '@modules/classes/infra/typeorm/repositories/Class
 import IConnectionRepository from '@modules/users/repositories/IConnectionRepository';
 import ConnectionsRepository from '@modules/users/infra/typeorm/repositories/ConnectionRepository';
 
+import IFavoriteRepository from '@modules/users/repositories/IFavoriteRepository';
+import FavoriteRepository from '@modules/users/infra/typeorm/repositories/FavoriteRepository';
+
 import IClasseScheduleRepository from '@modules/schedule/repositories/IClasseScheduleRepository';
 import ClassesScheduleRepository from '@modules/schedule/infra/typeorm/repositories/ClassesScheduleRepository';
 
@@ -17,6 +20,11 @@ import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepo
 
 import IUserTokensRepository from '@modules/users/repositories/IUserTokensRepository';
 import UserTokensRespository from '@modules/users/infra/typeorm/repositories/UserTokensRespository';
+
+container.registerSingleton<IFavoriteRepository>(
+  'FavoriteRepository',
+  FavoriteRepository,
+);
 
 container.registerSingleton<IConnectionRepository>(
   'ConnectionsRepository',

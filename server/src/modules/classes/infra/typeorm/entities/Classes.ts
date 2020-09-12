@@ -31,7 +31,7 @@ class Class {
   @Column()
   user_id: string;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, users => users.id)
   @JoinColumn({ name: 'user_id' })
   user: User;
 

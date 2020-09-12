@@ -4,6 +4,7 @@ import AppError from '@shared/errors/AppError';
 import convertHourToMinute from 'utils/convertHourToMinutes';
 
 import IClasseScheduleRepository from '@modules/schedule/repositories/IClasseScheduleRepository';
+import IUserRepository from '@modules/users/repositories/IUserRepository';
 import ICacheProvier from '@shared/container/providers/CacheProvider/models/ICacheProvier';
 import IClassesRepository from '../repositories/IClassesRepository';
 import Class from '../infra/typeorm/entities/Classes';
@@ -27,6 +28,9 @@ class CreateClassService {
     @inject('ClassesRepository')
     private classesRepository: IClassesRepository,
 
+    @inject('UsersRepository')
+    private usersRepository: IUserRepository,
+
     @inject('ClassesScheduleRepository')
     private classesScheduleRepository: IClasseScheduleRepository,
 
@@ -41,6 +45,12 @@ class CreateClassService {
     user_id,
   }: IRequest): Promise<Class> {
     try {
+      const checkIsTeacher = await this.usersRepository.findById(user_id);
+
+      if (checkIsTeacher?.is_teacher === false) {
+        throw new AppError('You are not a teacher');
+      }
+
       const classe = await this.classesRepository.create({
         subject_id,
         cost,
