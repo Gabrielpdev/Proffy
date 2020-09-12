@@ -6,6 +6,7 @@ import passwordRouter from '@modules/users/infra/http/routes/password.routes';
 import classesRouter from '@modules/classes/infra/http/routes/classes.routes';
 import connectionRouter from '@modules/users/infra/http/routes/connections.routes';
 import favoriteRouter from '@modules/users/infra/http/routes/favorites.routes';
+import teacherRouter from '@modules/users/infra/http/routes/teachers.routes';
 
 const routes = express.Router();
 
@@ -16,5 +17,6 @@ routes.use('/profile', profileRouter);
 routes.use('/classes', classesRouter);
 routes.use('/connection', connectionRouter);
 routes.use('/favorite', favoriteRouter);
+routes.use('/teacher', teacherRouter);
 
 export default routes;

@@ -1,8 +1,7 @@
-import { getRepository, Repository, Not } from 'typeorm';
+import { getRepository, Repository } from 'typeorm';
 
 import IUserRepository from '@modules/users/repositories/IUserRepository';
 import ICreateUserDTO from '@modules/users/dtos/ICreateUserDTO';
-import IFindAllProffysDTO from '@modules/users/dtos/IFindAllProffysDTO';
 
 import User from '@modules/users/infra/typeorm/entities/Users';
 
@@ -27,21 +26,10 @@ class UsersRepository implements IUserRepository {
     return user;
   }
 
-  public async findAllProffys({
-    except_user_id,
-  }: IFindAllProffysDTO): Promise<User[]> {
-    let users: User[];
-
-    if (except_user_id) {
-      users = await this.ormRepository.find({
-        where: {
-          id: Not(except_user_id),
-          is_teacher: true,
-        },
-      });
-    } else {
-      users = await this.ormRepository.find();
-    }
+  public async numberOfTeachers(): Promise<number> {
+    const users = await this.ormRepository.count({
+      where: { is_teacher: true },
+    });
 
     return users;
   }

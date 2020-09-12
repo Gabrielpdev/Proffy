@@ -54,7 +54,7 @@ class CreateUserService {
       is_teacher,
     });
 
-    await this.cacheProvider.invalidatePrefix('providers-list');
+    await this.cacheProvider.invalidatePrefix('teachers');
 
     return user;
   }
