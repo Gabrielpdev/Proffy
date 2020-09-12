@@ -6,7 +6,6 @@ import UpdateAvatarService from '@modules/users/services/UpdateAvatarService';
 
 export default class UsersController {
   public async update(request: Request, response: Response): Promise<Response> {
-    console.log('chamou');
     const updateAvatar = container.resolve(UpdateAvatarService);
 
     const user = await updateAvatar.execute({
