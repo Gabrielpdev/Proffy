@@ -44,50 +44,48 @@ const SignIn: React.FC = () => {
 
   return (
     <Container>
-      <div id="page-landing-content">
-        <LogoContainer>
-          <img src={logoImg} alt="Proffy" className="proffy-image" />
-          <h2>Sua plataforma de estudos online</h2>
-          <img
-            src={landingImg}
-            alt="Plataforma de estudos"
-            className="hero-image"
-          />
-        </LogoContainer>
+      <LogoContainer>
+        <img src={logoImg} alt="Proffy" className="proffy-image" />
+        <h2>Sua plataforma de estudos online</h2>
+        <img
+          src={landingImg}
+          alt="Plataforma de estudos"
+          className="hero-image"
+        />
+      </LogoContainer>
 
-        <Form onSubmit={handleSubmit}>
-          <strong>Fazer login</strong>
-          <Input
-            name="email"
-            title="Email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+      <Form onSubmit={handleSubmit}>
+        <strong>Fazer login</strong>
+        <Input
+          name="email"
+          title="Email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
-          <Input
-            name="password"
-            title="Senha"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+        <Input
+          name="password"
+          title="Senha"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
-          <button type="submit">Entrar</button>
+        <button type="submit">Entrar</button>
 
-          <Footer>
-            <div>
-              <span>Não tem conta ?</span>
-              <Link to="signup">Cadastre-se</Link>
-            </div>
+        <Footer>
+          <div>
+            <span>Não tem conta ?</span>
+            <Link to="signup">Cadastre-se</Link>
+          </div>
 
-            <span>
-              É de graça
-              <img src={purpleHeartIcon} alt="Coração roxo" />
-            </span>
-          </Footer>
-        </Form>
-      </div>
+          <span>
+            É de graça
+            <img src={purpleHeartIcon} alt="Coração roxo" />
+          </span>
+        </Footer>
+      </Form>
     </Container>
   );
 };

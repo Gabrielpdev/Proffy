@@ -1,14 +1,20 @@
 import styled from 'styled-components';
 
+import Background from '../../assets/images/background.svg';
+
 export const Container = styled.header`
   display: flex;
   flex-direction: column;
+  background: url(${Background}) no-repeat center;
+  background-size: 90%;
+  height: 30rem;
   background-color: var(--color-primary);
 
   @media (min-width: 700px) {
+    background-size: 100% 135%;
     display: flex;
     flex-direction: column;
-    height: 340px;
+    height: 450px;
   }
 `;
 
@@ -19,6 +25,7 @@ export const BarContainer = styled.div`
   align-items: center;
   color: var(--color-text-in-primary);
   background: var(--color-primary-darker);
+
   margin: 0 auto;
   padding: 1.6rem 3rem;
 

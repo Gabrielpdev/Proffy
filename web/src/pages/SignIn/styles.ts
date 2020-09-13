@@ -1,41 +1,30 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
 
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
 
   color: var(--color-text-in-primary);
-  background: var(--color-primary);
-
-  a {
-    text-decoration: none;
-  }
-
-  img.hero-image {
-    width: 90%;
-    max-width: 62.4rem;
-  }
 
   @media (min-width: 1100px) {
-    #page-landing-content {
-      height: 100vh;
-      display: flex;
-      justify-content: space-between;
-    }
+    flex-direction: row;
+    justify-content: space-between;
   }
 `;
 
 export const LogoContainer = styled.div`
-  text-align: center;
-  margin: 9rem 0 3.2rem;
+  height: 100%;
+  width: 100%;
+  padding: 12rem 0;
+  background: var(--color-primary);
 
-  img.proffy-image {
-    margin-top: 15rem;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 
   h2 {
     font-weight: 500;
@@ -44,27 +33,44 @@ export const LogoContainer = styled.div`
     margin-top: 0.8rem;
   }
 
+  img.hero-image {
+    max-width: 62.4rem;
+  }
+
+  @media (max-width: 640px) {
+    img.hero-image {
+      max-width: 50rem;
+    }
+  }
+
+  @media (max-width: 510px) {
+    img.proffy-image {
+      height: 20%;
+    }
+
+    img.hero-image {
+      max-width: 25rem;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+    }
+  }
+
   @media (min-width: 1100px) {
-    align-self: center;
-    text-align: left;
+    width: 60%;
     margin: 0;
     padding: 0 10rem;
 
-    h2 {
-      text-align: initial;
-      font-size: 3.6rem;
-    }
-
-    img.proffy-image {
-      margin: 0;
-      height: 100%;
+    img.hero-image {
+      max-width: 55rem;
     }
   }
 `;
 
 export const Form = styled.form`
-  height: 30vh;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
   padding: 3rem;
   background: var(--color-background);
 
@@ -166,7 +172,7 @@ export const Footer = styled.footer`
       margin-right: auto;
       font-weight: 600;
       text-decoration: none;
-      color: (--color-primary-lighter);
+      color: var(--color-primary-lighter);
     }
   }
 

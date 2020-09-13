@@ -1,5 +1,7 @@
 import React, { useState, useCallback, FormEvent, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import { FiCamera } from 'react-icons/fi';
+
 import PageHeader from '../../components/PageHeader';
 import Input from '../../components/Input';
 import { useToast } from '../../hooks/toast';
@@ -28,8 +30,6 @@ const SignUp: React.FC = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [password_confirmation, setPasswordConfirmation] = useState('');
-  const [avatar, setAvatar] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
   const [bio, setBio] = useState('');
   const [isTeacher, setIsTeacher] = useState(false);
@@ -48,12 +48,10 @@ const SignUp: React.FC = () => {
       api
         .post('/users', {
           name,
-          avatar,
           whatsapp,
           bio,
           email,
           password,
-          password_confirmation,
           is_teacher: isTeacher,
         })
         .then(() => {
@@ -74,18 +72,7 @@ const SignUp: React.FC = () => {
         });
     },
 
-    [
-      name,
-      avatar,
-      whatsapp,
-      bio,
-      email,
-      password,
-      password_confirmation,
-      push,
-      isTeacher,
-      addToast,
-    ],
+    [name, whatsapp, bio, email, password, push, isTeacher, addToast],
   );
 
   const toggleTeacher = useCallback(() => {
@@ -102,8 +89,42 @@ const SignUp: React.FC = () => {
       />
 
       <Content onSubmit={addNewUser}>
+        {/* <AvatarField>
+          <img
+            src={avatar_url ? 'https://github.com/gabrielpdev.png' : userIcon}
+            alt=""
+          />
+          <button type="button">
+            <FiCamera size={20} color="#fff" />
+          </button>
+        </AvatarField> */}
+
         <DataContent>
           <legend>Seus Dados</legend>
+
+          <ButtonContainer className="buttons-container">
+            <span>O que você é ?</span>
+            <div className="buttons">
+              <SelectButton
+                type="button"
+                className="study"
+                onClick={toggleTeacher}
+                isSelected={!isTeacher}
+              >
+                <img src={studyIcon} alt="estudar" />
+                Estudante
+              </SelectButton>
+              <SelectButton
+                type="button"
+                className="give-classes"
+                onClick={toggleTeacher}
+                isSelected={isTeacher}
+              >
+                <img src={giveClassIcon} alt="estudar" />
+                Professor
+              </SelectButton>
+            </div>
+          </ButtonContainer>
 
           <Input
             name="name"
@@ -120,12 +141,6 @@ const SignUp: React.FC = () => {
             onChange={(e) => setEmail(e.target.value)}
           />
 
-          <Input
-            name="avatar"
-            title="Avatar"
-            value={avatar}
-            onChange={(e) => setAvatar(e.target.value)}
-          />
           <Input
             name="whatsapp"
             title="Whatsapp"
@@ -147,36 +162,7 @@ const SignUp: React.FC = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-
-          <Input
-            name="password_confirmation"
-            title="Confirmação de Senha"
-            type="password"
-            value={password_confirmation}
-            onChange={(e) => setPasswordConfirmation(e.target.value)}
-          />
         </DataContent>
-
-        <ButtonContainer className="buttons-container">
-          <SelectButton
-            type="button"
-            className="study"
-            onClick={toggleTeacher}
-            isSelected={!isTeacher}
-          >
-            <img src={studyIcon} alt="estudar" />
-            Estudante
-          </SelectButton>
-          <SelectButton
-            type="button"
-            className="give-classes"
-            onClick={toggleTeacher}
-            isSelected={isTeacher}
-          >
-            <img src={giveClassIcon} alt="estudar" />
-            Professor
-          </SelectButton>
-        </ButtonContainer>
 
         <WarningContent>
           <p>

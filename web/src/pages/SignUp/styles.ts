@@ -28,10 +28,45 @@ export const Content = styled.form`
   border-radius: 0.8rem;
   margin: 0 auto 3.2rem;
   padding-top: 6.4rem;
-  overflow: hidden;
 
   @media (min-width: 700px) {
     margin-top: -5rem;
+  }
+`;
+
+export const AvatarField = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  img {
+    margin: -15rem auto 6.4rem auto;
+    height: 15rem;
+    width: 15rem;
+    border-radius: 50%;
+    border: 0;
+    background: var(--color-input-background);
+  }
+
+  button {
+    position: absolute;
+    top: -3rem;
+    left: 40rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: var(--color-secundary);
+    height: 4rem;
+    width: 4rem;
+    border-radius: 50%;
+    border: 0;
+
+    &:hover {
+      background: var(--color-secundary-dark);
+    }
   }
 `;
 
@@ -74,13 +109,23 @@ export const DataContent = styled.fieldset`
 
 export const ButtonContainer = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  margin: 3.2rem 0;
-  padding: 0 2rem;
+  margin: 2rem 0;
+
+  .buttons {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  span {
+    font-size: 1.4rem;
+  }
 `;
 
 export const SelectButton = styled.button<SelectButtonProps>`
-  width: 30rem;
+  width: 100%;
   height: 5.2rem;
   border: 0;
   border-radius: 0.8rem;
@@ -111,10 +156,11 @@ export const SelectButton = styled.button<SelectButtonProps>`
         : 'var(--color-primary-lighter)'};
     border: ${(props) =>
       props.isSelected ? '2px solid var(--color-primary-darker)' : 0};
-    opacity: ${(props) => (props.isSelected ? 1 : 0.9)};
+    opacity: ${(props) => (props.isSelected ? 1 : 0.6)};
 
     &:hover {
       background: var(--color-primary-light);
+      opacity: 0.9;
     }
   }
 
@@ -124,11 +170,12 @@ export const SelectButton = styled.button<SelectButtonProps>`
         ? 'var(--color-secundary-dark)'
         : 'var(--color-secundary)'};
     border: ${(props) =>
-      props.isSelected ? '2px solid var(--color-secundary-light)' : 0};
-    opacity: ${(props) => (props.isSelected ? 1 : 0.75)};
+      props.isSelected ? '2px solid var(--color-secundary-darken)' : 0};
+    opacity: ${(props) => (props.isSelected ? 1 : 0.6)};
 
     &:hover {
       background: var(--color-secundary-dark);
+      opacity: 0.9;
     }
   }
 `;

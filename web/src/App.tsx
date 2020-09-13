@@ -1,6 +1,6 @@
 import React from 'react';
-import './assets/styles/global.css';
 import { BrowserRouter as Router } from 'react-router-dom';
+import GlobalStyles from './styles/global';
 import Routes from './routes/index';
 import AppProvider from './hooks/index';
 
@@ -9,6 +9,7 @@ const src: React.FC = () => (
     <AppProvider>
       <Routes />
     </AppProvider>
+    <GlobalStyles />
   </Router>
 );
 
