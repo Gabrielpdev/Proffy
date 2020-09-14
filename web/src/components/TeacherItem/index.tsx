@@ -4,48 +4,55 @@ import wppIcon from '../../assets/images/icons/whatsapp.svg';
 import { Container } from './styles';
 import { api } from '../../services/api';
 
-export interface Teacher {
+export interface Schedule {
   id: string;
-  subject: string;
-  cost: number;
-  name: string;
-  avatar: string;
-  whatsapp: string;
-  bio: string;
+  class: {
+    cost: string;
+    subject_id: string;
+    user: {
+      id: string;
+      name: string;
+      email: string;
+      whatsapp: string;
+      bio: string;
+      is_teacher: boolean;
+      avatar_url: string;
+    };
+  };
 }
 interface TeacherItemProps {
-  teacher: Teacher;
+  schedule: Schedule;
 }
 
-const TeacherItem: React.FC<TeacherItemProps> = ({ teacher }) => {
+const TeacherItem: React.FC<TeacherItemProps> = ({ schedule }) => {
   const createNewConnection = useCallback(() => {
     api.post('/connections', {
-      user_id: teacher.id,
+      teacher_id: schedule.class.user.id,
     });
-  }, [teacher.id]);
+  }, [schedule.class.user.id]);
 
   return (
     <Container>
       <header>
-        <img src={teacher.avatar} alt="gabriel" />
+        <img src={schedule.class.user.avatar_url} alt="gabriel" />
 
         <div>
-          <strong>{teacher.name}</strong>
-          <span>{teacher.subject}</span>
+          <strong>{schedule.class.user.name}</strong>
+          <span>{schedule.class.subject_id}</span>
         </div>
       </header>
-      <p>{teacher.bio}</p>
+      <p>{schedule.class.user.bio}</p>
 
       <footer>
         <p>
           Preço/hora
-          <strong>R${teacher.cost}</strong>
+          <strong>R${schedule.class.cost}</strong>
         </p>
 
         <a
           target="_blank"
           onClick={createNewConnection}
-          href={`https://api.whatsapp.com/send?phone=+55${teacher.whatsapp}`}
+          href={`https://api.whatsapp.com/send?phone=+55${schedule.class.user.whatsapp}`}
         >
           <img src={wppIcon} alt="whatsapp" />
           Entrar em contato.
