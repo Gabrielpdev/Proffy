@@ -39,6 +39,10 @@ export const BarContainer = styled.div`
     align-items: center;
     color: var(--color-button-text);
 
+    > img {
+      height: 2rem;
+    }
+
     &:hover {
       opacity: 0.6;
     }
@@ -58,6 +62,12 @@ export const BarContainer = styled.div`
     justify-content: space-between;
     align-items: center;
     padding: 1.6rem 15rem;
+
+    a {
+      > img {
+        height: 3rem;
+      }
+    }
   }
 `;
 

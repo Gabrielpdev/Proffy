@@ -39,11 +39,15 @@ export const HeaderProfile = styled.div`
 
   strong {
     margin: 2rem 0;
-    font: 700 3rem Archivo;
+    font: 700 2.5rem Archivo;
   }
 
   @media (min-width: 700px) {
     align-self: center;
+
+    strong {
+      font-size: 3rem;
+    }
 
     img {
       margin-top: 0;
@@ -183,7 +187,7 @@ export const SelectButton = styled.button<SelectButtonProps>`
   height: 5.2rem;
   border: 0;
   border-radius: 0.8rem;
-  font: 700 2rem Archivo;
+  font: 700 1.5rem Archivo;
 
   display: flex;
   align-items: center;
@@ -195,8 +199,12 @@ export const SelectButton = styled.button<SelectButtonProps>`
   transition: background-color 0.2s;
 
   img {
-    width: 3rem;
-    margin-right: 2.4rem;
+    width: 2.5rem;
+    margin-right: 2rem;
+  }
+
+  span {
+    font-size: 5px;
   }
 
   &:first-child {
@@ -228,6 +236,14 @@ export const SelectButton = styled.button<SelectButtonProps>`
 
     &:hover {
       background: var(--color-secundary-dark);
+    }
+  }
+
+  @media (min-width: 700px) {
+    font-size: 2rem;
+    img {
+      width: 3rem;
+      margin-right: 2.4rem;
     }
   }
 `;
