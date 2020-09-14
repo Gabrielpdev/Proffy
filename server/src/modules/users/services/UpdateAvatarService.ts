@@ -5,6 +5,7 @@ import AppError from '@shared/errors/AppError';
 import User from '@modules/users/infra/typeorm/entities/Users';
 import IUserRepository from '@modules/users/repositories/IUserRepository';
 import IStorageProvider from '@shared/container/providers/StorageProvider/models/IStorageProvider';
+import ICacheProvier from '@shared/container/providers/CacheProvider/models/ICacheProvier';
 
 interface IRequest {
   user_id: string;
@@ -18,6 +19,9 @@ class UpdateAvatarService {
 
     @inject('StorageProvider')
     private storageProvider: IStorageProvider,
+
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvier,
   ) {}
 
   public async execute({ user_id, avatarFilename }: IRequest): Promise<User> {
@@ -36,6 +40,7 @@ class UpdateAvatarService {
     user.avatar = fileName;
 
     await this.usersRepository.save(user);
+    await this.cacheProvider.invalidatePrefix('classes');
 
     return user;
   }
