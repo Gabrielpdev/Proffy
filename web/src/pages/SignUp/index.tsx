@@ -1,6 +1,5 @@
 import React, { useState, useCallback, FormEvent, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { FiCamera } from 'react-icons/fi';
 
 import PageHeader from '../../components/PageHeader';
 import Input from '../../components/Input';
@@ -89,16 +88,6 @@ const SignUp: React.FC = () => {
       />
 
       <Content onSubmit={addNewUser}>
-        {/* <AvatarField>
-          <img
-            src={avatar_url ? 'https://github.com/gabrielpdev.png' : userIcon}
-            alt=""
-          />
-          <button type="button">
-            <FiCamera size={20} color="#fff" />
-          </button>
-        </AvatarField> */}
-
         <DataContent>
           <legend>Seus Dados</legend>
 

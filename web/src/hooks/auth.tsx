@@ -8,6 +8,7 @@ interface User {
   email: string;
   whatsapp: string;
   avatar: string;
+  avatar_url: string;
   bio: string;
   is_teacher: boolean;
 }

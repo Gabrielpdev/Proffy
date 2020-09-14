@@ -34,42 +34,6 @@ export const Content = styled.form`
   }
 `;
 
-export const AvatarField = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-
-  img {
-    margin: -15rem auto 6.4rem auto;
-    height: 15rem;
-    width: 15rem;
-    border-radius: 50%;
-    border: 0;
-    background: var(--color-input-background);
-  }
-
-  button {
-    position: absolute;
-    top: -3rem;
-    left: 40rem;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background: var(--color-secundary);
-    height: 4rem;
-    width: 4rem;
-    border-radius: 50%;
-    border: 0;
-
-    &:hover {
-      background: var(--color-secundary-dark);
-    }
-  }
-`;
-
 export const DataContent = styled.fieldset`
   border: 0;
   padding: 0 2.4rem;

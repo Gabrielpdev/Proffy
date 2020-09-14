@@ -1,4 +1,6 @@
-import React, { useState, useCallback, FormEvent } from 'react';
+import React, { useState, useCallback, FormEvent, ChangeEvent } from 'react';
+import { FiCamera } from 'react-icons/fi';
+
 import PageHeader from '../../components/PageHeader';
 import Input from '../../components/Input';
 import { useToast } from '../../hooks/toast';
@@ -9,10 +11,12 @@ import { api } from '../../services/api';
 
 import studyIcon from '../../assets/images/icons/study.svg';
 import giveClassIcon from '../../assets/images/icons/give-classes.svg';
+import userIcon from '../../assets/images/icons/user.png';
 
 import {
   Container,
   HeaderProfile,
+  AvatarField,
   Content,
   DataContent,
   ButtonContainer,
@@ -27,41 +31,56 @@ const Profile: React.FC = () => {
 
   const [name, setName] = useState(user.name);
   const [email, setEmail] = useState(user.email);
+  const [old_password, setOldPassword] = useState('');
   const [password, setPassword] = useState('');
   const [password_confirmation, setPasswordConfirmation] = useState('');
-  const [avatar, setAvatar] = useState(user.avatar);
   const [whatsapp, setWhatsapp] = useState(user.whatsapp);
   const [bio, setBio] = useState(user.bio);
   const [isTeacher, setIsTeacher] = useState(user.is_teacher);
 
-  const addNewUser = useCallback(
+  const handleAvatarChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      if (e.target.files) {
+        const data = new FormData();
+
+        data.append('avatar', e.target.files[0]);
+
+        api.patch('/users/avatar', data).then((response) => {
+          updateUser(response.data);
+
+          addToast({
+            type: 'success',
+            title: 'Avatar atualizado',
+          });
+        });
+      }
+    },
+    [addToast, updateUser],
+  );
+
+  const updateTheUser = useCallback(
     (e: FormEvent) => {
       e.preventDefault();
-      let data = {};
-      if (password === '') {
-        data = {
-          name,
-          avatar,
-          whatsapp,
-          bio,
-          email,
-          is_teacher: isTeacher,
-        };
-      } else {
-        data = {
-          name,
-          avatar,
-          whatsapp,
-          bio,
-          email,
-          is_teacher: isTeacher,
-          password,
-          password_confirmation,
-        };
-      }
+
+      const formData = {
+        name,
+        email,
+        whatsapp,
+        bio,
+        is_teacher: isTeacher,
+        ...(old_password
+          ? {
+              old_password,
+              password,
+              password_confirmation,
+            }
+          : {}),
+      };
+
+      console.log(formData);
 
       api
-        .put('/users', data)
+        .put('/profile', formData)
         .then((response) => {
           updateUser(response.data);
 
@@ -81,10 +100,10 @@ const Profile: React.FC = () => {
     },
     [
       name,
-      avatar,
       whatsapp,
       bio,
       email,
+      old_password,
       password,
       password_confirmation,
       isTeacher,
@@ -101,15 +120,44 @@ const Profile: React.FC = () => {
     <Container>
       <PageHeader title="">
         <HeaderProfile>
-          <img src={user.avatar} alt={user.name} />
-
+          <AvatarField>
+            <img src={user.avatar_url || userIcon} alt="" />
+            <label htmlFor="avatar">
+              <FiCamera />
+              <input type="file" id="avatar" onChange={handleAvatarChange} />
+            </label>
+          </AvatarField>
           <strong>{user.name}</strong>
         </HeaderProfile>
       </PageHeader>
 
-      <Content onSubmit={addNewUser}>
+      <Content onSubmit={updateTheUser}>
         <DataContent>
           <legend>Seus Dados</legend>
+
+          <ButtonContainer className="buttons-container">
+            <span>O que você é ?</span>
+            <div className="buttons">
+              <SelectButton
+                type="button"
+                className="study"
+                onClick={toggleTeacher}
+                isSelected={!isTeacher}
+              >
+                <img src={studyIcon} alt="estudar" />
+                Estudante
+              </SelectButton>
+              <SelectButton
+                type="button"
+                className="give-classes"
+                onClick={toggleTeacher}
+                isSelected={isTeacher}
+              >
+                <img src={giveClassIcon} alt="estudar" />
+                Professor
+              </SelectButton>
+            </div>
+          </ButtonContainer>
 
           <Input
             name="name"
@@ -127,12 +175,6 @@ const Profile: React.FC = () => {
           />
 
           <Input
-            name="avatar"
-            title="Avatar"
-            value={avatar}
-            onChange={(e) => setAvatar(e.target.value)}
-          />
-          <Input
             name="whatsapp"
             title="Whatsapp"
             value={whatsapp}
@@ -149,13 +191,19 @@ const Profile: React.FC = () => {
           <hr />
 
           <Input
+            name="old_password"
+            title="Senha Atual"
+            type="password"
+            value={old_password}
+            onChange={(e) => setOldPassword(e.target.value)}
+          />
+          <Input
             name="password"
             title="Nova Senha"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-
           <Input
             name="password_confirmation"
             title="Confirmação de Senha"
@@ -164,27 +212,6 @@ const Profile: React.FC = () => {
             onChange={(e) => setPasswordConfirmation(e.target.value)}
           />
         </DataContent>
-
-        <ButtonContainer className="buttons-container">
-          <SelectButton
-            type="button"
-            className="study"
-            onClick={toggleTeacher}
-            isSelected={!isTeacher}
-          >
-            <img src={studyIcon} alt="estudar" />
-            Estudante
-          </SelectButton>
-          <SelectButton
-            type="button"
-            className="give-classes"
-            onClick={toggleTeacher}
-            isSelected={isTeacher}
-          >
-            <img src={giveClassIcon} alt="estudar" />
-            Professor
-          </SelectButton>
-        </ButtonContainer>
 
         <WarningContent>
           <p>

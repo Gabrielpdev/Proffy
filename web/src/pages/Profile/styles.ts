@@ -37,17 +37,8 @@ export const HeaderProfile = styled.div`
   display: flex;
   flex-direction: column;
 
-  img {
-    margin-top: 2rem;
-    height: 20rem;
-    width: 20rem;
-    border: 0.1rem solid var(--color-primary-darken);
-    border-radius: 50%;
-    box-shadow: 0.1rem 0.1rem 5rem rgba(0, 0, 0, 0.5);
-  }
-
   strong {
-    margin-top: 2rem;
+    margin: 2rem 0;
     font: 700 3rem Archivo;
   }
 
@@ -57,6 +48,57 @@ export const HeaderProfile = styled.div`
     img {
       margin-top: 0;
     }
+  }
+`;
+
+export const AvatarField = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-top: 0;
+
+  img {
+    height: 20rem;
+    width: 20rem;
+    border-radius: 50%;
+    background: var(--color-input-background);
+    box-shadow: 0.1rem 0.1rem 5rem rgba(0, 0, 0, 0.5);
+  }
+
+  label {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    background: var(--color-secundary);
+    border-radius: 50%;
+    border: 0;
+    right: 0;
+    bottom: 0;
+    transition: background 0.2s;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    input {
+      display: none;
+    }
+
+    svg {
+      width: 20px;
+      height: 20px;
+      color: #fff;
+    }
+
+    &:hover {
+      background: var(--color-secundary-dark);
+    }
+  }
+
+  @media (min-width: 700px) {
+    margin-top: -2rem;
   }
 `;
 
@@ -121,13 +163,23 @@ export const DataContent = styled.fieldset`
 
 export const ButtonContainer = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  margin: 3.2rem 0;
-  padding: 0 2rem;
+  margin: 2rem 0;
+
+  .buttons {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  span {
+    font-size: 1.4rem;
+  }
 `;
 
 export const SelectButton = styled.button<SelectButtonProps>`
-  width: 30rem;
+  width: 90%;
   height: 5.2rem;
   border: 0;
   border-radius: 0.8rem;
