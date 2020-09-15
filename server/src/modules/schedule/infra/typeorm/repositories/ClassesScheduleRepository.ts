@@ -40,6 +40,7 @@ class ClassRepository implements IClasseScheduleRepository {
       .where('classes.user_id != :user_id', {
         user_id,
       })
+      .leftJoinAndSelect('classes.subject', 'subject')
       .leftJoinAndSelect('classes.user', 'users')
       .andWhere('users.is_teacher = true')
       .getMany();
@@ -55,18 +56,18 @@ class ClassRepository implements IClasseScheduleRepository {
     const time = convertHourToMinute(hour);
 
     const schedule = await this.ormRepository
-      .createQueryBuilder('classe_schedule')
-      .leftJoinAndSelect('classe_schedule.week_day', 'weekDays')
-      .where('classe_schedule.week_day_id = :week_day_id', {
+      .createQueryBuilder('classes_schedule')
+      .leftJoinAndSelect('classes_schedule.week_day', 'weekDays')
+      .where('classes_schedule.week_day_id = :week_day_id', {
         week_day_id,
       })
-      .andWhere('classe_schedule.from >= :time', {
+      .andWhere('classes_schedule.from >= :time', {
         time,
       })
-      .andWhere('classe_schedule.to < :time', {
+      .andWhere('classes_schedule.to < :time', {
         time,
       })
-      .leftJoinAndSelect('classe_schedule.class', 'classes')
+      .leftJoinAndSelect('classes_schedule.class', 'classes')
       .andWhere('classes.subject_id = :subject_id', {
         subject_id,
       })
@@ -95,6 +96,7 @@ class ClassRepository implements IClasseScheduleRepository {
       .andWhere('classes.user_id != :user_id', {
         user_id,
       })
+      .leftJoinAndSelect('classes.subject', 'subject')
       .leftJoinAndSelect('classes.user', 'users')
       .andWhere('users.is_teacher = true')
       .getMany();
@@ -116,6 +118,7 @@ class ClassRepository implements IClasseScheduleRepository {
       .andWhere('classes.user_id != :user_id', {
         user_id,
       })
+      .leftJoinAndSelect('classes.subject', 'subject')
       .leftJoinAndSelect('classes.user', 'users')
       .andWhere('users.is_teacher = true')
       .getMany();
@@ -142,6 +145,7 @@ class ClassRepository implements IClasseScheduleRepository {
       .andWhere('classes.user_id != :user_id', {
         user_id,
       })
+      .leftJoinAndSelect('classes.subject', 'subject')
       .leftJoinAndSelect('classes.user', 'users')
       .andWhere('users.is_teacher = true')
       .getMany();
@@ -171,6 +175,7 @@ class ClassRepository implements IClasseScheduleRepository {
       .andWhere('classes.user_id != :user_id', {
         user_id,
       })
+      .leftJoinAndSelect('classes.subject', 'subject')
       .leftJoinAndSelect('classes.user', 'users')
       .andWhere('users.is_teacher = true')
       .getMany();
@@ -201,6 +206,7 @@ class ClassRepository implements IClasseScheduleRepository {
       .andWhere('classes.user_id != :user_id', {
         user_id,
       })
+      .leftJoinAndSelect('classes.subject', 'subject')
       .leftJoinAndSelect('classes.user', 'users')
       .andWhere('users.is_teacher = true')
       .getMany();
@@ -226,6 +232,7 @@ class ClassRepository implements IClasseScheduleRepository {
       .andWhere('classes.user_id != :user_id', {
         user_id,
       })
+      .leftJoinAndSelect('classes.subject', 'subject')
       .leftJoinAndSelect('classes.user', 'users')
       .andWhere('users.is_teacher = true')
       .getMany();
