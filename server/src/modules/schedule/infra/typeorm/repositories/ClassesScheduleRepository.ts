@@ -25,6 +25,12 @@ class ClassRepository implements IClasseScheduleRepository {
     this.weekDayRepository = getRepository(WeekDay);
   }
 
+  public async findAllByWeekDay(id: string): Promise<string | undefined> {
+    const week_day = await this.weekDayRepository.findOne(id);
+
+    return week_day?.name;
+  }
+
   public async findAllClasses(
     user_id: string,
   ): Promise<ClassSchedule[] | undefined> {
@@ -50,6 +56,7 @@ class ClassRepository implements IClasseScheduleRepository {
 
     const schedule = await this.ormRepository
       .createQueryBuilder('classe_schedule')
+      .leftJoinAndSelect('classe_schedule.week_day', 'weekDays')
       .where('classe_schedule.week_day_id = :week_day_id', {
         week_day_id,
       })
@@ -67,6 +74,7 @@ class ClassRepository implements IClasseScheduleRepository {
         user_id,
       })
       .leftJoinAndSelect('classes.user', 'users')
+      .leftJoinAndSelect('classes.subject', 'subject')
       .andWhere('users.is_teacher = true')
       .getMany();
 
@@ -79,6 +87,7 @@ class ClassRepository implements IClasseScheduleRepository {
   }: IFindAllClassesBySubject): Promise<ClassSchedule[] | undefined> {
     const schedule = await this.ormRepository
       .createQueryBuilder('classe_schedule')
+      .leftJoinAndSelect('classe_schedule.week_day', 'weekDays')
       .leftJoinAndSelect('classe_schedule.class', 'classes')
       .where('classes.subject_id = :subject_id', {
         subject_id,
@@ -99,6 +108,7 @@ class ClassRepository implements IClasseScheduleRepository {
   }: IFindAllClassesByWeekDay): Promise<ClassSchedule[] | undefined> {
     const classes = await this.ormRepository
       .createQueryBuilder('classe_schedule')
+      .leftJoinAndSelect('classe_schedule.week_day', 'weekDays')
       .where('classe_schedule.week_day_id = :week_day_id', {
         week_day_id,
       })
@@ -121,6 +131,7 @@ class ClassRepository implements IClasseScheduleRepository {
 
     const classes = await this.ormRepository
       .createQueryBuilder('classe_schedule')
+      .leftJoinAndSelect('classe_schedule.week_day', 'weekDays')
       .andWhere('classe_schedule.from >= :time', {
         time,
       })
@@ -146,6 +157,7 @@ class ClassRepository implements IClasseScheduleRepository {
 
     const schedule = await this.ormRepository
       .createQueryBuilder('classe_schedule')
+      .leftJoinAndSelect('classe_schedule.week_day', 'weekDays')
       .where('classe_schedule.from >= :time', {
         time,
       })
@@ -175,6 +187,7 @@ class ClassRepository implements IClasseScheduleRepository {
 
     const schedule = await this.ormRepository
       .createQueryBuilder('classe_schedule')
+      .leftJoinAndSelect('classe_schedule.week_day', 'weekDays')
       .where('classe_schedule.from >= :time', {
         time,
       })
@@ -202,6 +215,7 @@ class ClassRepository implements IClasseScheduleRepository {
   }: IFindAllClassesByWeekDayAndSubject): Promise<ClassSchedule[] | undefined> {
     const schedule = await this.ormRepository
       .createQueryBuilder('classe_schedule')
+      .leftJoinAndSelect('classe_schedule.week_day', 'weekDays')
       .where('classe_schedule.week_day_id = :week_day_id', {
         week_day_id,
       })

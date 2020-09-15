@@ -6,7 +6,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity('schedules')
+@Entity('subjects')
 class Subject {
   @PrimaryColumn('uuid')
   id: string;

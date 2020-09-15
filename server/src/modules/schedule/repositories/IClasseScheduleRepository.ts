@@ -11,6 +11,7 @@ import IFindAllClassesByAllFilters from '../dtos/IFindAllClassesByAllFilters';
 
 export default interface IClasseScheduleRepository {
   create(data: ICreateScheduleDTO): Promise<ClassSchedule>;
+  findAllByWeekDay(week_day_id: string): Promise<string | undefined>;
   findAllClasses(user_id: string): Promise<ClassSchedule[] | undefined>;
   findAllClassesBySubject(
     data: IFindAllClassesBySubject | undefined,

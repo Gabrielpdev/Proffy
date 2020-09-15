@@ -19,7 +19,7 @@ class ClassSchedule {
   @Column()
   week_day_id: string;
 
-  @ManyToOne(() => WeekDay)
+  @ManyToOne(() => WeekDay, weekDays => weekDays.id)
   @JoinColumn({ name: 'week_day_id' })
   week_day: WeekDay;
 

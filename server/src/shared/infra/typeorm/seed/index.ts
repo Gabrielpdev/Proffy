@@ -32,8 +32,6 @@ export default async function loadFixtures(
     items.forEach(async (item: any) => {
       const entityName = Object.keys(item)[0];
       const data = item[entityName];
-
-      console.log(entityName);
       await dbConnection
         .createQueryBuilder()
         .insert()

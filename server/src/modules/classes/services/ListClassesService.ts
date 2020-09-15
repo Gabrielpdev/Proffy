@@ -112,17 +112,17 @@ class ListClassesService {
     }
 
     if (subject_id && week_day_id && hour) {
-      if (!classes) {
-        classes = await this.classesScheduleRepository.findAllClassesByAllFilters(
-          {
-            subject_id,
-            week_day_id,
-            hour,
-            user_id,
-          },
-        );
-        this.cacheProvider.save(keyCache, classToClass(classes));
-      }
+      // if (!classes) {
+      classes = await this.classesScheduleRepository.findAllClassesByAllFilters(
+        {
+          subject_id,
+          week_day_id,
+          hour,
+          user_id,
+        },
+      );
+      this.cacheProvider.save(keyCache, classToClass(classes));
+      // }
     }
 
     if (!subject_id && !week_day_id && !hour) {
