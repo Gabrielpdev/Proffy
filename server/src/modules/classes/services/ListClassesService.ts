@@ -4,8 +4,8 @@ import { classToClass } from 'class-transformer';
 // import AppError from '@shared/errors/AppError';
 
 import ICacheProvier from '@shared/container/providers/CacheProvider/models/ICacheProvier';
-import IClasseScheduleRepository from '@modules/schedule/repositories/IClasseScheduleRepository';
-import ClassSchedule from '@modules/schedule/infra/typeorm/entities/ClassesSchedule';
+import IClassesRepository from '@modules/classes/repositories/IClassesRepository';
+import Classes from '@modules/classes/infra/typeorm/entities/Classes';
 
 interface ScheduleItem {
   user_id: string;
@@ -24,8 +24,8 @@ interface IRequest {
 @injectable()
 class ListClassesService {
   constructor(
-    @inject('ClassesScheduleRepository')
-    private classesScheduleRepository: IClasseScheduleRepository,
+    @inject('ClassesRepository')
+    private classesRepository: IClassesRepository,
 
     @inject('CacheProvider')
     private cacheProvider: ICacheProvier,
@@ -36,14 +36,14 @@ class ListClassesService {
     subject_id,
     week_day_id,
     hour,
-  }: IRequest): Promise<ClassSchedule[] | undefined> {
+  }: IRequest): Promise<Classes[] | undefined> {
     const keyCache = `classes:subject${subject_id}-weekDay:${week_day_id}-hours:${hour}-user:${user_id}`;
 
-    let classes = await this.cacheProvider.recover<ClassSchedule[]>(keyCache);
+    let classes = await this.cacheProvider.recover<Classes[]>(keyCache);
 
     if (subject_id && !week_day_id && !hour) {
       if (!classes) {
-        classes = await this.classesScheduleRepository.findAllClassesBySubject({
+        classes = await this.classesRepository.findAllClassesBySubject({
           subject_id,
           user_id,
         });
@@ -54,7 +54,7 @@ class ListClassesService {
 
     if (!subject_id && week_day_id && !hour) {
       if (!classes) {
-        classes = await this.classesScheduleRepository.findAllClassesByWeekDay({
+        classes = await this.classesRepository.findAllClassesByWeekDay({
           week_day_id,
           user_id,
         });
@@ -64,7 +64,7 @@ class ListClassesService {
 
     if (!subject_id && !week_day_id && hour) {
       if (!classes) {
-        classes = await this.classesScheduleRepository.findAllClassesByHour({
+        classes = await this.classesRepository.findAllClassesByHour({
           hour,
           user_id,
         });
@@ -74,7 +74,7 @@ class ListClassesService {
 
     if (subject_id && week_day_id && !hour) {
       if (!classes) {
-        classes = await this.classesScheduleRepository.findAllClassesByWeekDayAndSubject(
+        classes = await this.classesRepository.findAllClassesByWeekDayAndSubject(
           {
             week_day_id,
             user_id,
@@ -87,52 +87,45 @@ class ListClassesService {
 
     if (!subject_id && week_day_id && hour) {
       if (!classes) {
-        classes = await this.classesScheduleRepository.findAllClassesByWeekDayAndHour(
-          {
-            week_day_id,
-            hour,
-            user_id,
-          },
-        );
+        classes = await this.classesRepository.findAllClassesByWeekDayAndHour({
+          week_day_id,
+          hour,
+          user_id,
+        });
         this.cacheProvider.save(keyCache, classToClass(classes));
       }
     }
 
     if (subject_id && !week_day_id && hour) {
       if (!classes) {
-        classes = await this.classesScheduleRepository.findAllClassesBySubjectAndHour(
-          {
-            subject_id,
-            hour,
-            user_id,
-          },
-        );
+        classes = await this.classesRepository.findAllClassesBySubjectAndHour({
+          subject_id,
+          hour,
+          user_id,
+        });
         this.cacheProvider.save(keyCache, classToClass(classes));
       }
     }
 
     if (subject_id && week_day_id && hour) {
-      // if (!classes) {
-      classes = await this.classesScheduleRepository.findAllClassesByAllFilters(
-        {
+      if (!classes) {
+        classes = await this.classesRepository.findAllClassesByAllFilters({
           subject_id,
           week_day_id,
           hour,
           user_id,
-        },
-      );
-      this.cacheProvider.save(keyCache, classToClass(classes));
-      // }
-    }
-
-    if (!subject_id && !week_day_id && !hour) {
-      if (!classes) {
-        classes = await this.classesScheduleRepository.findAllClasses(user_id);
-
+        });
         this.cacheProvider.save(keyCache, classToClass(classes));
       }
     }
 
+    if (!subject_id && !week_day_id && !hour) {
+      if (!classes) {
+        classes = await this.classesRepository.findAllClasses(user_id);
+
+        this.cacheProvider.save(keyCache, classToClass(classes));
+      }
+    }
     return classToClass(classes);
   }
 }
