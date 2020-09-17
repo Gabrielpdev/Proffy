@@ -68,15 +68,17 @@ class CreateClassService {
 
       classSchedule.forEach((scheduleItem: ScheduleItem): void => {
         // Checar se é horário valido
+        if (scheduleItem.from >= scheduleItem.to) {
+          throw { message: 'Hour must be valid', statusCode: 400 };
+        }
+
+        // Checar se é horário valido
         if (scheduleItem.from > 1439 || scheduleItem.from < 0) {
           throw { message: 'Hour must be valid', statusCode: 400 };
         }
 
         // Checar se é horário valido
-        if (
-          convertHourToMinute(String(scheduleItem.to)) > 1439 ||
-          convertHourToMinute(String(scheduleItem.to)) < 0
-        ) {
+        if (scheduleItem.to > 1439 || scheduleItem.to < 0) {
           throw { message: 'Hour must be valid', statusCode: 400 };
         }
 

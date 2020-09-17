@@ -39,7 +39,8 @@ class ListClassesService {
   }: IRequest): Promise<Classes[] | undefined> {
     const keyCache = `classes:subject${subject_id}-weekDay:${week_day_id}-hours:${hour}-user:${user_id}`;
 
-    let classes = await this.cacheProvider.recover<Classes[]>(keyCache);
+    // let classes = await this.cacheProvider.recover<Classes[]>(keyCache);
+    let classes;
 
     if (subject_id && !week_day_id && !hour) {
       if (!classes) {
@@ -74,32 +75,41 @@ class ListClassesService {
 
     if (subject_id && week_day_id && !hour) {
       if (!classes) {
-        classes = await this.classesRepository.findAllClassesByWeekDayAndSubject(
-          {
-            week_day_id,
-            user_id,
-            subject_id,
-          },
-        );
+        classes = await this.classesRepository.findAllClassesBySubject({
+          user_id,
+          subject_id,
+        });
+        classes = await this.classesRepository.findAllClassesByWeekDay({
+          user_id,
+          week_day_id,
+        });
         this.cacheProvider.save(keyCache, classToClass(classes));
       }
     }
 
     if (!subject_id && week_day_id && hour) {
       if (!classes) {
-        classes = await this.classesRepository.findAllClassesByWeekDayAndHour({
-          week_day_id,
+        classes = await this.classesRepository.findAllClassesByHour({
           hour,
           user_id,
         });
+        classes = await this.classesRepository.findAllClassesByWeekDay({
+          week_day_id,
+          user_id,
+        });
+
         this.cacheProvider.save(keyCache, classToClass(classes));
       }
     }
 
     if (subject_id && !week_day_id && hour) {
       if (!classes) {
-        classes = await this.classesRepository.findAllClassesBySubjectAndHour({
+        classes = await this.classesRepository.findAllClassesBySubject({
           subject_id,
+          user_id,
+        });
+
+        classes = await this.classesRepository.findAllClassesByHour({
           hour,
           user_id,
         });
@@ -109,12 +119,21 @@ class ListClassesService {
 
     if (subject_id && week_day_id && hour) {
       if (!classes) {
-        classes = await this.classesRepository.findAllClassesByAllFilters({
+        classes = await this.classesRepository.findAllClassesBySubject({
           subject_id,
-          week_day_id,
+          user_id,
+        });
+
+        classes = await this.classesRepository.findAllClassesByHour({
           hour,
           user_id,
         });
+
+        classes = await this.classesRepository.findAllClassesByWeekDay({
+          week_day_id,
+          user_id,
+        });
+
         this.cacheProvider.save(keyCache, classToClass(classes));
       }
     }
