@@ -15,11 +15,19 @@ import FavoriteRepository from '@modules/users/infra/typeorm/repositories/Favori
 import IClasseScheduleRepository from '@modules/schedule/repositories/IClasseScheduleRepository';
 import ClassesScheduleRepository from '@modules/schedule/infra/typeorm/repositories/ClassesScheduleRepository';
 
+import IWeekDaysRepository from '@modules/schedule/repositories/IWeekDaysRepository';
+import WeekDayRepository from '@modules/schedule/infra/typeorm/repositories/WeekDaysRepository';
+
 import IUserRepository from '@modules/users/repositories/IUserRepository';
 import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepository';
 
 import IUserTokensRepository from '@modules/users/repositories/IUserTokensRepository';
 import UserTokensRespository from '@modules/users/infra/typeorm/repositories/UserTokensRespository';
+
+container.registerSingleton<IWeekDaysRepository>(
+  'WeekDayRepository',
+  WeekDayRepository,
+);
 
 container.registerSingleton<IFavoriteRepository>(
   'FavoriteRepository',

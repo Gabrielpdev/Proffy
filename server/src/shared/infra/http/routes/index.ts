@@ -7,6 +7,7 @@ import classesRouter from '@modules/classes/infra/http/routes/classes.routes';
 import connectionRouter from '@modules/users/infra/http/routes/connections.routes';
 import favoriteRouter from '@modules/users/infra/http/routes/favorites.routes';
 import teacherRouter from '@modules/users/infra/http/routes/teachers.routes';
+import dayRouter from '@modules/schedule/infra/http/routes/days.routes';
 
 const routes = express.Router();
 
@@ -18,5 +19,6 @@ routes.use('/classes', classesRouter);
 routes.use('/connection', connectionRouter);
 routes.use('/favorite', favoriteRouter);
 routes.use('/teacher', teacherRouter);
+routes.use('/days', dayRouter);
 
 export default routes;

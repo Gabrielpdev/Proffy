@@ -13,3 +13,14 @@ fixtures:
         name: 'Sexta-feira'
     - week_day:
         name: 'Sábado'
+    - subjects:
+        name: 'Matemática'
+    - subjects:
+        name: 'Português'
+    - subjects:
+        name: 'Geografia'
+    - subjects:
+        name: 'História'
+    - subjects:
+        name: 'Ciências'
+

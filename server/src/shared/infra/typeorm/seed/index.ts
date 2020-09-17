@@ -12,7 +12,6 @@ export default async function loadFixtures(
       fs.readFileSync(`./src/shared/infra/typeorm/seed/${name}.yml`, 'utf8'),
     );
 
-    console.log(file);
     items = file.fixtures;
   } catch (e) {
     console.log('fixtures error', e);
@@ -39,5 +38,7 @@ export default async function loadFixtures(
         .values(data)
         .execute();
     });
+
+    console.log('Seed done !');
   }
 }
