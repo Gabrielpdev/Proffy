@@ -1,7 +1,7 @@
 import React, { useState, useCallback, FormEvent, useEffect } from 'react';
 
 import PageHeader from '../../components/PageHeader';
-import TeacherItem, { Schedule } from '../../components/TeacherItem';
+import TeacherItem, { Classes } from '../../components/TeacherItem';
 import Input from '../../components/Input';
 import Select from '../../components/Select';
 
@@ -19,7 +19,7 @@ const TeacherList: React.FC = () => {
   const [week_day, setWeekDay] = useState('');
   const [time, setTime] = useState('');
 
-  const [schedules, setSchedules] = useState<Schedule[]>([]);
+  const [classes, setClasses] = useState<Classes[]>([]);
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
@@ -38,7 +38,7 @@ const TeacherList: React.FC = () => {
         },
       })
       .then((response) => {
-        setSchedules(response.data);
+        setClasses(response.data);
       });
   }, [week_day, subject, time]);
 
@@ -56,7 +56,7 @@ const TeacherList: React.FC = () => {
             },
           })
           .then((response) => {
-            setSchedules(response.data);
+            setClasses(response.data);
           });
       } else {
         addToast({
@@ -127,9 +127,9 @@ const TeacherList: React.FC = () => {
       </PageHeader>
 
       <main>
-        {schedules[0] ? (
-          schedules.map((schedule) => (
-            <TeacherItem key={schedule.id} schedule={schedule} />
+        {classes[0] ? (
+          classes.map((classe) => (
+            <TeacherItem key={classe.id} classe={classe} />
           ))
         ) : (
           <p>

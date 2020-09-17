@@ -34,10 +34,66 @@ export const Container = styled.article`
     }
   }
 
-  > p {
-    padding: 02rem;
-    font-size: 1.6rem;
-    line-height: 2.8rem;
+  > div {
+    display: flex;
+    flex-direction: column;
+    p {
+      padding: 02rem;
+      font-size: 1.6rem;
+      line-height: 2.8rem;
+    }
+
+    /* .schedule {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      flex-direction: column;
+      padding: 0 10px;
+
+      .day {
+        width: 50%;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        padding: 1rem;
+        border-radius: 8px;
+        background: var(--color-box-footer);
+        border: 1px solid var(--color-line-in-white);
+
+        font-size: 1.4rem;
+      }
+    } */
+
+    .schedule {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+
+      .day {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+
+        padding: 1rem;
+        background: var(--color-box-footer);
+        width: 9.5rem;
+        border-radius: 8px;
+        border: 1px solid var(--color-line-in-white);
+
+        font-size: 1.4rem;
+
+        .nameDay {
+          margin-bottom: 1.2rem;
+          font-size: 0.98rem;
+        }
+      }
+    }
+    @media (min-width: 720px) {
+    }
   }
 
   footer {

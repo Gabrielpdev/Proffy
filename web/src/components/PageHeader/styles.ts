@@ -7,14 +7,13 @@ export const Container = styled.header`
   flex-direction: column;
   background: url(${Background}) no-repeat center;
   background-size: 90%;
-  height: 30rem;
   background-color: var(--color-primary);
 
   @media (min-width: 700px) {
     background-size: 100% 135%;
     display: flex;
     flex-direction: column;
-    height: 450px;
+    height: 30rem;
   }
 `;
 
