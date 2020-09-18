@@ -77,8 +77,6 @@ const Profile: React.FC = () => {
           : {}),
       };
 
-      console.log(formData);
-
       api
         .put('/profile', formData)
         .then((response) => {

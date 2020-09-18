@@ -5,7 +5,7 @@ import { Container } from './styles';
 import { api } from '../../services/api';
 import convertMinutesToHour from '../../utils/convertMinutesToHour';
 
-interface Week_Day {
+export interface Week_Day {
   id: string;
   name: string;
 }
@@ -117,6 +117,7 @@ const TeacherItem: React.FC<TeacherItemProps> = ({ classe }) => {
 
         <a
           target="_blank"
+          rel="noopener noreferrer"
           onClick={createNewConnection}
           href={`https://api.whatsapp.com/send?phone=+55${classe.user.whatsapp}`}
         >

@@ -1,7 +1,7 @@
 import React, { useState, useCallback, FormEvent, useEffect } from 'react';
 
 import PageHeader from '../../components/PageHeader';
-import TeacherItem, { Classes } from '../../components/TeacherItem';
+import TeacherItem, { Classes, Week_Day } from '../../components/TeacherItem';
 import Input from '../../components/Input';
 import Select from '../../components/Select';
 
@@ -12,62 +12,72 @@ import { api } from '../../services/api';
 import { Container, SearchForm } from './styles';
 import { useToast } from '../../hooks/toast';
 
+interface SubjectProps {
+  id: string;
+  name: string;
+}
+
 const TeacherList: React.FC = () => {
   const { addToast } = useToast();
 
-  const [subject, setSubject] = useState('');
-  const [week_day, setWeekDay] = useState('');
+  const [subject_id, setSubjectId] = useState('');
+  const [week_day_id, setWeekDayId] = useState('');
   const [time, setTime] = useState('');
 
   const [classes, setClasses] = useState<Classes[]>([]);
   const [total, setTotal] = useState(0);
 
+  const [days, setDays] = useState<Week_Day[]>([]);
+  const [subjects, setSubjects] = useState<SubjectProps[]>([]);
+
   useEffect(() => {
-    api.get('teachers').then((response) => {
+    api.get('/days').then((response) => {
+      setDays(response.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    api.get('/subjects').then((response) => {
+      setSubjects(response.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    api.get('/teachers').then((response) => {
       setTotal(response.data.total);
     });
   }, []);
 
   useEffect(() => {
-    api
-      .get('/classes', {
-        params: {
-          week_day,
-          subject,
-          time,
-        },
-      })
-      .then((response) => {
-        setClasses(response.data);
-      });
-  }, [week_day, subject, time]);
+    api.get('/classes').then((response) => {
+      setClasses(response.data);
+    });
+  }, []);
 
   const searchTeachers = useCallback(
     (e: FormEvent) => {
       e.preventDefault();
-
-      if (week_day !== '' && subject !== '' && time !== '') {
-        api
-          .get('/classes', {
-            params: {
-              week_day,
-              subject,
-              time,
-            },
-          })
-          .then((response) => {
-            setClasses(response.data);
+      api
+        .get('/classes', {
+          params: {
+            week_day_id,
+            subject_id,
+            hour: time,
+          },
+        })
+        .then((response) => {
+          setClasses(response.data);
+        })
+        .catch(() => {
+          addToast({
+            type: 'error',
+            title: 'Erro na busca',
+            description:
+              'Ocorreu um erro na busca, preencha todos do dados para buscar.',
           });
-      } else {
-        addToast({
-          type: 'error',
-          title: 'Erro na busca',
-          description:
-            'Ocorreu um erro na busca, preencha todos do dados para buscar.',
         });
-      }
     },
-    [week_day, subject, time, addToast],
+    [week_day_id, subject_id, time, addToast],
   );
 
   return (
@@ -81,36 +91,24 @@ const TeacherList: React.FC = () => {
           <Select
             name="subject"
             title="Matéria"
-            value={subject}
+            value={subject_id}
             onChange={(e) => {
-              setSubject(e.target.value);
+              setSubjectId(e.target.value);
             }}
-            options={[
-              { value: 'Artes', label: 'Artes' },
-              { value: 'Ciências', label: 'Ciências' },
-              { value: 'Português', label: 'Português' },
-              { value: 'Matemática', label: 'Matemática' },
-              { value: 'Biologia', label: 'Biologia' },
-              { value: 'Geografia', label: 'Geografia' },
-            ]}
+            options={subjects.map((subject) => ({
+              value: subject.id,
+              label: subject.name,
+            }))}
           />
 
           <Select
             name="week-day"
             title="Dia da semana"
-            value={week_day}
+            value={week_day_id}
             onChange={(e) => {
-              setWeekDay(e.target.value);
+              setWeekDayId(e.target.value);
             }}
-            options={[
-              { value: '0', label: 'Domingo' },
-              { value: '1', label: 'Segunda-Feira' },
-              { value: '2', label: 'Terça-Feira' },
-              { value: '3', label: 'Quarta-Feira' },
-              { value: '4', label: 'Quinta-Feira' },
-              { value: '5', label: 'Sexta-Feira' },
-              { value: '6', label: 'Sábado' },
-            ]}
+            options={days.map((day) => ({ value: day.id, label: day.name }))}
           />
           <Input
             name="time"
