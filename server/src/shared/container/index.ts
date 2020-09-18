@@ -18,11 +18,19 @@ import ClassesScheduleRepository from '@modules/schedule/infra/typeorm/repositor
 import IWeekDaysRepository from '@modules/schedule/repositories/IWeekDaysRepository';
 import WeekDayRepository from '@modules/schedule/infra/typeorm/repositories/WeekDaysRepository';
 
+import ISubjectsRepository from '@modules/schedule/repositories/ISubjectsRepository';
+import SubjectsRepository from '@modules/schedule/infra/typeorm/repositories/SubjectsRepository';
+
 import IUserRepository from '@modules/users/repositories/IUserRepository';
 import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepository';
 
 import IUserTokensRepository from '@modules/users/repositories/IUserTokensRepository';
 import UserTokensRespository from '@modules/users/infra/typeorm/repositories/UserTokensRespository';
+
+container.registerSingleton<ISubjectsRepository>(
+  'SubjectsRepository',
+  SubjectsRepository,
+);
 
 container.registerSingleton<IWeekDaysRepository>(
   'WeekDayRepository',
