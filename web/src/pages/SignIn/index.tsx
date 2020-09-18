@@ -61,6 +61,7 @@ const SignIn: React.FC = () => {
           title="Email"
           type="email"
           value={email}
+          mask=""
           onChange={(e) => setEmail(e.target.value)}
         />
 
@@ -69,6 +70,7 @@ const SignIn: React.FC = () => {
           title="Senha"
           type="password"
           value={password}
+          mask=""
           onChange={(e) => setPassword(e.target.value)}
         />
 

@@ -161,14 +161,15 @@ const Profile: React.FC = () => {
             name="name"
             title="Nome Completo"
             value={name}
+            mask=""
             onChange={(e) => setName(e.target.value)}
           />
 
           <Input
             name="email"
             title="Email"
-            type="email"
             value={email}
+            mask=""
             onChange={(e) => setEmail(e.target.value)}
           />
 
@@ -176,7 +177,15 @@ const Profile: React.FC = () => {
             name="whatsapp"
             title="Whatsapp"
             value={whatsapp}
-            onChange={(e) => setWhatsapp(e.target.value)}
+            mask="(99)99999-9999"
+            onChange={(e) =>
+              setWhatsapp(
+                e.target.value
+                  .replace('(', '')
+                  .replace(')', '')
+                  .replace('-', ''),
+              )
+            }
           />
           <TextArea
             name="bio"
@@ -193,6 +202,7 @@ const Profile: React.FC = () => {
             title="Senha Atual"
             type="password"
             value={old_password}
+            mask=""
             onChange={(e) => setOldPassword(e.target.value)}
           />
           <Input
@@ -200,6 +210,7 @@ const Profile: React.FC = () => {
             title="Nova Senha"
             type="password"
             value={password}
+            mask=""
             onChange={(e) => setPassword(e.target.value)}
           />
           <Input
@@ -207,6 +218,7 @@ const Profile: React.FC = () => {
             title="Confirmação de Senha"
             type="password"
             value={password_confirmation}
+            mask=""
             onChange={(e) => setPasswordConfirmation(e.target.value)}
           />
         </DataContent>

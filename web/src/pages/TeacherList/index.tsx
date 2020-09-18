@@ -43,8 +43,8 @@ const TeacherList: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    api.get('/teachers').then((response) => {
-      setTotal(response.data.total);
+    api.get('/teacher').then((response) => {
+      setTotal(response.data);
     });
   }, []);
 
@@ -73,7 +73,7 @@ const TeacherList: React.FC = () => {
             type: 'error',
             title: 'Erro na busca',
             description:
-              'Ocorreu um erro na busca, preencha todos do dados para buscar.',
+              'Ocorreu um erro na busca, preencha os dados corretamente.',
           });
         });
     },
@@ -115,6 +115,7 @@ const TeacherList: React.FC = () => {
             title="Hora"
             type="time"
             value={time}
+            mask=""
             onChange={(e) => {
               setTime(e.target.value);
             }}

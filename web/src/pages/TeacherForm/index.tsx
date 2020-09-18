@@ -1,7 +1,8 @@
-import React, { useState, useCallback, FormEvent } from 'react';
+import React, { useState, useCallback, FormEvent, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader';
 import Input from '../../components/Input';
+import { Week_Day } from '../../components/TeacherItem';
 
 import warningIcon from '../../assets/images/icons/warning.svg';
 import rocketIcon from '../../assets/images/icons/rocket.svg';
@@ -18,8 +19,13 @@ import {
   WarningContent,
 } from './styles';
 
+interface SubjectProps {
+  id: string;
+  name: string;
+}
+
 interface scheduleItensProps {
-  week_day: number;
+  week_day_id: string;
   from: string;
   to: string;
 }
@@ -28,15 +34,30 @@ const TeacherForm: React.FC = () => {
   const { push } = useHistory();
   const { addToast } = useToast();
 
-  const [subject, setSubject] = useState('');
+  const [subject_id, setSubjectId] = useState('');
   const [cost, setCost] = useState('');
 
   const [scheduleItens, setScheduleItens] = useState<scheduleItensProps[]>([
-    { week_day: 0, from: '', to: '' },
+    { week_day_id: '', from: '', to: '' },
   ]);
 
+  const [days, setDays] = useState<Week_Day[]>([]);
+  const [subjects, setSubjects] = useState<SubjectProps[]>([]);
+
+  useEffect(() => {
+    api.get('/days').then((response) => {
+      setDays(response.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    api.get('/subjects').then((response) => {
+      setSubjects(response.data);
+    });
+  }, []);
+
   const addNewScheduleItem = useCallback(() => {
-    setScheduleItens([...scheduleItens, { week_day: 0, from: '', to: '' }]);
+    setScheduleItens([...scheduleItens, { week_day_id: '', from: '', to: '' }]);
   }, [scheduleItens]);
 
   const addNewScheduleCreateClass = useCallback(
@@ -45,7 +66,7 @@ const TeacherForm: React.FC = () => {
 
       api
         .post('/classes', {
-          subject,
+          subject_id,
           cost,
           schedule: scheduleItens,
         })
@@ -66,7 +87,7 @@ const TeacherForm: React.FC = () => {
           });
         });
     },
-    [subject, cost, scheduleItens, push, addToast],
+    [subject_id, cost, scheduleItens, push, addToast],
   );
 
   const setScheduleItemValue = useCallback(
@@ -103,22 +124,19 @@ const TeacherForm: React.FC = () => {
           <Select
             name="subject"
             title="Matéria"
-            value={subject}
-            onChange={(e) => setSubject(e.target.value)}
-            options={[
-              { value: 'Português', label: 'Português' },
-              { value: 'Matemática', label: 'Matemática' },
-              { value: 'Geografia', label: 'Geografia' },
-              { value: 'Historia', label: 'Historia' },
-              { value: 'Biologia', label: 'Biologia' },
-              { value: 'Química', label: 'Biologia' },
-              { value: 'Artes', label: 'Artes' },
-            ]}
+            value={subject_id}
+            onChange={(e) => setSubjectId(e.target.value)}
+            options={subjects.map((subject) => ({
+              value: subject.id,
+              label: subject.name,
+            }))}
           />
           <Input
             name="cost"
             title="Custo da sua hora por aula"
             value={cost}
+            mask=""
+            type="number"
             onChange={(e) => setCost(e.target.value)}
           />
         </DataContent>
@@ -131,23 +149,18 @@ const TeacherForm: React.FC = () => {
             </button>
           </legend>
           {scheduleItens.map((scheduleItem, index) => (
-            <ScheduleItem key={scheduleItem.week_day}>
+            <ScheduleItem key={scheduleItem.week_day_id}>
               <Select
                 name="week_day"
                 title="Dia da semana"
-                value={scheduleItem.week_day}
+                value={scheduleItem.week_day_id}
                 onChange={(e) => {
-                  setScheduleItemValue(index, 'week_day', e.target.value);
+                  setScheduleItemValue(index, 'week_day_id', e.target.value);
                 }}
-                options={[
-                  { value: '0', label: 'Domingo' },
-                  { value: '1', label: 'Segunda-Feira' },
-                  { value: '2', label: 'Terça-Feira' },
-                  { value: '3', label: 'Quarta-Feira' },
-                  { value: '4', label: 'Quinta-Feira' },
-                  { value: '5', label: 'Sexta-Feira' },
-                  { value: '6', label: 'Sábado' },
-                ]}
+                options={days.map((day) => ({
+                  value: day.id,
+                  label: day.name,
+                }))}
               />
 
               <Input
@@ -155,6 +168,7 @@ const TeacherForm: React.FC = () => {
                 title="Dás"
                 type="time"
                 value={scheduleItem.from}
+                mask=""
                 onChange={(e) => {
                   setScheduleItemValue(index, 'from', e.target.value);
                 }}
@@ -164,6 +178,7 @@ const TeacherForm: React.FC = () => {
                 title="Até"
                 type="time"
                 value={scheduleItem.to}
+                mask=""
                 onChange={(e) => {
                   setScheduleItemValue(index, 'to', e.target.value);
                 }}

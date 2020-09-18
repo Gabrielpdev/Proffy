@@ -1,8 +1,9 @@
-import React, { InputHTMLAttributes } from 'react';
+import React from 'react';
+import InputMask, { Props } from 'react-input-mask';
 
 import { Container } from './styles';
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+interface InputProps extends Props {
   title: string;
   name: string;
 }
@@ -11,7 +12,7 @@ const Input: React.FC<InputProps> = ({ title, name, ...rest }) => {
   return (
     <Container>
       <label htmlFor={name}>{title}</label>
-      <input {...rest} id={name} />
+      <InputMask id={name} {...rest} />
     </Container>
   );
 };

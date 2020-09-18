@@ -37,7 +37,7 @@ const SignUp: React.FC = () => {
 
   useEffect(() => {
     api.get('users').then((response) => {
-      setTotal(response.data.total);
+      setTotal(response.data);
     });
   }, []);
 
@@ -119,6 +119,7 @@ const SignUp: React.FC = () => {
             name="name"
             title="Nome Completo"
             value={name}
+            mask=""
             onChange={(e) => setName(e.target.value)}
           />
 
@@ -127,6 +128,7 @@ const SignUp: React.FC = () => {
             title="Email"
             type="email"
             value={email}
+            mask=""
             onChange={(e) => setEmail(e.target.value)}
           />
 
@@ -134,7 +136,14 @@ const SignUp: React.FC = () => {
             name="whatsapp"
             title="Whatsapp"
             value={whatsapp}
-            onChange={(e) => setWhatsapp(e.target.value)}
+            mask=""
+            onChange={(e) =>
+              setWhatsapp(
+                e.target.value
+                  .replace('(', '')
+                  .replace(')', '')
+                  .replace('-', ''),
+              )}
           />
           <TextArea
             name="bio"
@@ -149,6 +158,7 @@ const SignUp: React.FC = () => {
             title="Senha"
             type="password"
             value={password}
+            mask=""
             onChange={(e) => setPassword(e.target.value)}
           />
         </DataContent>
