@@ -9,6 +9,6 @@ export default class TeacherController {
 
     const teachers = await numberOfTeachers.execute();
 
-    return response.json({ teachers });
+    return response.json(teachers);
   }
 }

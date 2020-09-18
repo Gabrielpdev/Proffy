@@ -72,6 +72,7 @@ class UpdateProfileService {
       user.password = await this.hashProvider.generateHash(password);
     }
 
+    await this.cacheProvider.invalidate('teachers');
     await this.cacheProvider.invalidatePrefix('classes');
     return this.userRepository.save(user);
   }

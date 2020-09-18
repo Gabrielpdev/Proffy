@@ -5,6 +5,7 @@ export default interface IUserRepository {
   create(data: ICreateUserDTO): Promise<User>;
   save(user: User): Promise<User>;
   numberOfTeachers(): Promise<number>;
+  numberOfUsers(): Promise<number>;
   findByEmail(email: string): Promise<User | undefined>;
   findById(id: string): Promise<User | undefined>;
 }

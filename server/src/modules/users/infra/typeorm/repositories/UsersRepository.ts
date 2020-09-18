@@ -34,6 +34,12 @@ class UsersRepository implements IUserRepository {
     return users;
   }
 
+  public async numberOfUsers(): Promise<number> {
+    const users = await this.ormRepository.count();
+
+    return users;
+  }
+
   public async create(userData: ICreateUserDTO): Promise<User> {
     const user = this.ormRepository.create(userData);
 
