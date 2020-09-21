@@ -1,5 +1,6 @@
 import styled from 'styled-components/native';
 import { Platform } from 'react-native';
+import { Form } from '@unform/mobile';
 import { RectButton, BorderlessButton } from 'react-native-gesture-handler';
 
 interface ButtonsProps {
@@ -27,7 +28,7 @@ export const TitleSchedule = styled.View`
 
 export const DeleteSchedule = styled(BorderlessButton)``;
 
-export const Form = styled.View`
+export const Forms = styled(Form)`
   margin: -50px 20px 0 20px;
   background: #fff;
   border-radius: 8px;

@@ -1,10 +1,11 @@
 import React, { useState, useCallback, useRef } from 'react';
-
-import { TextInput, KeyboardAvoidingView, Platform } from 'react-native';
+import { FormHandles } from '@unform/core';
+import { TextInput, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import landingImg from '../../assets/images/landing.png';
 import logoImg from '../../assets/images/logo.png';
+import { useAuth } from '../../hooks/auth';
 
 import Input from '../../components/Input';
 
@@ -14,7 +15,7 @@ import {
   Logo,
   LogoDescription,
   Banner,
-  Form,
+  Forms,
   TitleBlock,
   Title,
   Create,
@@ -30,19 +31,36 @@ import {
   ButtonText,
 } from './styles';
 
+interface SignInFormData {
+  email: string;
+  password: string;
+}
+
 const SignIn: React.FC = () => {
+  const formRef = useRef<FormHandles>(null);
+  const { signIn } = useAuth();
   const navigation = useNavigation();
 
   const passwordInputRef = useRef<TextInput>(null);
 
   const [remember, setRemember] = useState(false);
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  const handleSubmit = useCallback(() => {
-    navigation.navigate('Dashboard');
-  }, [navigation]);
+  const handleSignIn = useCallback(
+    async (data: SignInFormData) => {
+      try {
+        await signIn({
+          email: data.email,
+          password: data.password,
+        });
+      } catch (err) {
+        Alert.alert(
+          'Erro na autenticação',
+          'Ocorreu um erro ao fazer o login, cheque seu dados.',
+        );
+      }
+    },
+    [signIn],
+  );
 
   const handleNavigateToCreate = useCallback(() => {
     navigation.navigate('Step1');
@@ -72,7 +90,8 @@ const SignIn: React.FC = () => {
               </LogoDescription>
               <Banner source={landingImg} resizeMode="contain" />
             </LogoContainer>
-            <Form>
+
+            <Forms onSubmit={handleSignIn} ref={formRef}>
               <TitleBlock>
                 <Title>Fazer login</Title>
                 <Create onPress={handleNavigateToCreate}>
@@ -81,14 +100,13 @@ const SignIn: React.FC = () => {
               </TitleBlock>
 
               <Input
-                title="Email"
-                icon="user"
                 autoCapitalize="none"
                 autoCorrect={false}
                 keyboardType="email-address"
-                placeholder="Digite seu email"
-                value={email}
-                onChangeText={text => setEmail(text)}
+                name="email"
+                icon="mail"
+                title="Email"
+                placeholder="E-mail"
                 returnKeyType="next"
                 onSubmitEditing={() => {
                   passwordInputRef.current?.focus();
@@ -98,11 +116,14 @@ const SignIn: React.FC = () => {
               <Input
                 ref={passwordInputRef}
                 secureTextEntry
-                title="Senha"
+                name="password"
                 icon="lock"
-                placeholder="Digite sua senha"
-                value={password}
-                onChangeText={text => setPassword(text)}
+                title="Senha"
+                placeholder="Senha"
+                returnKeyType="send"
+                onSubmitEditing={() => {
+                  formRef.current?.submitForm();
+                }}
               />
 
               <Footer>
@@ -118,10 +139,14 @@ const SignIn: React.FC = () => {
                 </Forgot>
               </Footer>
 
-              <Button onPress={handleSubmit}>
+              <Button
+                onPress={() => {
+                  formRef.current?.submitForm();
+                }}
+              >
                 <ButtonText>Entrar</ButtonText>
               </Button>
-            </Form>
+            </Forms>
           </Container>
         </ScrollView>
       </KeyboardAvoidingView>

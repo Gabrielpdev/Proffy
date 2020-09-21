@@ -1,4 +1,5 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { FormHandles } from '@unform/core';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -8,16 +9,17 @@ import {
 import { Picker } from '@react-native-community/picker';
 import { Feather } from '@expo/vector-icons';
 
-import Input from '../../components/Input';
+// import Input from '../../components/Input';
 import InputMask from '../../components/Input';
 
 import attentionIcon from '../../assets/images/atention.png';
 
 import PageHeader from '../../components/PageHeader';
+import api from '../../services/api';
 
 import {
   Container,
-  Form,
+  Forms,
   ScheduleItem,
   TitleSchedule,
   Label,
@@ -40,24 +42,43 @@ import {
 } from './styles';
 
 interface scheduleItensProps {
-  week_day: number | undefined;
+  week_day_id: string | undefined;
   from: string;
   to: string;
 }
+interface SubjectProps {
+  id: string;
+  name: string;
+}
 
 const GiveClasses: React.FC = () => {
+  const formRef = useRef<FormHandles>(null);
   const [subject, setSubject] = useState('');
+  const [subjectOptions, setSubjectOptions] = useState<SubjectProps[]>([]);
+  const [daysOptions, setDaysOptions] = useState<SubjectProps[]>([]);
   const [cost, setCost] = useState('');
 
   const [scheduleItens, setScheduleItens] = useState<scheduleItensProps[]>([
-    { week_day: 0, from: '', to: '' },
+    { week_day_id: '', from: '', to: '' },
   ]);
+
+  useEffect(() => {
+    api.get('/subjects').then(response => {
+      setSubjectOptions(response.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    api.get('/days').then(response => {
+      setDaysOptions(response.data);
+    });
+  }, []);
 
   const addNewScheduleItem = useCallback(() => {
     if (
       scheduleItens.filter(
         scheduleItem =>
-          scheduleItem.week_day === 0 ||
+          scheduleItem.week_day_id === '' ||
           scheduleItem.from === '' ||
           scheduleItem.to === '',
       )[0]
@@ -74,13 +95,13 @@ const GiveClasses: React.FC = () => {
       );
     }
 
-    setScheduleItens([...scheduleItens, { week_day: 0, from: '', to: '' }]);
+    setScheduleItens([...scheduleItens, { week_day_id: '', from: '', to: '' }]);
   }, [scheduleItens]);
 
   const handleDeleteSchedule = useCallback(
-    (week_day: string) => {
+    (week_day_id: string) => {
       const scheduleToDelete = scheduleItens.filter(
-        scheduleItem => scheduleItem.week_day !== Number(week_day),
+        scheduleItem => scheduleItem.week_day_id !== week_day_id,
       );
       setScheduleItens(scheduleToDelete);
     },
@@ -108,7 +129,7 @@ const GiveClasses: React.FC = () => {
   const handleSetValueToWeekDay = useCallback(
     (index, itemValue) => {
       const dayAlreadySelected = scheduleItens.filter(
-        item => item.week_day === itemValue,
+        item => item.week_day_id === itemValue,
       );
 
       if (dayAlreadySelected[0]) {
@@ -118,15 +139,30 @@ const GiveClasses: React.FC = () => {
         );
       }
 
-      return setScheduleItemValue(index, 'week_day', itemValue);
+      return setScheduleItemValue(index, 'week_day_id', itemValue);
     },
     [scheduleItens, setScheduleItemValue],
   );
 
-  const handleSubmit = useCallback(() => {
-    console.log(scheduleItens);
-    console.log(cost);
-  }, [cost, scheduleItens]);
+  const handleSubmit = useCallback(async () => {
+    try {
+      const formData = {
+        cost: Number(cost),
+        subject_id: subject,
+        schedule: scheduleItens,
+      };
+
+      await api.post('/classes', formData);
+
+      Alert.alert('Perfil atualizado com sucesso!');
+    } catch (err) {
+      Alert.alert(
+        'Erro no cadastro de aula',
+        'Ocorreu um erro ao cadastrar a aula, verifique os dados e tente novamente.',
+      );
+      console.log(err);
+    }
+  }, [cost, scheduleItens, subject]);
 
   return (
     <>
@@ -142,7 +178,7 @@ const GiveClasses: React.FC = () => {
               title={`Que incrível que você ${'\n'}quer dar aulas.`}
             />
 
-            <Form>
+            <Forms onSubmit={handleSubmit} ref={formRef}>
               <FormContent>
                 <TitleForm>Sobre a aula</TitleForm>
 
@@ -157,13 +193,13 @@ const GiveClasses: React.FC = () => {
                       value=""
                       color="#c1bccc"
                     />
-                    <Picker.Item label="Português" value="Português" />
-                    <Picker.Item label="Matemática" value="Matemática" />
-                    <Picker.Item label="Geografia" value="Geografia" />
-                    <Picker.Item label="Historia" value="Historia" />
-                    <Picker.Item label="Biologia" value="Biologia" />
-                    <Picker.Item label="Química" value="Química" />
-                    <Picker.Item label="Artes" value="Artes" />
+                    {subjectOptions.map(item => (
+                      <Picker.Item
+                        label={item.name}
+                        key={item.id}
+                        value={item.id}
+                      />
+                    ))}
                   </Picker>
                 </PickerView>
 
@@ -180,6 +216,7 @@ const GiveClasses: React.FC = () => {
                   keyboardType="decimal-pad"
                   placeholder="Digite o custo por hora"
                   placeholderTextColor="#c1bccc"
+                  name="cost"
                   value={cost}
                   onChangeText={text => {
                     setCost(text.substring(2).replace(',', '.'));
@@ -194,12 +231,12 @@ const GiveClasses: React.FC = () => {
                 </TitleGroup>
 
                 {scheduleItens.map((scheduleItem, index) => (
-                  <ScheduleItem key={scheduleItem.week_day}>
+                  <ScheduleItem key={scheduleItem.week_day_id}>
                     <TitleSchedule>
                       <Label>Dia da semana</Label>
                       <DeleteSchedule
                         onPress={() =>
-                          handleDeleteSchedule(String(scheduleItem.week_day))
+                          handleDeleteSchedule(String(scheduleItem.week_day_id))
                         }
                       >
                         <Feather name="trash-2" size={20} color="#e33d3d" />
@@ -208,7 +245,7 @@ const GiveClasses: React.FC = () => {
 
                     <PickerView>
                       <Picker
-                        selectedValue={scheduleItem.week_day}
+                        selectedValue={scheduleItem.week_day_id}
                         onValueChange={itemValue =>
                           handleSetValueToWeekDay(index, itemValue)}
                       >
@@ -217,13 +254,13 @@ const GiveClasses: React.FC = () => {
                           value={0}
                           color="#c1bccc"
                         />
-                        <Picker.Item label="Domingo" value={1} />
-                        <Picker.Item label="Segunda" value={2} />
-                        <Picker.Item label="Terça" value={3} />
-                        <Picker.Item label="Quarta" value={4} />
-                        <Picker.Item label="Quinta" value={5} />
-                        <Picker.Item label="Sexta" value={6} />
-                        <Picker.Item label="Sábado" value={7} />
+                        {daysOptions.map(day => (
+                          <Picker.Item
+                            label={day.name}
+                            key={day.id}
+                            value={day.id}
+                          />
+                        ))}
                       </Picker>
                     </PickerView>
 
@@ -239,6 +276,7 @@ const GiveClasses: React.FC = () => {
                         keyboardType="number-pad"
                         placeholder="Ex. 08:00"
                         placeholderTextColor="#c1bccc"
+                        name="from"
                         value={scheduleItem.from}
                         onChangeText={text =>
                           setScheduleItemValue(index, 'from', String(text))}
@@ -256,6 +294,7 @@ const GiveClasses: React.FC = () => {
                         maxLength={5}
                         placeholder="Ex. 20:00"
                         placeholderTextColor="#c1bccc"
+                        name="to"
                         value={scheduleItem.to}
                         onChangeText={text =>
                           setScheduleItemValue(
@@ -269,8 +308,12 @@ const GiveClasses: React.FC = () => {
                 ))}
               </FormContent>
               <Footer>
-                <Button onPress={handleSubmit}>
-                  <ButtonText>Salvar cadastro</ButtonText>
+                <Button
+                  onPress={() => {
+                    formRef.current?.submitForm();
+                  }}
+                >
+                  <ButtonText>Salvar</ButtonText>
                 </Button>
 
                 <FooterAlert>
@@ -283,7 +326,7 @@ const GiveClasses: React.FC = () => {
                   </FooterAlertTextView>
                 </FooterAlert>
               </Footer>
-            </Form>
+            </Forms>
           </Container>
         </ScrollView>
       </KeyboardAvoidingView>

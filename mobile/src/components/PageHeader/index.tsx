@@ -4,6 +4,7 @@ import { Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import backIcon from '../../assets/images/icons/back.png';
 import logoImg from '../../assets/images/logo.png';
+import { useAuth } from '../../hooks/auth';
 
 import {
   Container,
@@ -27,11 +28,11 @@ const PageHeader: React.FC<PageHeaderProps> = ({
   headerRight,
   children,
 }) => {
-  const { navigate } = useNavigation();
+  const { signOut } = useAuth();
 
   const handleGoBack = useCallback(() => {
-    navigate('SignIn');
-  }, [navigate]);
+    signOut();
+  }, [signOut]);
 
   return (
     <Container>

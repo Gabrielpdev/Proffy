@@ -4,7 +4,9 @@ import React, {
   forwardRef,
   useImperativeHandle,
   useCallback,
+  useEffect,
 } from 'react';
+import { useField } from '@unform/core';
 import { TextInputProps } from 'react-native';
 import {
   TextInputMask,
@@ -14,14 +16,17 @@ import {
 import { Container, Title, Content, TextInput, Icon } from './styles';
 
 interface InputProps extends TextInputProps {
+  name: string;
   containerStyle?: {};
   title: string;
   icon?: string;
-  value: string;
   textArena?: boolean;
   type?: TextInputMaskTypeProp;
   options?: TextInputMaskOptionProp;
-  onChangeText(text: any): void;
+}
+
+interface InputValueReference {
+  value: string;
 }
 
 interface InputRef {
@@ -30,19 +35,20 @@ interface InputRef {
 
 const Input: React.RefForwardingComponent<InputRef, InputProps> = (
   {
+    name,
+    icon,
     containerStyle,
     title,
-    value,
-    icon,
     textArena = false,
     type,
     options,
-    onChangeText,
     ...rest
   },
   ref,
 ) => {
   const inputElementRef = useRef<any>(null);
+  const { defaultValue = '', error, fieldName, registerField } = useField(name);
+  const inputValueRef = useRef<InputValueReference>({ value: defaultValue });
 
   const [isFocused, setIsFocused] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
@@ -54,14 +60,30 @@ const Input: React.RefForwardingComponent<InputRef, InputProps> = (
   const handleInputBlur = useCallback(() => {
     setIsFocused(false);
 
-    setIsFilled(!!value);
-  }, [value]);
+    setIsFilled(!!inputValueRef.current.value);
+  }, []);
 
   useImperativeHandle(ref, () => ({
     focus() {
       inputElementRef.current.focus();
     },
   }));
+
+  useEffect(() => {
+    registerField<string>({
+      name: fieldName,
+      ref: inputValueRef.current,
+      path: 'value',
+      setValue(ref: any, value) {
+        inputValueRef.current.value = value;
+        inputElementRef.current.setNativeProps({ text: value });
+      },
+      clearValue() {
+        inputValueRef.current.value = 'value';
+        inputElementRef.current.clear();
+      },
+    });
+  }, [fieldName, registerField]);
 
   return (
     <Container style={containerStyle}>
@@ -75,12 +97,14 @@ const Input: React.RefForwardingComponent<InputRef, InputProps> = (
         {type ? (
           <TextInputMask
             type={type}
-            value={value}
-            onChangeText={onChangeText}
             options={options}
             onFocus={handleInputFocus}
             onBlur={handleInputBlur}
             ref={inputElementRef}
+            defaultValue={defaultValue}
+            onChangeText={value => {
+              inputValueRef.current.value = value;
+            }}
             {...rest}
           />
         ) : (
@@ -88,6 +112,10 @@ const Input: React.RefForwardingComponent<InputRef, InputProps> = (
             onFocus={handleInputFocus}
             onBlur={handleInputBlur}
             ref={inputElementRef}
+            defaultValue={defaultValue}
+            onChangeText={value => {
+              inputValueRef.current.value = value;
+            }}
             {...rest}
           />
         )}

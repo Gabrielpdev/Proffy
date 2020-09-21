@@ -1,6 +1,5 @@
 import styled, { css } from 'styled-components/native';
 import { Feather } from '@expo/vector-icons';
-import { TextInputMask } from 'react-native-masked-text';
 
 interface TitleProps {
   isFocused: boolean;

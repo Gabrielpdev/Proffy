@@ -1,6 +1,7 @@
 import styled from 'styled-components/native';
 import { Platform } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
+import { Form } from '@unform/mobile';
 import Input from '../../components/Input';
 
 interface ButtonsProps {
@@ -53,7 +54,7 @@ export const Title = styled.Text`
   font-family: 'Archivo_700Bold';
 `;
 
-export const Form = styled.View`
+export const Forms = styled(Form)`
   margin: -50px 20px 0 20px;
   padding: 0 20px;
   background: #fff;
@@ -74,6 +75,15 @@ export const FormFooter = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 5px;
+`;
+
+export const BottonsTittle = styled.Text`
+  color: #9c98a6;
+  font-family: 'Poppins_400Regular';
+  font-size: 14px;
+  line-height: 24px;
+  text-align: left;
 `;
 
 export const StudyButton = styled(RectButton)<ButtonsProps>`

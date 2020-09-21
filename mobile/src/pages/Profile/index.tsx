@@ -1,14 +1,12 @@
-import React, { useCallback, useRef, useState, useEffect } from 'react';
-import {
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  TextInput,
-} from 'react-native';
+import React, { useCallback, useRef, useState } from 'react';
+import { FormHandles } from '@unform/core';
+import { Alert, ScrollView, TextInput } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import Constants from 'expo-constants';
+
+import { useAuth } from '../../hooks/auth';
 
 import BackgroundImg from '../../assets/images/background.png';
 import studyIcon from '../../assets/images/icons/study.png';
@@ -16,6 +14,8 @@ import giveClassesIcon from '../../assets/images/icons/give-classes.png';
 
 import Input from '../../components/Input';
 import PageHeader from '../../components/PageHeader';
+
+import api from '../../services/api';
 
 import {
   Container,
@@ -25,11 +25,12 @@ import {
   AvatarContainer,
   UserAvatarButton,
   UserAvatar,
-  Form,
   TitleForm,
   TextArena,
+  Forms,
   FormFooter,
   ImageIcon,
+  BottonsTittle,
   StudyButton,
   TeacherButton,
   TextButton,
@@ -37,23 +38,79 @@ import {
   ButtonText,
 } from './styles';
 
+interface ProfileFormData {
+  name: string;
+  email: string;
+  whatsapp: string;
+  bio: string;
+  old_password: string;
+  password: string;
+  password_confirmation: string;
+}
+
 const Profile: React.FC = () => {
+  const formRef = useRef<FormHandles>(null);
+  const { user, updateUser } = useAuth();
+
   const emailInputRef = useRef<TextInput | null>(null);
+  const oldPasswordInputRef = useRef<TextInput | null>(null);
   const passwordInputRef = useRef<TextInput | null>(null);
   const passwordConfirmationInputRef = useRef<TextInput | null>(null);
 
   const whatsappInputRef = useRef<TextInput>(null);
   const bioInputRef = useRef<TextInput>(null);
 
-  const [name, setName] = useState('');
-  const [whatsapp, setWhatsapp] = useState('');
-  const [bio, setBio] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [password_confirmation, setPasswordConfirmation] = useState('');
-  const [isTeacher, setIsTeacher] = useState(false);
+  const [isTeacher, setIsTeacher] = useState(user.is_teacher);
 
-  useEffect(() => {
+  const handleSubmit = useCallback(
+    async (data: ProfileFormData) => {
+      try {
+        const {
+          name,
+          email,
+          whatsapp,
+          bio,
+          old_password,
+          password,
+          password_confirmation,
+        } = data;
+
+        const formData = {
+          name,
+          email,
+          whatsapp,
+          bio,
+          is_teacher: isTeacher,
+          ...(old_password
+            ? {
+                old_password,
+                password,
+                password_confirmation,
+              }
+            : {}),
+        };
+
+        const response = await api.put('/profile', formData);
+
+        updateUser(response.data);
+
+        Alert.alert('Perfil atualizado com sucesso!');
+      } catch (err) {
+        Alert.alert(
+          'Erro na atualização do perfil',
+          'Ocorreu um erro ao atualizar seu perfil, tente novamente.',
+        );
+        console.log(err);
+      }
+    },
+    [updateUser, isTeacher],
+  );
+
+  const toggleIsTeacher = useCallback(() => {
+    setIsTeacher(state => !state);
+  }, []);
+
+  const handleUpdateAvatar = useCallback(async () => {
     async function getPermissionAsync(): Promise<void> {
       if (Constants.platform.ios) {
         const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
@@ -63,164 +120,164 @@ const Profile: React.FC = () => {
       }
     }
     getPermissionAsync();
-  }, []);
 
-  const handleSubmit = useCallback(() => {}, []);
-
-  const toggleIsTeacher = useCallback(() => {
-    setIsTeacher(state => !state);
-  }, []);
-
-  const handleUpdateAvatar = useCallback(async () => {
-    const data = await ImagePicker.launchImageLibraryAsync({
+    const imageURL = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [4, 4],
       quality: 1,
     });
 
-    console.log(data);
+    const data = new FormData();
 
-    // const data = new FormData();
+    data.append('avatar', {
+      type: 'image/jpeg',
+      name: `${user.id}.jpg`,
+      uri: imageURL.uri,
+    });
 
-    // data.append('avatar', {
-    //   type: 'image/jpeg',
-    //   name: 'Gabriel.jpg',
-    //   uri: response.uri,
-    // });
-  }, []);
+    api.patch('users/avatar', data).then(apiResponse => {
+      updateUser(apiResponse.data);
+      Alert.alert('Avatar atualizado com sucesso');
+    });
+  }, [updateUser, user.id]);
 
   return (
     <>
-      <KeyboardAvoidingView
-        enabled
-        style={{ flex: 1 }}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      >
-        <ScrollView keyboardShouldPersistTaps="handled">
-          <Container>
-            <PageHeader titleBar="Meu perfil">
-              <Background source={BackgroundImg} resizeMode="contain">
-                {/* <BackButton onPress={handleGoBack}>
-                  <Feather name="arrow-left" size={24} color="#999591" />
-                </BackButton> */}
+      <ScrollView keyboardShouldPersistTaps="handled">
+        <Container>
+          <PageHeader titleBar="Meu perfil">
+            <Background source={BackgroundImg} resizeMode="contain">
+              <AvatarContainer>
+                <UserAvatar
+                  source={{
+                    uri: user.avatar_url.replace('localhost', '192.168.0.112'),
+                  }}
+                />
+                <UserAvatarButton onPress={handleUpdateAvatar}>
+                  <Feather name="camera" size={25} color="#fff" />
+                </UserAvatarButton>
+              </AvatarContainer>
 
-                <AvatarContainer>
-                  <UserAvatar
-                    source={{
-                      uri:
-                        'https://avatars2.githubusercontent.com/u/61878136?s=460&u=e4b113d2332fdb1c09b3be7cb626923e86f89ae1&v=4',
-                    }}
-                  />
-                  <UserAvatarButton onPress={handleUpdateAvatar}>
-                    <Feather name="camera" size={25} color="#fff" />
-                  </UserAvatarButton>
-                </AvatarContainer>
+              <Title>Gabriel Pereira</Title>
+            </Background>
+          </PageHeader>
 
-                <Title>Gabriel Pereira</Title>
-              </Background>
-            </PageHeader>
+          <Forms onSubmit={handleSubmit} ref={formRef} initialData={user}>
+            <TitleForm>Seus Dados</TitleForm>
+            <BottonsTittle>O que você é ?</BottonsTittle>
+            <FormFooter>
+              <StudyButton isSelected={!isTeacher} onPress={toggleIsTeacher}>
+                <ImageIcon source={studyIcon} />
+                <TextButton>Estudar</TextButton>
+              </StudyButton>
 
-            <Form>
-              <TitleForm>Seus Dados</TitleForm>
-              <Input
-                autoCapitalize="words"
-                title="Nome"
-                icon="user"
-                placeholder="Nome"
-                value={name}
-                onChangeText={text => setName(text)}
-                returnKeyType="next"
-                onSubmitEditing={() => {
-                  emailInputRef.current?.focus();
-                }}
-              />
+              <TeacherButton isSelected={isTeacher} onPress={toggleIsTeacher}>
+                <ImageIcon source={giveClassesIcon} />
+                <TextButton>Dar aula</TextButton>
+              </TeacherButton>
+            </FormFooter>
 
-              <Input
-                ref={emailInputRef}
-                keyboardType="email-address"
-                autoCorrect={false}
-                autoCapitalize="none"
-                title="Email"
-                icon="mail"
-                placeholder="E-mail"
-                value={email}
-                onChangeText={text => setEmail(text)}
-                returnKeyType="next"
-                onSubmitEditing={() => {
-                  whatsappInputRef.current?.focus();
-                }}
-              />
+            <Input
+              autoCapitalize="words"
+              title="Nome"
+              icon="user"
+              placeholder="Nome"
+              name="name"
+              returnKeyType="next"
+              onSubmitEditing={() => {
+                emailInputRef.current?.focus();
+              }}
+            />
 
-              <Input
-                ref={whatsappInputRef}
-                title="Whatsapp"
-                icon="phone"
-                placeholder="Digite seu whatsapp"
-                value={whatsapp}
-                onChangeText={text => setWhatsapp(text)}
-                returnKeyType="next"
-                onSubmitEditing={() => {
-                  bioInputRef.current?.focus();
-                }}
-              />
-              <TextArena
-                ref={bioInputRef}
-                title="Bio"
-                icon="edit-2"
-                multiline
-                textArena
-                numberOfLines={4}
-                placeholder="Fale sobre você"
-                value={bio}
-                onChangeText={text => setBio(text)}
-                returnKeyType="next"
-              />
+            <Input
+              ref={emailInputRef}
+              keyboardType="email-address"
+              autoCorrect={false}
+              autoCapitalize="none"
+              title="Email"
+              name="email"
+              icon="mail"
+              placeholder="E-mail"
+              returnKeyType="next"
+              onSubmitEditing={() => {
+                whatsappInputRef.current?.focus();
+              }}
+            />
 
-              <FormFooter>
-                <StudyButton isSelected={!isTeacher} onPress={toggleIsTeacher}>
-                  <ImageIcon source={studyIcon} />
-                  <TextButton>Estudar</TextButton>
-                </StudyButton>
+            <Input
+              ref={whatsappInputRef}
+              title="Whatsapp"
+              icon="phone"
+              placeholder="Digite seu whatsapp"
+              name="whatsapp"
+              returnKeyType="next"
+              onSubmitEditing={() => {
+                bioInputRef.current?.focus();
+              }}
+            />
+            <TextArena
+              ref={bioInputRef}
+              title="Bio"
+              icon="edit-2"
+              multiline
+              textArena
+              numberOfLines={4}
+              placeholder="Fale sobre você"
+              name="bio"
+              returnKeyType="next"
+            />
 
-                <TeacherButton isSelected={isTeacher} onPress={toggleIsTeacher}>
-                  <ImageIcon source={giveClassesIcon} />
-                  <TextButton>Dar aula</TextButton>
-                </TeacherButton>
-              </FormFooter>
+            <Input
+              ref={oldPasswordInputRef}
+              secureTextEntry
+              name="old_password"
+              icon="lock"
+              title="Senha atual"
+              placeholder="Senha atual"
+              returnKeyType="next"
+              containerStyle={{ marginTop: 16 }}
+              onSubmitEditing={() => {
+                passwordInputRef.current.focus();
+              }}
+            />
 
-              <Input
-                ref={passwordInputRef}
-                secureTextEntry
-                icon="lock"
-                placeholder="Nova senha"
-                title="Nova Senha"
-                containerStyle={{ paddingTop: 40 }}
-                value={password}
-                onChangeText={text => setPassword(text)}
-                returnKeyType="next"
-                onSubmitEditing={() => {
-                  passwordConfirmationInputRef.current?.focus();
-                }}
-              />
+            <Input
+              ref={passwordInputRef}
+              secureTextEntry
+              name="password"
+              icon="lock"
+              title="Nova Senha"
+              placeholder="Nova senha"
+              returnKeyType="next"
+              onSubmitEditing={() => {
+                passwordConfirmationInputRef.current.focus();
+              }}
+            />
 
-              <Input
-                ref={passwordConfirmationInputRef}
-                secureTextEntry
-                icon="lock"
-                placeholder="Confirmação de senha"
-                title="Confirme sua senha"
-                value={password_confirmation}
-                onChangeText={text => setPasswordConfirmation(text)}
-              />
+            <Input
+              ref={passwordConfirmationInputRef}
+              secureTextEntry
+              name="password"
+              icon="lock"
+              title="Confirmação de senha"
+              placeholder="Confirmação de senha"
+              returnKeyType="send"
+              onSubmitEditing={() => {
+                formRef.current?.submitForm();
+              }}
+            />
 
-              <Button onPress={handleSubmit}>
-                <ButtonText>Confirmar mudanças</ButtonText>
-              </Button>
-            </Form>
-          </Container>
-        </ScrollView>
-      </KeyboardAvoidingView>
+            <Button
+              onPress={() => {
+                formRef.current?.submitForm();
+              }}
+            >
+              <ButtonText>Confirmar mudanças</ButtonText>
+            </Button>
+          </Forms>
+        </Container>
+      </ScrollView>
     </>
   );
 };

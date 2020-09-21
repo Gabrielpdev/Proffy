@@ -1,5 +1,6 @@
 import React from 'react';
-import { SafeAreaView } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { SafeAreaView, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { AppLoading } from 'expo';
 import {
@@ -12,7 +13,8 @@ import {
   Poppins_600SemiBold,
 } from '@expo-google-fonts/poppins';
 
-import AppStack from './src/routes/AppStack';
+import AppProvider from './src/hooks';
+import Routes from './src/routes';
 
 const App: React.FC = () => {
   const [fontsLoaded] = useFonts({
@@ -27,10 +29,16 @@ const App: React.FC = () => {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <AppStack />
+    <NavigationContainer>
+      {/* <SafeAreaView style={{ flex: 1 }}> */}
       <StatusBar style="light" />
-    </SafeAreaView>
+      <AppProvider>
+        <View style={{ flex: 1 }}>
+          <Routes />
+        </View>
+      </AppProvider>
+      {/* </SafeAreaView> */}
+    </NavigationContainer>
   );
 };
 

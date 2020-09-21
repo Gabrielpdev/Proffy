@@ -7,10 +7,13 @@ import Favorites from '../pages/Favorites';
 import Profile from '../pages/Profile';
 import GiveClasses from '../pages/GiveClasses';
 
+import { useAuth } from '../hooks/auth';
+
 const { Navigator, Screen } = createBottomTabNavigator();
 
-const StudyTabs: React.FC = () => {
-  const Teacher = true;
+const AppRoutes: React.FC = () => {
+  const { user } = useAuth();
+  const { is_teacher } = user;
 
   return (
     <Navigator
@@ -65,7 +68,7 @@ const StudyTabs: React.FC = () => {
           ),
         }}
       />
-      {Teacher && (
+      {is_teacher && (
         <Screen
           name="Give-Classes"
           component={GiveClasses}
@@ -99,4 +102,4 @@ const StudyTabs: React.FC = () => {
   );
 };
 
-export default StudyTabs;
+export default AppRoutes;
