@@ -40,6 +40,7 @@ import {
   FooterAlertTitle,
   FooterAlertDescription,
 } from './styles';
+import convertHourToMinute from '../../utils/convertHourToMinutes';
 
 interface scheduleItensProps {
   week_day_id: string | undefined;
@@ -144,25 +145,50 @@ const GiveClasses: React.FC = () => {
     [scheduleItens, setScheduleItemValue],
   );
 
+  const sendAlert = useCallback((title, content) => {
+    Alert.alert(title, content);
+  }, []);
+
   const handleSubmit = useCallback(async () => {
+    const formData = {
+      cost: Number(cost),
+      subject_id: subject,
+      schedule: scheduleItens,
+    };
+
     try {
-      const formData = {
-        cost: Number(cost),
-        subject_id: subject,
-        schedule: scheduleItens,
-      };
+      scheduleItens.forEach(schedule => {
+        if (
+          convertHourToMinute(schedule.from) >= convertHourToMinute(schedule.to)
+        ) {
+          throw new TypeError('Hora de inicio depois da hora de termino.');
+        }
+
+        if (
+          convertHourToMinute(schedule.from) > 1439 ||
+          convertHourToMinute(schedule.from) < 0
+        ) {
+          throw new TypeError('Horário deve ser válido');
+        }
+
+        // Checar se é horário valido
+        if (
+          convertHourToMinute(schedule.to) > 1439 ||
+          convertHourToMinute(schedule.to) < 0
+        ) {
+          throw new TypeError('Horário deve ser válido');
+        }
+      });
 
       await api.post('/classes', formData);
 
       Alert.alert('Perfil atualizado com sucesso!');
     } catch (err) {
-      Alert.alert(
-        'Erro no cadastro de aula',
-        'Ocorreu um erro ao cadastrar a aula, verifique os dados e tente novamente.',
-      );
+      sendAlert('Erro no cadastro de aula', err.message);
+
       console.log(err);
     }
-  }, [cost, scheduleItens, subject]);
+  }, [cost, scheduleItens, subject, sendAlert]);
 
   return (
     <>
@@ -236,8 +262,7 @@ const GiveClasses: React.FC = () => {
                       <Label>Dia da semana</Label>
                       <DeleteSchedule
                         onPress={() =>
-                          handleDeleteSchedule(String(scheduleItem.week_day_id))
-                        }
+                          handleDeleteSchedule(String(scheduleItem.week_day_id))}
                       >
                         <Feather name="trash-2" size={20} color="#e33d3d" />
                       </DeleteSchedule>
@@ -247,7 +272,8 @@ const GiveClasses: React.FC = () => {
                       <Picker
                         selectedValue={scheduleItem.week_day_id}
                         onValueChange={itemValue =>
-                          handleSetValueToWeekDay(index, itemValue)}
+                          handleSetValueToWeekDay(index, itemValue)
+                        }
                       >
                         <Picker.Item
                           label="Selecione um dia"
@@ -279,7 +305,8 @@ const GiveClasses: React.FC = () => {
                         name="from"
                         value={scheduleItem.from}
                         onChangeText={text =>
-                          setScheduleItemValue(index, 'from', String(text))}
+                          setScheduleItemValue(index, 'from', String(text))
+                        }
                       />
 
                       <InputMask
@@ -301,7 +328,8 @@ const GiveClasses: React.FC = () => {
                             index,
                             'to',
                             text.replace('-', ':'),
-                          )}
+                          )
+                        }
                       />
                     </InputGroup>
                   </ScheduleItem>
