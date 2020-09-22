@@ -48,6 +48,72 @@ export const Bio = styled.Text`
   font-size: 14px;
   line-height: 24px;
   color: #6a6180;
+  padding-bottom: 20px;
+`;
+
+export const Schedule = styled.View`
+  padding: 20px;
+  border-top-width: 1px;
+  border-top-color: #e6e6f0;
+`;
+
+export const DaysHeader = styled.View`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 7px 40px;
+`;
+
+export const Days = styled.View`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 8px;
+
+  background: #f7f8fa;
+  border-radius: 8px;
+  border: 1px solid #e6e6f0;
+`;
+
+export const DaysContent = styled.View`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 10px 15px;
+`;
+
+export const DaysHeaderDay = styled.Text`
+  font-family: 'Poppins_400Regular';
+  font-size: 11px;
+  line-height: 15px;
+  color: #9c98a6;
+`;
+
+export const DaysHeaderHour = styled.Text`
+  font-family: 'Poppins_400Regular';
+  font-size: 11px;
+  line-height: 15px;
+  color: #9c98a6;
+`;
+
+export const DayName = styled.Text`
+  font-family: 'Archivo_700Bold';
+  font-size: 16px;
+  line-height: 21px;
+  color: #6a6180;
+`;
+
+export const Hour = styled.Text`
+  font-family: 'Archivo_700Bold';
+  font-size: 16px;
+  line-height: 21px;
+  color: #6a6180;
 `;
 
 export const Footer = styled.View`
@@ -55,6 +121,8 @@ export const Footer = styled.View`
   padding: 24px;
   align-items: center;
   margin-top: 24px;
+  border-top-width: 1px;
+  border-top-color: #e6e6f0;
 `;
 
 export const Price = styled.Text`

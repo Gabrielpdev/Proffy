@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Picker } from '@react-native-community/picker';
 import { Feather } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -7,7 +7,7 @@ import { KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import api from '../../services/api';
 
 import PageHeader from '../../components/PageHeader';
-import TeacherItem, { Teacher } from '../../components/TeacherItem';
+import TeacherItem, { Classes } from '../../components/TeacherItem';
 
 import {
   Container,
@@ -23,26 +23,39 @@ import {
   SubmitButtonText,
 } from './styles';
 
+interface SubjectAndDaysProps {
+  id: string;
+  name: string;
+}
+
 const TeacherList: React.FC = () => {
-  const [teachers, setTeachers] = useState<Teacher[]>([]);
+  const [teachers, setTeachers] = useState<Classes[]>([]);
   const [isFiltersVisible, setIsFilterVisible] = useState(false);
-  const [favorites, setFavorites] = useState<string[]>([]);
 
-  const [subject, setSubject] = useState('');
-  const [week_day, setWeekDay] = useState('');
-  const [time, setTime] = useState('');
+  const [subject_id, setSubject] = useState('');
+  const [week_day_id, setWeekDay] = useState('');
+  const [hour, setHour] = useState('');
 
-  const loadFavorites = useCallback(() => {
-    AsyncStorage.getItem('favorites').then(response => {
-      if (response) {
-        const favoritesTeachers = JSON.parse(response);
-        const favoritesTeachersIds = favoritesTeachers.map(
-          (teacher: Teacher) => {
-            return teacher.id;
-          },
-        );
-        setFavorites(favoritesTeachersIds);
-      }
+  const [subjectOptions, setSubjectOptions] = useState<SubjectAndDaysProps[]>(
+    [],
+  );
+  const [daysOptions, setDaysOptions] = useState<SubjectAndDaysProps[]>([]);
+
+  useEffect(() => {
+    api.get('/subjects').then(response => {
+      setSubjectOptions(response.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    api.get('/days').then(response => {
+      setDaysOptions(response.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    api.get('/classes').then(response => {
+      setTeachers(response.data);
     });
   }, []);
 
@@ -51,23 +64,22 @@ const TeacherList: React.FC = () => {
   }, []);
 
   const handleFiltersSubmit = useCallback(() => {
-    loadFavorites();
     api
       .get('/classes', {
         params: {
-          week_day,
-          subject,
-          time,
+          week_day_id,
+          subject_id,
+          hour,
         },
       })
       .then(response => {
-        setIsFilterVisible(false);
         setTeachers(response.data);
+        setIsFilterVisible(false);
         setSubject('');
         setWeekDay('');
-        setTime('');
+        setHour('');
       });
-  }, [week_day, subject, time, loadFavorites]);
+  }, [week_day_id, subject_id, hour]);
 
   return (
     <>
@@ -94,7 +106,7 @@ const TeacherList: React.FC = () => {
                   <Label>Matéria</Label>
                   <PickerView>
                     <Picker
-                      selectedValue={subject}
+                      selectedValue={subject_id}
                       onValueChange={itemValue => setSubject(String(itemValue))}
                     >
                       <Picker.Item
@@ -102,13 +114,13 @@ const TeacherList: React.FC = () => {
                         value=""
                         color="#c1bccc"
                       />
-                      <Picker.Item label="Português" value="Português" />
-                      <Picker.Item label="Matemática" value="Matemática" />
-                      <Picker.Item label="Geografia" value="Geografia" />
-                      <Picker.Item label="Historia" value="Historia" />
-                      <Picker.Item label="Biologia" value="Biologia" />
-                      <Picker.Item label="Química" value="Química" />
-                      <Picker.Item label="Artes" value="Artes" />
+                      {subjectOptions.map(item => (
+                        <Picker.Item
+                          label={item.name}
+                          key={item.id}
+                          value={item.id}
+                        />
+                      ))}
                     </Picker>
                   </PickerView>
 
@@ -117,9 +129,8 @@ const TeacherList: React.FC = () => {
                       <Label>Dia da semana</Label>
                       <PickerView>
                         <Picker
-                          selectedValue={week_day}
+                          selectedValue={week_day_id}
                           onValueChange={itemValue =>
-                            // eslint-disable-next-line prettier/prettier
                             setWeekDay(String(itemValue))}
                         >
                           <Picker.Item
@@ -127,13 +138,13 @@ const TeacherList: React.FC = () => {
                             value=""
                             color="#c1bccc"
                           />
-                          <Picker.Item label="Domingo" value="0" />
-                          <Picker.Item label="Segunda" value="1" />
-                          <Picker.Item label="Terça" value="2" />
-                          <Picker.Item label="Quarta" value="3" />
-                          <Picker.Item label="Quinta" value="4" />
-                          <Picker.Item label="Sexta" value="5" />
-                          <Picker.Item label="Sábado" value="6" />
+                          {daysOptions.map(day => (
+                            <Picker.Item
+                              label={day.name}
+                              key={day.id}
+                              value={day.id}
+                            />
+                          ))}
                         </Picker>
                       </PickerView>
                     </InputBlock>
@@ -148,8 +159,8 @@ const TeacherList: React.FC = () => {
                         maxLength={5}
                         placeholder="Qual horário ?"
                         placeholderTextColor="#c1bccc"
-                        value={time}
-                        onChangeText={text => setTime(text)}
+                        value={hour}
+                        onChangeText={text => setHour(text)}
                       />
                     </InputBlock>
                   </InputGroup>
@@ -163,11 +174,7 @@ const TeacherList: React.FC = () => {
 
             <Scroll>
               {teachers.map(teacher => (
-                <TeacherItem
-                  key={teacher.id}
-                  teacher={teacher}
-                  favorited={favorites.includes(teacher.id)}
-                />
+                <TeacherItem key={teacher.id} classe={teacher} />
               ))}
             </Scroll>
           </Container>
