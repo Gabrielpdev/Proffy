@@ -44,6 +44,18 @@ class CreateFavoriteService {
       throw new AppError('You can just favorite a teacher');
     }
 
+    const checkIsFavorited = await this.favoriteRepository.getFavorites(
+      student_id,
+    );
+
+    const teacherExists = checkIsFavorited.find(
+      item => item.teacher_id === teacher_id,
+    );
+
+    if (teacherExists) {
+      throw new AppError('This teacher is already favorited');
+    }
+
     const favorite = await this.favoriteRepository.create(data);
 
     await this.cacheProvider.invalidatePrefix('favorite');

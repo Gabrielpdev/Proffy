@@ -3,6 +3,7 @@ import { container } from 'tsyringe';
 
 import CreateFavoriteService from '@modules/users/services/CreateFavoriteService';
 import ListFavoritesService from '@modules/users/services/ListFavoritesService';
+import DeleteFavoriteService from '@modules/users/services/DeleteFavoriteService';
 
 export default class FavoriteController {
   public async index(request: Request, response: Response): Promise<Response> {
@@ -24,6 +25,17 @@ export default class FavoriteController {
       student_id,
       teacher_id,
     });
+
+    return response.json(favorites);
+  }
+
+  public async delete(request: Request, response: Response): Promise<Response> {
+    const user_id = request.user.id;
+    const { id } = request.body;
+
+    const deleteFavorite = container.resolve(DeleteFavoriteService);
+
+    const favorites = await deleteFavorite.execute({ id, user_id });
 
     return response.json(favorites);
   }

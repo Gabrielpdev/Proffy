@@ -10,6 +10,7 @@ const favoriteController = new FavoriteController();
 favoriteRouter.use(ensureAuthenticated);
 
 favoriteRouter.get('/', favoriteController.index);
+favoriteRouter.delete('/', favoriteController.delete);
 favoriteRouter.post(
   '/',
   celebrate({
