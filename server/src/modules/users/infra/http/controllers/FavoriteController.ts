@@ -17,13 +17,13 @@ export default class FavoriteController {
 
   public async create(request: Request, response: Response): Promise<Response> {
     const student_id = request.user.id;
-    const { teacher_id } = request.body;
+    const { class_id } = request.body;
 
     const createFavorite = container.resolve(CreateFavoriteService);
 
     const favorites = await createFavorite.execute({
       student_id,
-      teacher_id,
+      class_id,
     });
 
     return response.json(favorites);
@@ -31,7 +31,7 @@ export default class FavoriteController {
 
   public async delete(request: Request, response: Response): Promise<Response> {
     const user_id = request.user.id;
-    const { id } = request.body;
+    const { id } = request.params;
 
     const deleteFavorite = container.resolve(DeleteFavoriteService);
 

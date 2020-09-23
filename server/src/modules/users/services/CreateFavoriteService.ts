@@ -3,13 +3,14 @@ import { injectable, inject } from 'tsyringe';
 import AppError from '@shared/errors/AppError';
 
 import Favorites from '@modules/users/infra/typeorm/entities/Favorites';
+import IClassesRepository from '@modules/classes/repositories/IClassesRepository';
 import ICacheProvier from '@shared/container/providers/CacheProvider/models/ICacheProvier';
 import IFavoriteRepository from '../repositories/IFavoriteRepository';
 import IUserRepository from '../repositories/IUserRepository';
 
 interface IRequest {
   student_id: string;
-  teacher_id: string;
+  class_id: string;
 }
 
 @injectable()
@@ -21,39 +22,30 @@ class CreateFavoriteService {
     @inject('UsersRepository')
     private usersRepository: IUserRepository,
 
+    @inject('ClassesRepository')
+    private classesRepository: IClassesRepository,
+
     @inject('CacheProvider')
     private cacheProvider: ICacheProvier,
   ) {}
 
   public async execute(data: IRequest): Promise<Favorites> {
-    const { student_id, teacher_id } = data;
+    const { class_id, student_id } = data;
 
-    if (student_id === teacher_id) {
-      throw new AppError('You can not favorite yourself');
+    const checkClasseId = await this.classesRepository.findById(class_id);
+
+    if (!checkClasseId) {
+      throw new AppError('Class does not exists');
     }
 
-    const checkStudentId = await this.usersRepository.findById(student_id);
+    const favorites = await this.favoriteRepository.getFavorites(student_id);
 
-    if (!checkStudentId) {
-      throw new AppError('User does not exists');
-    }
-
-    const checkIsTeacher = await this.usersRepository.findById(teacher_id);
-
-    if (checkIsTeacher?.is_teacher === false) {
-      throw new AppError('You can just favorite a teacher');
-    }
-
-    const checkIsFavorited = await this.favoriteRepository.getFavorites(
-      student_id,
+    const checkFavoritesExists = favorites.find(
+      favorite => favorite.class_id === class_id,
     );
 
-    const teacherExists = checkIsFavorited.find(
-      item => item.teacher_id === teacher_id,
-    );
-
-    if (teacherExists) {
-      throw new AppError('This teacher is already favorited');
+    if (checkFavoritesExists) {
+      throw new AppError('This class is already favorited');
     }
 
     const favorite = await this.favoriteRepository.create(data);

@@ -8,6 +8,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 
+import Classes from '@modules/classes/infra/typeorm/entities/Classes';
 import Users from './Users';
 
 @Entity('favorites')
@@ -23,11 +24,11 @@ class Favorites {
   student: Users;
 
   @Column()
-  teacher_id: string;
+  class_id: string;
 
-  @ManyToOne(() => Users, users => users.id)
-  @JoinColumn({ name: 'teacher_id' })
-  teacher: Users;
+  @ManyToOne(() => Classes, classes => classes.id)
+  @JoinColumn({ name: 'class_id' })
+  classe: Classes;
 
   @CreateDateColumn()
   created_at: Date;

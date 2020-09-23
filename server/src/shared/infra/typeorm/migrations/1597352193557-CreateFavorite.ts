@@ -24,7 +24,7 @@ export default class CreateFavorite1597352193557 implements MigrationInterface {
             isNullable: true,
           },
           {
-            name: 'teacher_id',
+            name: 'class_id',
             type: 'uuid',
             isNullable: true,
           },
@@ -57,10 +57,10 @@ export default class CreateFavorite1597352193557 implements MigrationInterface {
     await queryRunner.createForeignKey(
       'favorites',
       new TableForeignKey({
-        name: 'FavoriteTeacher',
-        columnNames: ['teacher_id'],
+        name: 'FavoriteClasse',
+        columnNames: ['class_id'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'users',
+        referencedTableName: 'classes',
         onDelete: 'SET NULL',
         onUpdate: 'CASCADE',
       }),
@@ -69,7 +69,7 @@ export default class CreateFavorite1597352193557 implements MigrationInterface {
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.dropForeignKey('favorites', 'UserFavorite');
-    await queryRunner.dropForeignKey('favorites', 'FavoriteTeacher');
+    await queryRunner.dropForeignKey('favorites', 'FavoriteClasse');
     await queryRunner.dropTable('favorites');
   }
 }
