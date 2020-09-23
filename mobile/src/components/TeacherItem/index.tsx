@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Image, Linking } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
 
 import api from '../../services/api';
 import convertMinutesToHour from '../../utils/convertMinutesToHour';
@@ -33,6 +32,7 @@ import {
   ContactButton,
   ContactButtonText,
 } from './styles';
+import { useAuth } from '../../hooks/auth';
 
 export interface Week_Day {
   id: string;
@@ -46,6 +46,11 @@ interface Class_Schedule {
   toFormatted: string;
   week_day: Week_Day;
   is_available: boolean;
+}
+
+interface Favorite {
+  id: string;
+  teacher_id: string;
 }
 export interface Classes {
   id: string;
@@ -61,6 +66,7 @@ export interface Classes {
     bio: string;
     is_teacher: boolean;
     avatar_url: string;
+    favorites: [Favorite];
   };
   class_schedule: [Class_Schedule];
 }
@@ -80,6 +86,16 @@ const TeacherItem: React.FC<TeacherItemProps> = ({ classe }) => {
       setDays(response.data);
     });
 
+    api.get('/favorite').then(response => {
+      response.data.map((favorite: Favorite) => {
+        if (favorite.teacher_id === classe.user.id) {
+          setIsFavorited(true);
+        }
+      });
+    });
+  }, [classe.user.id]);
+
+  useEffect(() => {
     const classeFormatted = classe.class_schedule.map(class_schedule => {
       return {
         ...class_schedule,
@@ -94,36 +110,27 @@ const TeacherItem: React.FC<TeacherItemProps> = ({ classe }) => {
     api.post('/connections', {
       teacher_id: classe.user.id,
     });
-  }, [classe.user.id]);
 
-  //   Linking.openURL(`whatsapp://send?phone=+55${classe.user.whatsapp}`);
-  // }, [classe.user.whatsapp, classe.user.id]);
+    Linking.openURL(`whatsapp://send?phone=+55${classe.user.whatsapp}`);
+  }, [classe.user.whatsapp, classe.user.id]);
 
-  // const handleToggleFavorite = useCallback(async () => {
-  //   const favorites = await AsyncStorage.getItem('favorites');
+  const handleToggleFavorite = useCallback(async () => {
+    if (isFavorited) {
+      const { data } = await api.get('/favorite');
 
-  //   let favoritesArray = [];
+      const favorite = data.find(
+        (item: Favorite) => item.teacher_id === classe.user.id,
+      );
 
-  //   if (favorites) {
-  //     favoritesArray = JSON.parse(favorites);
-  //   }
-
-  //   if (isFavorited) {
-  //     const favoriteIndex = favoritesArray.findIndex((teacherItem: Classes) => {
-  //       return teacherItem.id === classe.user.id;
-  //     });
-
-  //     favoritesArray.splice(favoriteIndex, 1);
-
-  //     setIsFavorited(false);
-  //   } else {
-  //     favoritesArray.push(classe.user);
-
-  //     setIsFavorited(true);
-  //   }
-
-  //   await AsyncStorage.setItem('favorites', JSON.stringify(favoritesArray));
-  // }, [isFavorited, classe]);
+      api.delete(`/favorite/${favorite?.id}`);
+      setIsFavorited(false);
+    } else {
+      api.post('/favorite', {
+        teacher_id: classe.user.id,
+      });
+      setIsFavorited(true);
+    }
+  }, [isFavorited, classe]);
 
   return (
     <Container>
@@ -185,7 +192,7 @@ const TeacherItem: React.FC<TeacherItemProps> = ({ classe }) => {
         </Price>
 
         <ButtonsContainer>
-          <FavoriteButton favorite={isFavorited}>
+          <FavoriteButton favorite={isFavorited} onPress={handleToggleFavorite}>
             {isFavorited === true ? (
               <Image source={unfavoriteIcon} />
             ) : (
@@ -193,8 +200,8 @@ const TeacherItem: React.FC<TeacherItemProps> = ({ classe }) => {
             )}
           </FavoriteButton>
 
-          <ContactButton>
-            <Image source={whatsappIcon} onPress={handleLinkToWhatsapp} />
+          <ContactButton onPress={handleLinkToWhatsapp}>
+            <Image source={whatsappIcon} />
             <ContactButtonText>Entrar em contato</ContactButtonText>
           </ContactButton>
         </ButtonsContainer>
