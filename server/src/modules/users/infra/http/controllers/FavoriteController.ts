@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 import CreateFavoriteService from '@modules/users/services/CreateFavoriteService';
 import ListFavoritesService from '@modules/users/services/ListFavoritesService';
@@ -12,7 +13,7 @@ export default class FavoriteController {
 
     const favorites = await listFavorites.execute(student_id);
 
-    return response.json(favorites);
+    return response.json(classToClass(favorites));
   }
 
   public async create(request: Request, response: Response): Promise<Response> {

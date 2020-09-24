@@ -1,7 +1,8 @@
 import { injectable, inject } from 'tsyringe';
 
-import Favorite from '@modules/users/infra/typeorm/entities/Favorites';
+import Classes from '@modules/classes/infra/typeorm/entities/Classes';
 import ICacheProvier from '@shared/container/providers/CacheProvider/models/ICacheProvier';
+import IClassesRepository from '@modules/classes/repositories/IClassesRepository';
 import IFavoriteRepository from '../repositories/IFavoriteRepository';
 
 @injectable()
@@ -10,17 +11,34 @@ class ListFavoritesService {
     @inject('FavoriteRepository')
     private favoriteRepository: IFavoriteRepository,
 
+    @inject('ClassesRepository')
+    private classesRepository: IClassesRepository,
+
     @inject('CacheProvider')
     private cacheProvider: ICacheProvier,
   ) {}
 
-  public async execute(user_id: string): Promise<Favorite[]> {
+  public async execute(user_id: string): Promise<Classes[]> {
     const keyCache = `favorite:user:${user_id}`;
 
-    let favorites = await this.cacheProvider.recover<Favorite[]>(keyCache);
+    let favorites = await this.cacheProvider.recover<Classes[]>(keyCache);
 
     if (!favorites) {
-      favorites = await this.favoriteRepository.getFavorites(user_id);
+      const favoritesList = await this.favoriteRepository.getFavorites(user_id);
+
+      const classes = await this.classesRepository.findAllClasses(user_id);
+
+      const array: Classes[] = [];
+
+      favoritesList.forEach(favorite => {
+        classes?.forEach(classe => {
+          if (favorite.class_id === classe.id) {
+            array.push(classe);
+          }
+        });
+      });
+
+      favorites = array;
 
       this.cacheProvider.save(keyCache, favorites);
     }
