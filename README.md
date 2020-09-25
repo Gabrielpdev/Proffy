@@ -46,7 +46,8 @@ Após isso os alunos podem encontrar esse professor buscando a matéria, dia e h
 
 
 <h2 align="center">
-    <img alt="Proffy" title="#GoBarber" src=".github/web.gif" width="100%" />
+    <img alt="Proffy" title="#Proffy" src=".github/proffy.gif" width="50%" />
+    <img alt="Proffy" title="#Proffy" src=".github/proffy-tablet.gif" width="200px" />
 </h2>
 
 ## 🏁 Iniciando <a name = "getting_started"></a>
@@ -65,7 +66,7 @@ $ cd backend
 yarn
 
 # Configure seu .env baseado no .env.example
-$ yarn knex:migrate
+$ yarn typeorm migration:run
 $ yarn start
 # server inicializado
 
@@ -83,14 +84,18 @@ $ yarn start
 
 ## ⛏️ Tecnologias Utilizadas <a name = "built_using"></a>
 
+As seguintes ferramentas foram usadas na construção do projeto:
 - 🔵 [TypeScript][typescript]
 - 🟢 [Node Js][nodejs]
-- ❄️ [Knex][knex]
+- 🔴 [Redis][redis]
+- ⚙ [TypeORM][typeorm]
 - 🐘 [Postgres][postgres]
+- 👄 [Handlebars][handlebars]
+- 📷 [Expo Image Picker][image-picker]
 - ⚛️ [React][reactjs]
-- 🔼 [Expo][expo]
 - ⚛️ [React Native][reactNative]
-- 💅 [Styled-components]
+- 🔼 [Expo][expo]
+- 💅 [Styled-components][styled-components]
 
 ## 👨‍💼 Metas de desenvolvimento <a name = "roadmap"></a>
 
@@ -110,13 +115,17 @@ $ yarn start
 Feito com ❤️ por Gabriel Pereira 👋🏽 [Entre em contato!](https://www.linkedin.com/in/gabriel-pereira-oliveira-78b1801ab/)
 
 [expo]: https://expo.io/
-[knex]:http://knexjs.org/
+[image-picker]: https://docs.expo.io/versions/latest/sdk/imagepicker/
+[handlebars]: https://handlebarsjs.com/
 [postgres]: https://www.postgresql.org/
+[typeorm]: https://typeorm.io/#/
 [nodejs]: https://nodejs.org/en/
+[redis]: https://redis.io/
 [typescript]: https://www.typescriptlang.org/
 [reactjs]: https://reactjs.org
 [reactNative]: https://reactnative.dev/
 [rs]: https://rocketseat.com.br
 [Rocketseat]:https://github.com/Rocketseat
 [styled-components]:https://styled-components.com/
+
 
