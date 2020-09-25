@@ -21,7 +21,6 @@ import api from '../../services/api';
 import {
   Container,
   Background,
-  // BackButton,
   Title,
   AvatarContainer,
   UserAvatarButton,
@@ -167,7 +166,7 @@ const Profile: React.FC = () => {
                 </UserAvatarButton>
               </AvatarContainer>
 
-              <Title>Gabriel Pereira</Title>
+              <Title>{user.name}</Title>
             </Background>
           </PageHeader>
 

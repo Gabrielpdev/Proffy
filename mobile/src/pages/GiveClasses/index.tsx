@@ -178,11 +178,25 @@ const GiveClasses: React.FC = () => {
         ) {
           throw new TypeError('Horário deve ser válido');
         }
+
+        if (
+          schedule.from === '' ||
+          schedule.to === '' ||
+          schedule.week_day_id === ''
+        ) {
+          throw new TypeError(
+            'Complete os horários para finalizar o cadastro.',
+          );
+        }
       });
 
       await api.post('/classes', formData);
 
-      Alert.alert('Perfil atualizado com sucesso!');
+      Alert.alert('Aula cadastrada com sucesso!');
+
+      setCost('');
+      setSubject('');
+      setScheduleItens([{ week_day_id: '', from: '', to: '' }]);
     } catch (err) {
       sendAlert('Erro no cadastro de aula', err.message);
 

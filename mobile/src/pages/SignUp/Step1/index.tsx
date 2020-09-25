@@ -6,8 +6,10 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  Alert,
 } from 'react-native';
 
+import { FormHandles } from '@unform/core';
 import Input from '../../../components/Input';
 
 import studyIcon from '../../../assets/images/icons/study.png';
@@ -22,7 +24,7 @@ import {
   Dot2,
   Title,
   Description,
-  Form,
+  Forms,
   FormQuestion1,
   TextArena,
   FormFooter,
@@ -35,24 +37,44 @@ import {
   FormButtonText,
 } from './styles';
 
+interface Step1Props {
+  name: string;
+  whatsapp: string;
+  bio: string;
+}
+
 const Step1: React.FC = () => {
+  const formRef = useRef<FormHandles>(null);
   const { goBack, navigate } = useNavigation();
 
-  const whatsappInputRef = useRef<TextInput>(null);
-  const bioInputRef = useRef<TextInput>(null);
+  const whatsappInputRef = useRef<TextInput | null>(null);
+  const bioInputRef = useRef<TextInput | null>(null);
 
-  const [name, setName] = useState('');
   const [isTeacher, setIsTeacher] = useState(false);
   const [whatsapp, setWhatsapp] = useState('');
-  const [bio, setBio] = useState('');
 
   const handleGoBack = useCallback(() => {
     goBack();
   }, [goBack]);
 
-  const handleContinue = useCallback(() => {
-    navigate('Step2');
-  }, [navigate]);
+  const handleContinue = useCallback(
+    async (data: Step1Props) => {
+      try {
+        if (whatsapp.length !== 11) {
+          throw new Error('Número de telefone deve estar completo.');
+        }
+        const formData = {
+          ...data,
+          whatsapp,
+          is_teacher: isTeacher,
+        };
+        navigate('Step2', formData);
+      } catch (err) {
+        Alert.alert('Erro', err.message);
+      }
+    },
+    [navigate, whatsapp, isTeacher],
+  );
 
   const toggleIsTeacher = useCallback(() => {
     setIsTeacher(state => !state);
@@ -83,31 +105,34 @@ const Step1: React.FC = () => {
           </Title>
           <Description>
             Basta preencher esses dados
-            {'\n'}
-e você estará conosco.
-</Description>
+            {'\n'}e você estará conosco.
+          </Description>
 
-          <Form>
+          <Forms onSubmit={handleContinue} ref={formRef}>
             <FormQuestion1>01. Quem é você ?</FormQuestion1>
 
             <Input
               title="Nome"
               icon="user"
-              value={name}
               placeholder="Digite seu nome"
-              onChangeText={text => setName(text)}
-              returnKeyType="next"
-              onSubmitEditing={() => {
-                whatsappInputRef.current?.focus();
-              }}
+              name="name"
             />
             <Input
               ref={whatsappInputRef}
+              type="cel-phone"
               title="Whatsapp"
               icon="phone"
               placeholder="Digite seu whatsapp"
+              name="whatsapp"
               value={whatsapp}
-              onChangeText={text => setWhatsapp(text)}
+              onChangeText={value =>
+                setWhatsapp(
+                  value
+                    .replace('(', '')
+                    .replace(')', '')
+                    .replace(' ', '')
+                    .replace('-', ''),
+                )}
               returnKeyType="next"
               onSubmitEditing={() => {
                 bioInputRef.current?.focus();
@@ -118,12 +143,10 @@ e você estará conosco.
               title="Bio"
               icon="edit-2"
               multiline
+              name="bio"
               textArena
               numberOfLines={4}
               placeholder="Fale sobre você"
-              value={bio}
-              onChangeText={text => setBio(text)}
-              returnKeyType="next"
             />
 
             <FormQuestion2>02. O que você quer fazer ?</FormQuestion2>
@@ -139,10 +162,14 @@ e você estará conosco.
               </TeacherButton>
             </FormFooter>
 
-            <FormButton onPress={handleContinue}>
+            <FormButton
+              onPress={() => {
+                formRef.current?.submitForm();
+              }}
+            >
               <FormButtonText>Próximo</FormButtonText>
             </FormButton>
-          </Form>
+          </Forms>
         </Container>
       </ScrollView>
     </KeyboardAvoidingView>

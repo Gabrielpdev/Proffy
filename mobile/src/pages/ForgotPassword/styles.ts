@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 import { RectButton } from 'react-native-gesture-handler';
-import { Feather } from '@expo/vector-icons';
 import { Platform } from 'react-native';
+import { Form } from '@unform/mobile';
 
 interface IconProps {
   remember: boolean;
@@ -43,7 +43,7 @@ export const LogoDescription = styled.Text`
   margin-top: 15px;
 `;
 
-export const Form = styled.View`
+export const Forms = styled(Form)`
   background: #f0f0f7;
   align-items: center;
   justify-content: center;

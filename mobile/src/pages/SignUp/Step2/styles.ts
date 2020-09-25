@@ -1,6 +1,7 @@
 import styled from 'styled-components/native';
 import { RectButton } from 'react-native-gesture-handler';
 import { Platform } from 'react-native';
+import { Form } from '@unform/mobile';
 import Input from '../../../components/Input';
 
 export const Container = styled.View`
@@ -55,7 +56,7 @@ export const Description = styled.Text`
   color: #6a6180;
 `;
 
-export const Form = styled.View`
+export const Forms = styled(Form)`
   margin-top: 70%;
 `;
 

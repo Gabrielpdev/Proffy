@@ -34,6 +34,7 @@ import {
   ContactButton,
   ContactButtonText,
 } from './styles';
+import { useAuth } from '../../hooks/auth';
 
 export interface Week_Day {
   id: string;
@@ -49,10 +50,6 @@ interface Class_Schedule {
   is_available: boolean;
 }
 export interface Favorite {
-  id: string;
-  class_id: string;
-}
-export interface Classes {
   id: string;
   favorite_id: string;
   cost: string;
@@ -77,10 +74,11 @@ interface TeacherItemProps {
 }
 
 const TeacherItem: React.FC<TeacherItemProps> = ({ classe }) => {
+  const { favorites, updateFavorites } = useAuth();
+
   const [isFavorited, setIsFavorited] = useState(false);
 
   const [days, setDays] = useState<Week_Day[]>([]);
-  const [favorites, setFavorites] = useState<Classes[]>([]);
   const [class_schedules, setClassSchedules] = useState<Class_Schedule[]>([]);
 
   useEffect(() => {
@@ -89,37 +87,29 @@ const TeacherItem: React.FC<TeacherItemProps> = ({ classe }) => {
     });
   }, []);
 
-  useFocusEffect(
-    useCallback(() => {
-      api.get('/favorite').then(response => {
-        setFavorites(response.data);
+  useEffect(() => {
+    console.log(favorites);
+    if (favorites[0]) {
+      favorites.forEach(favorite => {
+        if (favorite.id === classe.id) {
+          setIsFavorited(true);
+        }
       });
-    }, []),
-  );
-
-  useFocusEffect(
-    useCallback(() => {
-      if (favorites[0]) {
-        favorites.forEach((favorite: Classes) => {
-          if (favorite.id === classe.id) {
-            console.log('entrou');
-            setIsFavorited(true);
-          }
-        });
-      } else {
-        setIsFavorited(false);
-      }
-    }, [classe.id, favorites]),
-  );
+    } else {
+      setIsFavorited(false);
+    }
+  }, [classe.id, favorites]);
 
   useEffect(() => {
-    const classeFormatted = classe.class_schedule.map(class_schedule => {
-      return {
-        ...class_schedule,
-        fromFormatted: convertMinutesToHour(class_schedule.from),
-        toFormatted: convertMinutesToHour(class_schedule.to),
-      };
-    });
+    const classeFormatted = classe.class_schedule.map(
+      (class_schedule: Class_Schedule) => {
+        return {
+          ...class_schedule,
+          fromFormatted: convertMinutesToHour(class_schedule.from),
+          toFormatted: convertMinutesToHour(class_schedule.to),
+        };
+      },
+    );
     setClassSchedules(classeFormatted);
   }, [classe.class_schedule]);
 
@@ -133,17 +123,23 @@ const TeacherItem: React.FC<TeacherItemProps> = ({ classe }) => {
 
   const handleToggleFavorite = useCallback(async () => {
     if (isFavorited) {
-      const favorite = favorites.find((item: Classes) => item.id === classe.id);
+      const favorite = favorites.find(item => item.id === classe.id);
 
-      api.delete(`/favorite/${favorite?.favorite_id}`);
-      setIsFavorited(false);
-    } else {
-      api.post('/favorite', {
-        class_id: classe.id,
+      api.delete(`/favorite/${favorite?.favorite_id}`).then(response => {
+        updateFavorites(response.data);
+        setIsFavorited(false);
       });
-      setIsFavorited(true);
+    } else {
+      api
+        .post('/favorite', {
+          class_id: classe.id,
+        })
+        .then(response => {
+          updateFavorites(response.data);
+          setIsFavorited(true);
+        });
     }
-  }, [isFavorited, classe, favorites]);
+  }, [isFavorited, classe, favorites, updateFavorites]);
 
   return (
     <Container>

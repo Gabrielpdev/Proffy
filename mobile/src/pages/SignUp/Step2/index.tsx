@@ -1,5 +1,5 @@
-import React, { useState, useRef, useCallback } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import React, { useRef, useCallback } from 'react';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 import {
   TextInput,
@@ -9,6 +9,7 @@ import {
   Alert,
 } from 'react-native';
 
+import { FormHandles } from '@unform/core';
 import Input from '../../../components/Input';
 
 import {
@@ -20,31 +21,53 @@ import {
   Dot2,
   Title,
   Description,
-  Form,
+  Forms,
   FormTitle,
-  TextArena,
   FormButton,
   FormButtonText,
 } from './styles';
+import api from '../../../services/api';
+
+interface Step2Props {
+  email: string;
+  password: string;
+}
 
 const Step2: React.FC = () => {
+  const formRef = useRef<FormHandles>(null);
+  const { params } = useRoute();
   const { goBack, reset } = useNavigation();
 
   const passwordInputRef = useRef<TextInput>(null);
-
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
 
   const handleGoBack = useCallback(() => {
     goBack();
   }, [goBack]);
 
-  const handleContinue = useCallback(() => {
-    reset({
-      index: 1,
-      routes: [{ name: 'SignIn' }, { name: 'Finished' }],
-    });
-  }, [reset]);
+  const handleContinue = useCallback(
+    async (data: Step2Props) => {
+      const formData = {
+        ...params,
+        ...data,
+      };
+
+      try {
+        console.log({ ...formData });
+        await api.post('/users', { ...formData });
+
+        reset({
+          index: 1,
+          routes: [{ name: 'SignIn' }, { name: 'Finished' }],
+        });
+      } catch (err) {
+        Alert.alert(
+          'Erro na autenticação',
+          'Ocorreu um erro ao fazer o cadastro, cheque seu dados.',
+        );
+      }
+    },
+    [reset, params],
+  );
 
   return (
     <KeyboardAvoidingView
@@ -71,10 +94,11 @@ const Step2: React.FC = () => {
           </Title>
           <Description>
             Basta preencher esses dados
-            {'\n'}e você estará conosco.
-          </Description>
+            {'\n'}
+e você estará conosco.
+</Description>
 
-          <Form>
+          <Forms onSubmit={handleContinue} ref={formRef}>
             <FormTitle>03. Email e Senha</FormTitle>
 
             <Input
@@ -84,8 +108,7 @@ const Step2: React.FC = () => {
               autoCorrect={false}
               keyboardType="email-address"
               placeholder="Digite seu email"
-              value={email}
-              onChangeText={text => setEmail(text)}
+              name="email"
               returnKeyType="next"
               onSubmitEditing={() => {
                 passwordInputRef.current?.focus();
@@ -98,15 +121,21 @@ const Step2: React.FC = () => {
               title="Senha"
               icon="lock"
               placeholder="Digite sua senha"
-              value={password}
-              onChangeText={text => setPassword(text)}
-              returnKeyType="next"
+              name="password"
+              returnKeyType="send"
+              onSubmitEditing={() => {
+                formRef.current?.submitForm();
+              }}
             />
 
-            <FormButton onPress={handleContinue}>
+            <FormButton
+              onPress={() => {
+                formRef.current?.submitForm();
+              }}
+            >
               <FormButtonText>Concluir cadastro</FormButtonText>
             </FormButton>
-          </Form>
+          </Forms>
         </Container>
       </ScrollView>
     </KeyboardAvoidingView>

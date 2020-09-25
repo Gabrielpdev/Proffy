@@ -1,10 +1,11 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 
 import { KeyboardAvoidingView, Platform } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 
 import { Feather } from '@expo/vector-icons';
+import { FormHandles } from '@unform/core';
 import Input from '../../components/Input';
 
 import logoImg from '../../assets/images/logo.png';
@@ -17,7 +18,7 @@ import {
   Logo,
   LogoDescription,
   Icon,
-  Form,
+  Forms,
   TitleBlock,
   Title,
   Description,
@@ -26,13 +27,10 @@ import {
 } from './styles';
 
 const SignIn: React.FC = () => {
+  const formRef = useRef<FormHandles>(null);
   const { navigate, goBack } = useNavigation();
 
-  const [email, setEmail] = useState('');
-
-  const handleSubmit = useCallback(() => {
-    console.log(email);
-  }, [email]);
+  const handleSubmit = useCallback(() => {}, []);
 
   const handleNavigateToEmailSended = useCallback(() => {
     navigate('ForgotSend');
@@ -60,7 +58,7 @@ const SignIn: React.FC = () => {
               </LogoContainer>
             </Background>
 
-            <Form>
+            <Forms onSubmit={handleNavigateToEmailSended} ref={formRef}>
               <Icon onPress={handleGoBack}>
                 <Feather name="arrow-left" size={20} color="#9C98A6" />
               </Icon>
@@ -80,14 +78,17 @@ const SignIn: React.FC = () => {
                 autoCorrect={false}
                 keyboardType="email-address"
                 placeholder="Digite seu email"
-                value={email}
-                onChangeText={text => setEmail(text)}
+                name="email"
               />
 
-              <Button onPress={handleNavigateToEmailSended}>
+              <Button
+                onPress={() => {
+                  formRef.current?.submitForm();
+                }}
+              >
                 <ButtonText>Enviar</ButtonText>
               </Button>
-            </Form>
+            </Forms>
           </Container>
         </ScrollView>
       </KeyboardAvoidingView>

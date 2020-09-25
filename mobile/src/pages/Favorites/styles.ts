@@ -14,3 +14,10 @@ export const Scroll = styled(ScrollView).attrs({
 })`
   margin-top: -40px;
 `;
+
+export const Text = styled.Text`
+  margin: 100px auto;
+  font-family: 'Poppins_400Regular';
+  font-size: 16px;
+  color: #6a6180;
+`;

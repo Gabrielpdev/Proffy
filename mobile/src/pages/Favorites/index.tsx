@@ -1,22 +1,13 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useFocusEffect } from '@react-navigation/native';
+import React from 'react';
 
 import PageHeader from '../../components/PageHeader';
-import TeacherItem, { Classes } from '../../components/TeacherItem';
-import api from '../../services/api';
+import TeacherItem from '../../components/TeacherItem';
 
-import { Container, Scroll } from './styles';
+import { Container, Scroll, Text } from './styles';
+import { useAuth } from '../../hooks/auth';
 
 const Favorites: React.FC = () => {
-  const [favoriteList, setFavoriteList] = useState<Classes[]>([]);
-
-  useFocusEffect(
-    useCallback(() => {
-      api.get('/favorite').then(response => {
-        setFavoriteList(response.data);
-      });
-    }, []),
-  );
+  const { favorites } = useAuth();
 
   return (
     <Container>
@@ -25,9 +16,13 @@ const Favorites: React.FC = () => {
         titleBar="Favoritos"
       />
       <Scroll>
-        {favoriteList.map(classe => (
-          <TeacherItem key={classe.id} classe={classe} />
-        ))}
+        {favorites[0] ? (
+          favorites.map(classe => (
+            <TeacherItem key={classe.id} classe={classe} />
+          ))
+        ) : (
+          <Text>Vocẽ não tem Proffys favoritados</Text>
+        )}
       </Scroll>
     </Container>
   );

@@ -43,6 +43,7 @@ export const UserAvatar = styled.Image`
   border-radius: 98px;
   align-self: center;
   position: relative;
+  background: #f4ede8;
 `;
 
 export const Title = styled.Text`
