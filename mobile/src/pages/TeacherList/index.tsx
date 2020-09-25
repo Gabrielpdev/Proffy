@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Picker } from '@react-native-community/picker';
 import { Feather } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-community/async-storage';
 import { KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 
 import api from '../../services/api';
@@ -131,7 +130,8 @@ const TeacherList: React.FC = () => {
                         <Picker
                           selectedValue={week_day_id}
                           onValueChange={itemValue =>
-                            setWeekDay(String(itemValue))}
+                            setWeekDay(String(itemValue))
+                          }
                         >
                           <Picker.Item
                             label="Selecione um dia"

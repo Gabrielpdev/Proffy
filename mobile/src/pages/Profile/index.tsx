@@ -11,6 +11,7 @@ import { useAuth } from '../../hooks/auth';
 import BackgroundImg from '../../assets/images/background.png';
 import studyIcon from '../../assets/images/icons/study.png';
 import giveClassesIcon from '../../assets/images/icons/give-classes.png';
+import userImg from '../../assets/images/user.png';
 
 import Input from '../../components/Input';
 import PageHeader from '../../components/PageHeader';
@@ -149,11 +150,18 @@ const Profile: React.FC = () => {
           <PageHeader titleBar="Meu perfil">
             <Background source={BackgroundImg} resizeMode="contain">
               <AvatarContainer>
-                <UserAvatar
-                  source={{
-                    uri: user.avatar_url.replace('localhost', '192.168.0.112'),
-                  }}
-                />
+                {user.avatar_url ? (
+                  <UserAvatar
+                    source={{
+                      uri: user.avatar_url.replace(
+                        'localhost',
+                        '192.168.0.112',
+                      ),
+                    }}
+                  />
+                ) : (
+                  <UserAvatar source={userImg} />
+                )}
                 <UserAvatarButton onPress={handleUpdateAvatar}>
                   <Feather name="camera" size={25} color="#fff" />
                 </UserAvatarButton>

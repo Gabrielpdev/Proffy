@@ -1,12 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Image, Linking } from 'react-native';
 
+import { useFocusEffect } from '@react-navigation/native';
 import api from '../../services/api';
 import convertMinutesToHour from '../../utils/convertMinutesToHour';
 
 import heartIcon from '../../assets/images/icons/heart-outline.png';
 import unfavoriteIcon from '../../assets/images/icons/unfavorite.png';
 import whatsappIcon from '../../assets/images/icons/whatsapp.png';
+import userImg from '../../assets/images/user.png';
 
 import {
   Container,
@@ -32,7 +34,6 @@ import {
   ContactButton,
   ContactButtonText,
 } from './styles';
-import { useAuth } from '../../hooks/auth';
 
 export interface Week_Day {
   id: string;
@@ -47,13 +48,13 @@ interface Class_Schedule {
   week_day: Week_Day;
   is_available: boolean;
 }
-
-interface Favorite {
+export interface Favorite {
   id: string;
-  teacher_id: string;
+  class_id: string;
 }
 export interface Classes {
   id: string;
+  favorite_id: string;
   cost: string;
   subject: {
     name: string;
@@ -79,21 +80,37 @@ const TeacherItem: React.FC<TeacherItemProps> = ({ classe }) => {
   const [isFavorited, setIsFavorited] = useState(false);
 
   const [days, setDays] = useState<Week_Day[]>([]);
+  const [favorites, setFavorites] = useState<Classes[]>([]);
   const [class_schedules, setClassSchedules] = useState<Class_Schedule[]>([]);
 
   useEffect(() => {
     api.get('/days').then(response => {
       setDays(response.data);
     });
+  }, []);
 
-    api.get('/favorite').then(response => {
-      response.data.map((favorite: Favorite) => {
-        if (favorite.teacher_id === classe.user.id) {
-          setIsFavorited(true);
-        }
+  useFocusEffect(
+    useCallback(() => {
+      api.get('/favorite').then(response => {
+        setFavorites(response.data);
       });
-    });
-  }, [classe.user.id]);
+    }, []),
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      if (favorites[0]) {
+        favorites.forEach((favorite: Classes) => {
+          if (favorite.id === classe.id) {
+            console.log('entrou');
+            setIsFavorited(true);
+          }
+        });
+      } else {
+        setIsFavorited(false);
+      }
+    }, [classe.id, favorites]),
+  );
 
   useEffect(() => {
     const classeFormatted = classe.class_schedule.map(class_schedule => {
@@ -116,30 +133,30 @@ const TeacherItem: React.FC<TeacherItemProps> = ({ classe }) => {
 
   const handleToggleFavorite = useCallback(async () => {
     if (isFavorited) {
-      const { data } = await api.get('/favorite');
+      const favorite = favorites.find((item: Classes) => item.id === classe.id);
 
-      const favorite = data.find(
-        (item: Favorite) => item.teacher_id === classe.user.id,
-      );
-
-      api.delete(`/favorite/${favorite?.id}`);
+      api.delete(`/favorite/${favorite?.favorite_id}`);
       setIsFavorited(false);
     } else {
       api.post('/favorite', {
-        teacher_id: classe.user.id,
+        class_id: classe.id,
       });
       setIsFavorited(true);
     }
-  }, [isFavorited, classe]);
+  }, [isFavorited, classe, favorites]);
 
   return (
     <Container>
       <Profile>
-        <ImageProfile
-          source={{
-            uri: classe.user.avatar_url.replace('localhost', '192.168.0.112'),
-          }}
-        />
+        {classe.user.avatar_url ? (
+          <ImageProfile
+            source={{
+              uri: classe.user.avatar_url.replace('localhost', '192.168.0.112'),
+            }}
+          />
+        ) : (
+          <ImageProfile source={userImg} />
+        )}
 
         <ProfileInfo>
           <Name>{classe.user.name}</Name>
