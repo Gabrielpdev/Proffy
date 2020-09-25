@@ -1,4 +1,5 @@
 import { injectable, inject } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 import Classes from '@modules/classes/infra/typeorm/entities/Classes';
 import ICacheProvier from '@shared/container/providers/CacheProvider/models/ICacheProvier';
@@ -18,7 +19,7 @@ class ListFavoritesService {
     private cacheProvider: ICacheProvier,
   ) {}
 
-  public async execute(user_id: string): Promise<Classes[]> {
+  public async execute(user_id: string): Promise<Classes[] | any> {
     const keyCache = `favorite:user:${user_id}`;
 
     let favorites = await this.cacheProvider.recover<Classes[]>(keyCache);
@@ -28,17 +29,20 @@ class ListFavoritesService {
 
       const classes = await this.classesRepository.findAllClasses(user_id);
 
-      const array: Classes[] = [];
+      const array: any[] = [];
 
       favoritesList.forEach(favorite => {
         classes?.forEach(classe => {
           if (favorite.class_id === classe.id) {
-            array.push(classe);
+            array.push({
+              ...classe,
+              favorite_id: favorite.id,
+            });
           }
         });
       });
 
-      favorites = array;
+      favorites = classToClass(array);
 
       this.cacheProvider.save(keyCache, favorites);
     }

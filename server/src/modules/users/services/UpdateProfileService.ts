@@ -73,6 +73,7 @@ class UpdateProfileService {
     }
 
     await this.cacheProvider.invalidate('teachers');
+    await this.cacheProvider.invalidatePrefix('favorite');
     await this.cacheProvider.invalidatePrefix('classes');
     return this.userRepository.save(user);
   }

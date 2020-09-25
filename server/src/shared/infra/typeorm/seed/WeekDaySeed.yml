@@ -22,5 +22,9 @@ fixtures:
     - subjects:
         name: 'História'
     - subjects:
-        name: 'Ciências'
+        name: 'Química'
+    - subjects:
+        name: 'Biologia'
+    - subjects:
+        name: 'Programação'
 

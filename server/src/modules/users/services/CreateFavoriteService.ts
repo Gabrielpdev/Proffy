@@ -1,4 +1,5 @@
 import { injectable, inject } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 import AppError from '@shared/errors/AppError';
 
@@ -29,7 +30,7 @@ class CreateFavoriteService {
     private cacheProvider: ICacheProvier,
   ) {}
 
-  public async execute(data: IRequest): Promise<Favorites> {
+  public async execute(data: IRequest): Promise<any> {
     const { class_id, student_id } = data;
 
     const checkClasseId = await this.classesRepository.findById(class_id);
@@ -48,11 +49,30 @@ class CreateFavoriteService {
       throw new AppError('This class is already favorited');
     }
 
-    const favorite = await this.favoriteRepository.create(data);
+    await this.favoriteRepository.create(data);
+
+    const favoritesList = await this.favoriteRepository.getFavorites(
+      student_id,
+    );
+
+    const classes = await this.classesRepository.findAllClasses(student_id);
+
+    const array: any[] = [];
+
+    favoritesList.forEach(item => {
+      classes?.forEach(classe => {
+        if (item.class_id === classe.id) {
+          array.push({
+            ...classe,
+            favorite_id: item.id,
+          });
+        }
+      });
+    });
 
     await this.cacheProvider.invalidatePrefix('favorite');
 
-    return favorite;
+    return classToClass(array);
   }
 }
 

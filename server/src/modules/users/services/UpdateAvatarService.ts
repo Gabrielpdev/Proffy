@@ -40,6 +40,7 @@ class UpdateAvatarService {
     user.avatar = fileName;
 
     await this.usersRepository.save(user);
+    await this.cacheProvider.invalidatePrefix('favorite');
     await this.cacheProvider.invalidatePrefix('classes');
 
     return user;
