@@ -45,11 +45,16 @@ A aplicação visa estabelecer um contato entre alunos e professores. O professo
 Após isso os alunos podem encontrar esse professor buscando a matéria, dia e hora que batem com a do professor cadastrado.<br/> 
 
 
-<h2 align="center">
-    <img alt="Proffy" title="#Proffy" src=".github/proffy.gif" width="50%" />
-    <img alt="Proffy" title="#Proffy" src=".github/proffy-tablet.gif" width="160px" />
-    <img alt="Proffy" title="#Proffy" src=".github/mobile.gif" width="160px" />
-</h2>
+<span align="center">
+	<h2>Desktop</h2>
+	<img alt="Proffy" title="#Proffy" src=".github/proffy.gif" height="300px"  />
+	<img alt="Proffy" title="#Proffy" src=".github/proffy-tablet.gif" height="300px" margin="10px" />
+</span>
+
+<span align="center">
+	<h2>Mobile</h2>
+	<img alt="Proffy" title="#Proffy" src=".github/mobile.gif" height="300px" />
+</span>
 
 ## 🏁 Iniciando <a name = "getting_started"></a>
 
