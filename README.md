@@ -63,6 +63,8 @@ Instruções de como acessar as rotas e instalação.
 ### ⚒ Instalando <a name = "installing"></a>
 
 ```
+# É necessário ter o docker na sua máquina
+
 git clone https://github.com/Gabrielpdev/Proffy.git
 
 # Go into the backend repository
@@ -72,6 +74,7 @@ $ cd backend
 yarn
 
 # Configure seu .env baseado no .env.example
+# Configure seu .ormconfig.json baseado no .ormconfig.example.json
 $ yarn typeorm migration:run
 $ yarn start
 # server inicializado
@@ -81,7 +84,7 @@ $ cd web
 $ yarn
 $ yarn start
 
-# 📱 Iniciando com o Mobile 🚧 Em Construção...🚧
+# 📱 Iniciando com o Mobile
 
 $ cd mobile
 $ yarn
