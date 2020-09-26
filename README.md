@@ -47,7 +47,8 @@ Após isso os alunos podem encontrar esse professor buscando a matéria, dia e h
 
 <h2 align="center">
     <img alt="Proffy" title="#Proffy" src=".github/proffy.gif" width="50%" />
-    <img alt="Proffy" title="#Proffy" src=".github/proffy-tablet.gif" width="200px" />
+    <img alt="Proffy" title="#Proffy" src=".github/proffy-tablet.gif" width="160px" />
+    <img alt="Proffy" title="#Proffy" src=".github/mobile.gif" width="160px" />
 </h2>
 
 ## 🏁 Iniciando <a name = "getting_started"></a>
