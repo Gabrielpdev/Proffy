@@ -47,7 +47,7 @@ Após isso os alunos podem encontrar esse professor buscando a matéria, dia e h
 
 <span align="center">
 	<h2>Desktop</h2>
-	<img alt="Proffy" title="#Proffy" src=".github/proffy.gif" height="300px"  />
+	<img alt="Proffy" title="#Proffy" src=".github/proffy.gif" width="680px"  />
 	<img alt="Proffy" title="#Proffy" src=".github/proffy-tablet.gif" height="300px" margin="10px" />
 </span>
 
